@@ -24,7 +24,6 @@ void chooseOptionLoop() {
 		case makeorder: makeOrder(choiceChar); break;
 		case invalid: chooseOptionLoop(); break;
 	}
-
 	delete choiceChar;
 	chooseOptionLoop();
 }
