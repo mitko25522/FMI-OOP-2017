@@ -23,13 +23,13 @@
     <ClCompile Include="SourceFiles\Commandhandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\gui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\wallet.cpp">
+    <ClCompile Include="SourceFiles\Gui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Wallet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

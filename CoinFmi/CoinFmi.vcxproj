@@ -122,9 +122,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Commandhandler.cpp" />
-    <ClCompile Include="SourceFiles\gui.cpp" />
+    <ClCompile Include="SourceFiles\Gui.cpp" />
     <ClCompile Include="SourceFiles\Main.cpp" />
-    <ClCompile Include="SourceFiles\wallet.cpp" />
+    <ClCompile Include="SourceFiles\Wallet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\commandhandler.h" />
