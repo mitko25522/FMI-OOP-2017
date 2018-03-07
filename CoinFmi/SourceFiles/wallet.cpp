@@ -2,5 +2,5 @@
 
 void addWallet(char* choiceChar) {
 	Wallet newWallet;
-	newWallet.fiatMoney
+	newWallet.fiatMoney;
 }
