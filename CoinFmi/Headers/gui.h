@@ -2,3 +2,4 @@
 
 void printWelcomeMessage();
 void chooseOptionLoop();
+void printGeneralHelp();

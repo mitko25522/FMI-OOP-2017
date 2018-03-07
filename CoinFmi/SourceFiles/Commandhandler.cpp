@@ -1,7 +1,7 @@
 #include "../Headers/commandhandler.h"
 
 Choice determineChoice(char* choiceStr) {
-	if (isQuit(choiceStr))
+	/*if (isQuit(choiceStr))
 		return quit;
 	else if (isHelp(choiceStr))
 		return help;
@@ -14,5 +14,6 @@ Choice determineChoice(char* choiceStr) {
 	else if (isMakeOrder(choiceStr))
 		return makeorder;
 	else 
-		return invalid;
+		return invalid;*/
+	return invalid;
 }
