@@ -19,9 +19,9 @@ void chooseOptionLoop() {
 		case quit: exit(EXIT_SUCCESS); break;
 		case help: printGeneralHelp(); break;
 		case addwallet: addWallet(choiceChar); break;
-	//	case walletinfo: walletInfo(choiceChar); break;
-	//	case attractinvestors: printTopTen(); break;
-	//	case makeorder: makeOrder(choiceChar); break;
+		case walletinfo: walletInfo(choiceChar); break;
+		case attractinvestors: printTopTen(); break;
+		case makeorder: makeOrder(choiceChar); break;
 		case invalid: chooseOptionLoop(); break;
 	}
 	delete choiceChar;

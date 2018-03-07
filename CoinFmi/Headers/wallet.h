@@ -10,5 +10,5 @@ void addWallet(char*);
 void extractName(char*, char*);
 double extractFiatMoney(char* input);
 long int generateUniqueId();
-bool alreadyExists(const long);
+bool idAlreadyExists(const long);
 void saveWallet(Wallet);

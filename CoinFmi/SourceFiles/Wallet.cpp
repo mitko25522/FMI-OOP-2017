@@ -43,26 +43,36 @@ long int generateUniqueId() {
 		id += tempArr[i] * j;
 	}
 
-	if (alreadyExists(id)) {
+	if (idAlreadyExists(id)) {
 		generateUniqueId();
 	}
 
 	return id;
 }
 
-bool alreadyExists(const long) {
-	//needs work
-	return true;
+bool idAlreadyExists(const long generatedId) {
+
+	std::ifstream InFile;
+	InFile.open("wallets.dat", std::ios::in | std::ios::binary);
+	do {
+		int readId;
+		InFile.read((char*)&readId, sizeof(int));
+		if (readId == generatedId) {
+			return true;
+		}
+		std::cout << InFile.tellg() << " " << readId << std::endl;
+	} while (!InFile.eof());
+	InFile.close();
+	return false;
 }
 
 void saveWallet(Wallet wallet) {
-	//in progress
 	char newLineSymbol = '\n';
 	std::ofstream OutFile;
 	OutFile.open("wallets.dat", std::ios::out | std::ios::binary | std::ios::app);
 	OutFile.write((char *)&wallet.id, sizeof(long));
 	OutFile.write((char *)&wallet.fiatMoney, sizeof(double));
 	OutFile.write(wallet.owner, strlen(wallet.owner));
-	OutFile.write(&newLineSymbol,1);
+	OutFile.write(&newLineSymbol, 1);
 	OutFile.close();
 }
