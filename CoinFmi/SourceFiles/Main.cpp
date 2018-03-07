@@ -1,4 +1,4 @@
-#include "gui.h"
+#include "../Headers/gui.h"
 using namespace std;
 
 int main() {

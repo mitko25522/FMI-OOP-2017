@@ -1,7 +1,7 @@
 #include <iostream>
-#include "../Headers/gui.h"
-#include "../Headers/commandhandler.h"
-#include "../Headers/wallet.h"
+#include "gui.h"
+#include "commandhandler.h"
+#include "wallet.h"
 using namespace std;
 
 void printWelcomeMessage() {
@@ -24,7 +24,6 @@ void chooseOptionLoop() {
 		case makeorder: makeOrder(choiceChar); break;
 		case invalid: chooseOptionLoop(); break;
 	}
-
 	delete choiceChar;
 	chooseOptionLoop();
 }

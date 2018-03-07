@@ -118,18 +118,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Commandhandler.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="gui.cpp" />
-    <ClCompile Include="wallet.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="wallets.dat" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gui.h" />
-    <ClInclude Include="commandhandler.h" />
-    <ClInclude Include="wallet.h" />
+    <ClCompile Include="SourceFiles\Commandhandler.cpp" />
+    <ClCompile Include="SourceFiles\gui.cpp" />
+    <ClCompile Include="SourceFiles\Main.cpp" />
+    <ClCompile Include="SourceFiles\wallet.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headers\commandhandler.h" />
+    <ClInclude Include="Headers\gui.h" />
+    <ClInclude Include="Headers\wallet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

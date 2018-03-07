@@ -1,4 +1,4 @@
-#include "commandhandler.h"
+#include "../Headers/commandhandler.h"
 
 Choice determineChoice(char* choiceStr) {
 	if (isQuit(choiceStr))

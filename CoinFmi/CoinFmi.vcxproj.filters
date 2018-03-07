@@ -15,32 +15,32 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="wallet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Commandhandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="wallets.dat">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gui.h">
+    <ClCompile Include="SourceFiles\Commandhandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\gui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\wallet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headers\commandhandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="wallet.h">
+    <ClInclude Include="Headers\gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="commandhandler.h">
+    <ClInclude Include="Headers\wallet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
