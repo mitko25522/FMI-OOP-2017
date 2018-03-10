@@ -1,5 +1,6 @@
 #include "../Headers/gui.h"
 #include "../Headers/wallet.h"
+#include "../Headers/commandhandler.h";
 #include <iostream>
 //int ch = 12345678;
 //ofstream OutFile;
@@ -14,19 +15,18 @@
 //cout << number;
 
 int main() {
-	/*printWelcomeMessage();
-	chooseOptionLoop();*/
-
-	//Wallet wallet;
-	//wallet.id = 99999999;
-	//for (int i = 0; i < 10; i++) {
-	//	wallet.owner[i] = 'a' + i;
-	//}
-	//wallet.owner[10] = '\0';
-	//wallet.fiatMoney = 500.3;
-	//saveWallet(wallet);
-
-	std::cout << idAlreadyExists(88888888) << std::endl;
+	/*printWelcomeMessage;
+	while (true) {
+		chooseOption();
+}*/
+	char text[5];
+	text[0] = 'h';
+	text[1] = 'E';
+	text[2] = 'l';
+	text[3] = 'p';
+	text[4] = '\0';
+	char* pText = (char*)text;
+	std::cout << isHelp(pText) << std::endl;
 	return 0;
 }
 

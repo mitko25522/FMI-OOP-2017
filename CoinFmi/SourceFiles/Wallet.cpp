@@ -10,7 +10,6 @@ void addWallet(char* choiceChar) {
 	extractName(newWallet.owner, choiceChar);
 	newWallet.id = generateUniqueId();
 	saveWallet(newWallet);
-
 }
 
 void extractName(char* owner, char* input) {
@@ -43,9 +42,9 @@ long int generateUniqueId() {
 		id += tempArr[i] * j;
 	}
 
-	if (idAlreadyExists(id)) {
-		generateUniqueId();
-	}
+	//if (idAlreadyExists(id)) {
+	//	generateUniqueId();
+	//}
 
 	return id;
 }
@@ -70,9 +69,25 @@ void saveWallet(Wallet wallet) {
 	char newLineSymbol = '\n';
 	std::ofstream OutFile;
 	OutFile.open("wallets.dat", std::ios::out | std::ios::binary | std::ios::app);
-	OutFile.write((char *)&wallet.id, sizeof(long));
-	OutFile.write((char *)&wallet.fiatMoney, sizeof(double));
-	OutFile.write(wallet.owner, strlen(wallet.owner));
-	OutFile.write(&newLineSymbol, 1);
+	OutFile.write((char *)&wallet, sizeof(wallet));
 	OutFile.close();
+}
+
+void walletInfo(char * userInput) {
+
+}
+
+void printTopTen() {
+
+}
+
+Wallet readWallet(size_t index) {
+	std::ifstream inFile;
+	inFile.open("wallets.dat", std::ios::binary | std::ios::in);
+	Wallet wallet;
+	Wallet* pWallet = &wallet;
+	inFile.seekg(index * sizeof(Wallet));
+	inFile.read((char*)pWallet, sizeof(Wallet));
+	inFile.close();
+	return wallet;
 }

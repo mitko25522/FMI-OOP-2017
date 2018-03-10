@@ -1,5 +1,5 @@
 #pragma once
 
 void printWelcomeMessage();
-void chooseOptionLoop();
+void chooseOption();
 void printGeneralHelp();

@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include "../Headers/gui.h"
 #include "../Headers/commandhandler.h"
 #include "../Headers/wallet.h"
@@ -9,23 +9,22 @@ void printWelcomeMessage() {
 	cout << "For a list of commands type help\n\n";
 }
 
-void chooseOptionLoop() {
+void chooseOption() {
 	cout << "Enter command> ";
-	char * choiceChar = new char[100];
-	cin.getline(choiceChar, 100);
+	char * userInput = new char[100];
+	cin.getline(userInput, 100);
 	
-	Choice choice = determineChoice(choiceChar);
+	Choice choice = determineChoice(userInput);
 	switch (choice) {
 		case quit: exit(EXIT_SUCCESS); break;
 		case help: printGeneralHelp(); break;
-		case addwallet: addWallet(choiceChar); break;
-		case walletinfo: walletInfo(choiceChar); break;
+		case addwallet: addWallet(userInput); break;
+		case walletinfo: walletInfo(userInput); break;
 		case attractinvestors: printTopTen(); break;
-		case makeorder: makeOrder(choiceChar); break;
-		case invalid: chooseOptionLoop(); break;
+	//	case makeorder: makeOrder(userInput); break;
+		case invalid: chooseOption(); break;
 	}
-	delete choiceChar;
-	chooseOptionLoop();
+	delete userInput;
 }
 
 void printGeneralHelp() {
