@@ -3,7 +3,6 @@
 #include "../Headers/commandhandler.h";
 #include <iostream>
 
-
 int main() {
 	printWelcomeMessage();
 	while (true) {

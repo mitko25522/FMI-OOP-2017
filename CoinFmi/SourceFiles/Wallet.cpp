@@ -55,34 +55,53 @@ unsigned generateUniqueId() {
 		id += tempArr[i] * j;
 	}
 
-	//if (idAlreadyExists(id)) {
-	//	generateUniqueId();
-	//}
+	if (idAlreadyExists(id)) {
+		generateUniqueId();
+	}
 
 	std::cout << "Generated id: " << id << std::endl << std::endl;
 	return id;
 }
 
-bool idAlreadyExists(const long generatedId) {
-
+bool idAlreadyExists(unsigned generatedId, const char* fileName) {
 	std::ifstream InFile;
 	InFile.open("wallets.dat", std::ios::in | std::ios::binary);
-	do {
-		int readId;
-		InFile.read((char*)&readId, sizeof(int));
-		if (readId == generatedId) {
+
+	if (!InFile.is_open()) {
+		std::cerr << "Error opening " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	while (!InFile.eof()) {
+		Wallet tempWallet;
+		InFile.read((char*)&tempWallet, sizeof(Wallet));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
+		if (generatedId == tempWallet.id) {
 			return true;
 		}
-		std::cout << InFile.tellg() << " " << readId << std::endl;
-	} while (!InFile.eof());
-	InFile.close();
+	}
+
 	return false;
 }
 
-void saveWallet(Wallet wallet) {
+void saveWallet(Wallet wallet, const char* fileName) {
 	std::ofstream OutFile;
-	OutFile.open("wallets.dat", std::ios::out | std::ios::binary | std::ios::app);
-	OutFile.write((char *)&wallet, sizeof(wallet));
+	OutFile.open(fileName, std::ios::out | std::ios::binary | std::ios::app);
+	if (OutFile.is_open()) {
+		OutFile.write((char *)&wallet, sizeof(wallet));
+		if (OutFile.bad()) {
+
+		}
+	}
+	else {
+		std::cerr << "Error opening " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
 	OutFile.close();
 
 }
@@ -94,7 +113,7 @@ void walletInfo(char * userInput, const char* fileName) {
 	InFile.open("wallets.dat", std::ios::in | std::ios::binary);
 
 	if (!InFile.is_open()) {
-		std::cout << "Error reading " << fileName;
+		std::cerr << "Error reading " << fileName;
 		exit(EXIT_FAILURE);
 	}
 
@@ -125,13 +144,14 @@ void printTopTen() {
 }
 
 Wallet readWallet(size_t index) {
-	std::ifstream inFile;
-	inFile.open("wallets.dat", std::ios::in | std::ios::binary);
+	//potentially dangerous, needs fixing currently not suitable for use
+	std::ifstream InFile;
+	InFile.open("wallets.dat", std::ios::in | std::ios::binary);
 	Wallet wallet;
 	Wallet* pWallet = &wallet;
-	inFile.seekg(index * sizeof(Wallet));
-	inFile.read((char*)pWallet, sizeof(Wallet));
-	inFile.close();
+	InFile.seekg(index * sizeof(Wallet));
+	InFile.read((char*)pWallet, sizeof(Wallet));
+	InFile.close();
 	return wallet;
 }
 
