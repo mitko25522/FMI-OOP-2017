@@ -13,12 +13,10 @@ enum Choice
 
 Choice determineChoice(char*);
 void convertToLowerCase(char*);
-bool isQuit(char*);
-bool isHelp(char*);
 bool isAddWallet(char*);
 bool isWalletInfo(char*);
-bool isAttractInvestors(char*);
 bool isMakeOrder(char*);
 bool isNumber(char);
 bool isLetter(char);
 bool isSpace(char);
+bool areEqual(char*, const char*);

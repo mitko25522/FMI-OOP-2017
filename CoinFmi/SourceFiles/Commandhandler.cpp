@@ -2,15 +2,15 @@
 
 Choice determineChoice(char* choiceStr) {
 	convertToLowerCase(choiceStr);
-	if (isQuit(choiceStr))
+	if (areEqual(choiceStr, "quit"))
 		return QUIT;
-	else if (isHelp(choiceStr))
+	else if (areEqual(choiceStr, "help"))
 		return HELP;
 	else if (isAddWallet(choiceStr))
 		return ADD_WALLET;
 	else if (isWalletInfo(choiceStr))
 		return WALLET_INFO;
-	else if (isAttractInvestors(choiceStr))
+	else if (areEqual(choiceStr, "attract-investors"))
 		return ATTRACT_INVESTORS;
 	else if (isMakeOrder(choiceStr))
 		return MAKE_ORDER;
@@ -24,30 +24,6 @@ void convertToLowerCase(char* input) {
 			input[i] = char(((int)input[i]) + 32);
 		}
 	}
-}
-
-bool isQuit(char* input) {
-	convertToLowerCase(input);
-	const char* base = "quit";
-
-	for (int i = 0; base[i] != '\0'; i++) {
-		if (input[i] != base[i]) {
-			return false;
-		}
-	}
-
-	return true;
-}
-
-bool isHelp(char* input) {
-	const char* base = "help";
-
-	for (int i = 0; base[i] != '\0'; i++) {
-		if (input[i] != base[i]) {
-			return false;
-		}
-	}
-	return true;
 }
 
 bool isAddWallet(char* input) {
@@ -130,10 +106,6 @@ bool isWalletInfo(char* input) {
 	return true;
 }
 
-bool isAttractInvestors(char* input) {
-	return false;
-}
-
 bool isMakeOrder(char* input) {
 	return false;
 }
@@ -149,4 +121,13 @@ bool isLetter(char character) {
 
 bool isSpace(char character) {
 	return character == ' ';
+}
+
+bool areEqual(char* input, const char* base) {
+	for (int i = 0; base[i] != '\0'; i++) {
+		if (input[i] != base[i]) {
+			return false;
+		}
+	}
+	return true;
 }

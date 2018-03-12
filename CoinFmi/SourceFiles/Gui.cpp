@@ -5,7 +5,7 @@
 using namespace std;
 
 void printWelcomeMessage() {
-	cout << "FMICoins [Version 0.4]\n(c) 2018 Dimitar Stoyanov, All rights reserved\n";
+	cout << "FMICoins \n(c) 2018 Dimitar Stoyanov\n";
 	cout << "For a list of commands type help\n\n";
 }
 
