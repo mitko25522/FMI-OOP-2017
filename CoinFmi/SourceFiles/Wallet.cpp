@@ -12,8 +12,20 @@ void addWallet(char* choiceChar) {
 	saveWallet(newWallet);
 }
 
-void extractName(char* owner, char* input) {
-	//moves name from input to owner
+void extractName(char* to, char* from) {
+	size_t len = strl(from);
+	int index = len - 3;
+	while (from[index - 1] != '*') {
+		index--;
+	}
+
+	for (int i = 0; from[index] != '*'; i++, index++) {
+		to[i] = from[index];
+		if (from[index + 1] == '*') {
+			to[i + 1] = '\0';
+		}
+	}
+
 }
 
 double extractFiatMoney(const char * input) {
@@ -29,9 +41,9 @@ double extractFiatMoney(const char * input) {
 	return fiatMoney;
 }
 
-long int generateUniqueId() {
+unsigned generateUniqueId() {
 	srand(rand() ^ time(NULL));
-	int tempArr[8];
+	unsigned tempArr[8];
 	tempArr[0] = (rand() % 8) + 1;
 	for (int i = 1; i < 8; i++) {
 		tempArr[i] = rand() % 10;
@@ -66,7 +78,6 @@ bool idAlreadyExists(const long generatedId) {
 }
 
 void saveWallet(Wallet wallet) {
-	char newLineSymbol = '\n';
 	std::ofstream OutFile;
 	OutFile.open("wallets.dat", std::ios::out | std::ios::binary | std::ios::app);
 	OutFile.write((char *)&wallet, sizeof(wallet));
@@ -74,7 +85,8 @@ void saveWallet(Wallet wallet) {
 }
 
 void walletInfo(char * userInput) {
-
+	Wallet selectedWallet;
+	selectedWallet.id = extractId(userInput);
 }
 
 void printTopTen() {
@@ -83,11 +95,25 @@ void printTopTen() {
 
 Wallet readWallet(size_t index) {
 	std::ifstream inFile;
-	inFile.open("wallets.dat", std::ios::binary | std::ios::in);
+	inFile.open("wallets.dat", std::ios::in | std::ios::binary);
 	Wallet wallet;
 	Wallet* pWallet = &wallet;
 	inFile.seekg(index * sizeof(Wallet));
 	inFile.read((char*)pWallet, sizeof(Wallet));
 	inFile.close();
 	return wallet;
+}
+
+size_t strl(const char* str) {
+	size_t len = 0;
+	while (str[len] != '\0') {
+		len++;
+	}
+	return len;
+}
+
+unsigned extractId(char* input) {
+	unsigned id = 0;
+
+	return id;
 }

@@ -38,7 +38,6 @@ bool isQuit(char* input) {
 }
 
 bool isHelp(char* input) {
-	convertToLowerCase(input);
 	const char* base = "help";
 	for (int i = 0; base[i] != '\0'; i++) {
 		if (input[i] != base[i]) {
@@ -48,9 +47,7 @@ bool isHelp(char* input) {
 	return true;
 }
 
-//add-wallet **fiatMoney** **name**
 bool isAddWallet(char* input) {
-	convertToLowerCase(input);
 	const char* base = "add-wallet **";
 	int observedIndex = 0;
 	for (; base[observedIndex] != '\0'; observedIndex++) {
@@ -100,17 +97,14 @@ bool isAddWallet(char* input) {
 }
 
 bool isWalletInfo(char* input) {
-	convertToLowerCase(input);
 	return false;
 }
 
 bool isAttractInvestors(char* input) {
-	convertToLowerCase(input);
 	return false;
 }
 
 bool isMakeOrder(char* input) {
-	convertToLowerCase(input);
 	return false;
 }
 

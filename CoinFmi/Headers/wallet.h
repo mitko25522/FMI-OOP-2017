@@ -9,9 +9,11 @@ struct Wallet {
 void addWallet(char*);
 void extractName(char*, char*);
 double extractFiatMoney(const char* input);
-long int generateUniqueId();
+unsigned generateUniqueId();
 bool idAlreadyExists(const long);	
 void saveWallet(Wallet);
 void walletInfo(char *);
 void printTopTen();
-Wallet readWallet(size_t index);	
+Wallet readWallet(size_t index);
+size_t strl(const char*);
+unsigned extractId(char*);
