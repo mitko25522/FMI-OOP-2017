@@ -15,18 +15,18 @@
 //cout << number;
 
 int main() {
-	/*printWelcomeMessage;
+	printWelcomeMessage();
 	while (true) {
 		chooseOption();
-}*/
-	char text[5];
+	}
+	/*char text[5];
 	text[0] = 'h';
 	text[1] = 'E';
 	text[2] = 'l';
 	text[3] = 'p';
 	text[4] = '\0';
 	char* pText = (char*)text;
-	std::cout << isHelp(pText) << std::endl;
+	std::cout << isHelp(pText) << std::endl;*/
 	return 0;
 }
 

@@ -2,13 +2,13 @@
 
 enum Choice
 {
-	invalid,
-	quit,
-	help,
-	addwallet,
-	walletinfo,
-	attractinvestors,
-	makeorder
+	INVALID,
+	QUIT,
+	HELP,
+	ADD_WALLET,
+	WALLET_INFO,
+	ATTRACT_INVESTORS,
+	MAKE_ORDER
 };
 
 Choice determineChoice(char*);
@@ -19,3 +19,6 @@ bool isAddWallet(char*);
 bool isWalletInfo(char*);
 bool isAttractInvestors(char*);
 bool isMakeOrder(char*);
+bool isNumber(char);
+bool isLetter(char);
+bool isSpace(char);

@@ -5,7 +5,7 @@
 using namespace std;
 
 void printWelcomeMessage() {
-	cout << "FMICoins [Version 0.0]\n(c) 2018 Dimitar Stoyanov, All rights reserved\n";
+	cout << "FMICoins [Version 0.4]\n(c) 2018 Dimitar Stoyanov, All rights reserved\n";
 	cout << "For a list of commands type help\n\n";
 }
 
@@ -16,13 +16,13 @@ void chooseOption() {
 	
 	Choice choice = determineChoice(userInput);
 	switch (choice) {
-		case quit: exit(EXIT_SUCCESS); break;
-		case help: printGeneralHelp(); break;
-		case addwallet: addWallet(userInput); break;
-		case walletinfo: walletInfo(userInput); break;
-		case attractinvestors: printTopTen(); break;
-	//	case makeorder: makeOrder(userInput); break;
-		case invalid: chooseOption(); break;
+		case QUIT: exit(EXIT_SUCCESS); break;
+		case HELP: printGeneralHelp(); break;
+		case ADD_WALLET: addWallet(userInput); break;
+		case WALLET_INFO: walletInfo(userInput); break;
+		case ATTRACT_INVESTORS: printTopTen(); break;
+	//	case MAKE_ORDER: makeOrder(userInput); break;
+		case INVALID: chooseOption(); break;
 	}
 	delete userInput;
 }

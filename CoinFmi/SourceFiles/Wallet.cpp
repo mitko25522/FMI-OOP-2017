@@ -4,7 +4,7 @@
 #include <fstream>
 
 void addWallet(char* choiceChar) {
-	//takes input as "add-wallet **fiatMoney** **name**" template
+	std::cout << "Adding wallet.." << std::endl;
 	Wallet newWallet;
 	newWallet.fiatMoney = extractFiatMoney(choiceChar);
 	extractName(newWallet.owner, choiceChar);
@@ -16,9 +16,9 @@ void extractName(char* owner, char* input) {
 	//moves name from input to owner
 }
 
-double extractFiatMoney(char* input) {
+double extractFiatMoney(const char * input) {
 	double fiatMoney = 0;
-	int index = 0;
+	int index = 13;
 	while (input[index + 1] != '*') {
 		index++;
 	}

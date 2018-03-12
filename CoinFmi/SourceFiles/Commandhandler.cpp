@@ -3,19 +3,19 @@
 Choice determineChoice(char* choiceStr) {
 	convertToLowerCase(choiceStr);
 	if (isQuit(choiceStr))
-		return quit;
+		return QUIT;
 	else if (isHelp(choiceStr))
-		return help;
+		return HELP;
 	else if (isAddWallet(choiceStr))
-		return addwallet;
+		return ADD_WALLET;
 	else if (isWalletInfo(choiceStr))
-		return walletinfo;
+		return WALLET_INFO;
 	else if (isAttractInvestors(choiceStr))
-		return attractinvestors;
+		return ATTRACT_INVESTORS;
 	else if (isMakeOrder(choiceStr))
-		return makeorder;
+		return MAKE_ORDER;
 	else
-		return invalid;
+		return INVALID;
 }
 
 void convertToLowerCase(char* input) {
@@ -48,9 +48,55 @@ bool isHelp(char* input) {
 	return true;
 }
 
+//add-wallet **fiatMoney** **name**
 bool isAddWallet(char* input) {
 	convertToLowerCase(input);
-	return false;
+	const char* base = "add-wallet **";
+	int observedIndex = 0;
+	for (; base[observedIndex] != '\0'; observedIndex++) {
+		if (input[observedIndex] != base[observedIndex]) {
+			return false;
+		}
+	}
+
+	for (; input[observedIndex] != '*'; observedIndex++) {
+		if (!isNumber(input[observedIndex])) {
+			return false;
+		}
+	}
+
+	if (input[++observedIndex] != '*') {
+		return false;
+	}
+
+	if (input[++observedIndex] != ' ') {
+		return false;
+	}
+
+	if (input[++observedIndex] != '*') {
+		return false;
+	}
+
+	if (input[(++observedIndex)++] != '*') {
+		return false;
+	}
+
+	for (; input[observedIndex] != '*'; observedIndex++) {
+		if (!isLetter(input[observedIndex]) && !isSpace(input[observedIndex])) {
+			return false;
+		}
+	}
+
+	if (input[++observedIndex] != '*') {
+		return false;
+	}
+
+	if (input[++observedIndex] != '\0') {
+		return false;
+	}
+
+
+	return true;
 }
 
 bool isWalletInfo(char* input) {
@@ -66,4 +112,26 @@ bool isAttractInvestors(char* input) {
 bool isMakeOrder(char* input) {
 	convertToLowerCase(input);
 	return false;
+}
+
+bool isNumber(char character) {
+	if (character >= '0' && character <= '9') {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool isLetter(char character) {
+	if (character >= 'a' && character <= 'z') {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool isSpace(char character) {
+	return character == ' ';
 }

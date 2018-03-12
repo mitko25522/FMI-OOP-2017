@@ -8,7 +8,7 @@ struct Wallet {
 
 void addWallet(char*);
 void extractName(char*, char*);
-double extractFiatMoney(char* input);
+double extractFiatMoney(const char* input);
 long int generateUniqueId();
 bool idAlreadyExists(const long);	
 void saveWallet(Wallet);
