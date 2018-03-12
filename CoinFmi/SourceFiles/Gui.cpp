@@ -13,7 +13,6 @@ void chooseOption() {
 	cout << "Enter command> ";
 	char * userInput = new char[100];
 	cin.getline(userInput, 100);
-	
 	Choice choice = determineChoice(userInput);
 	switch (choice) {
 		case QUIT: exit(EXIT_SUCCESS); break;
@@ -22,7 +21,7 @@ void chooseOption() {
 		case WALLET_INFO: walletInfo(userInput); break;
 		case ATTRACT_INVESTORS: printTopTen(); break;
 	//	case MAKE_ORDER: makeOrder(userInput); break;
-		case INVALID: chooseOption(); break;
+		case INVALID: break;
 	}
 	delete userInput;
 }

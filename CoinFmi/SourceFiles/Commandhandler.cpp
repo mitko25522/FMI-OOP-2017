@@ -29,16 +29,19 @@ void convertToLowerCase(char* input) {
 bool isQuit(char* input) {
 	convertToLowerCase(input);
 	const char* base = "quit";
+
 	for (int i = 0; base[i] != '\0'; i++) {
 		if (input[i] != base[i]) {
 			return false;
 		}
 	}
+
 	return true;
 }
 
 bool isHelp(char* input) {
 	const char* base = "help";
+
 	for (int i = 0; base[i] != '\0'; i++) {
 		if (input[i] != base[i]) {
 			return false;
@@ -50,6 +53,7 @@ bool isHelp(char* input) {
 bool isAddWallet(char* input) {
 	const char* base = "add-wallet **";
 	int observedIndex = 0;
+
 	for (; base[observedIndex] != '\0'; observedIndex++) {
 		if (input[observedIndex] != base[observedIndex]) {
 			return false;
@@ -92,12 +96,38 @@ bool isAddWallet(char* input) {
 		return false;
 	}
 
-
 	return true;
 }
 
 bool isWalletInfo(char* input) {
-	return false;
+	const char* base = "wallet-info **";
+	int observedIndex = 0;
+
+	for (; base[observedIndex] != '\0'; observedIndex++) {
+		if (input[observedIndex] != base[observedIndex]) {
+			return false;
+		}
+	}
+
+	for (int i = 0; i < 8; i++, observedIndex++) {
+		if (!isNumber(input[observedIndex])) {
+			return false;
+		}
+	}
+
+	if (input[observedIndex++] != '*') {
+		return false;
+	}
+
+	if (input[observedIndex++] != '*') {
+		return false;
+	}
+
+	if (input[observedIndex] != '\0') {
+		return false;
+	}
+
+	return true;
 }
 
 bool isAttractInvestors(char* input) {
@@ -109,22 +139,13 @@ bool isMakeOrder(char* input) {
 }
 
 bool isNumber(char character) {
-	if (character >= '0' && character <= '9') {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return (character >= '0' && character <= '9');
 }
 
 bool isLetter(char character) {
-	if (character >= 'a' && character <= 'z') {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return (character >= 'a' && character <= 'z');
 }
+
 
 bool isSpace(char character) {
 	return character == ' ';
