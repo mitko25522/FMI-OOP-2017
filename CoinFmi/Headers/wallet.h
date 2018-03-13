@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 struct Wallet {
 	char owner[256];
@@ -18,3 +19,9 @@ Wallet readWallet(size_t index);
 size_t strl(const char*);
 unsigned extractId(const char*);
 void printWallet(Wallet);
+uint8_t countOfTopWallets(const char* = "wallets.dat");
+void bubbleSort(Wallet*, size_t);
+Wallet* getTopWallets(uint8_t, const char* = "wallets.dat");
+Wallet getRichestWallet(const char* = "wallets.dat");
+Wallet getNextRichestWallet(double, const char* = "wallets.dat");
+void printStr(char*);
