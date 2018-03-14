@@ -29,3 +29,5 @@ Wallet getRichestWallet(const char* = "wallets.dat");
 Wallet getNextRichestWallet(double, const char* = "wallets.dat");
 void printStr(char*);
 bool didNotInvest(Wallet);
+void printWalletList(const char* = "wallets.dat");
+void compactPrintWallet(Wallet);

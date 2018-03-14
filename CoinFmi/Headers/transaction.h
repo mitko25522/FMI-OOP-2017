@@ -20,4 +20,4 @@ bool isSender(Wallet, Transaction);
 bool isReceiver(Wallet, Transaction);
 double extractFmiCoins(Transaction);
 void printTransaction(Transaction);
-void printTransactionList(const char* = "transactions.dat");
+void printTransactionLog(const char* = "transactions.dat");

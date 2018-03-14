@@ -12,6 +12,12 @@ Choice determineChoice(char* choiceStr) {
 		return WALLET_INFO;
 	else if (areEqual(choiceStr, "attract-investors"))
 		return ATTRACT_INVESTORS;
+	else if (areEqual(choiceStr, "transaction-log"))
+		return TRANSACTION_LOG;
+	else if (areEqual(choiceStr, "wallet-list"))
+		return WALLET_LIST;
+	else if (areEqual(choiceStr, "clear-data"))
+		return CLEAR_DATA;
 	else if (isMakeOrder(choiceStr))
 		return MAKE_ORDER;
 	else

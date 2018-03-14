@@ -74,7 +74,7 @@ double extractFmiCoins(Transaction transaction) {
 	return transaction.fmiCoins;
 }
 
-void printTransactionList(const char* fileName) {
+void printTransactionLog(const char* fileName) {
 	std::ifstream InFile;
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
@@ -92,6 +92,7 @@ void printTransactionList(const char* fileName) {
 			exit(EXIT_FAILURE);
 		}
 		else if (InFile.eof()) {
+			std::cout << std::endl;
 			break;
 		}
 		printTransaction(tempTransaction);
@@ -99,5 +100,5 @@ void printTransactionList(const char* fileName) {
 }
 
 void printTransaction(Transaction transaction) {
-	std::cout << "From: " << transaction.senderId << " |To: " << transaction.receiverId << "| Amount: " << transaction.fmiCoins << "| Time: " << transaction.time << std::endl;
+	std::cout << "From: " << transaction.senderId << " | To: " << transaction.receiverId << " | Time: " << transaction.time << " | Amount: " << transaction.fmiCoins << std::endl;
 }

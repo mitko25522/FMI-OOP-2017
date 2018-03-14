@@ -341,3 +341,36 @@ void printStr(char* str) {
 bool didNotInvest(Wallet wallet) {
 	return !wallet.fiatMoney;
 }
+
+void printWalletList(const char* fileName) {
+	std::ifstream InFile;
+	InFile.open(fileName, std::ios::in | std::ios::binary);
+
+	if (!InFile.is_open()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_SUCCESS);
+	}
+
+	while (!InFile.eof()) {
+		Wallet tempWallet;
+		InFile.read((char*)&tempWallet, sizeof(Wallet));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+		else if (InFile.eof()) {
+			std::cout << std::endl;
+			break;
+		}
+		compactPrintWallet(tempWallet);;
+	}
+}
+
+void compactPrintWallet(Wallet wallet) {
+	std::cout << "Id: " << wallet.id << " | Owner: ";
+	for (int i = 0; wallet.owner[i] != '\0'; i++) {
+		std::cout << wallet.owner[i];
+	}
+	std::cout << " | Fiat money: " << wallet.fiatMoney << std::endl;
+}

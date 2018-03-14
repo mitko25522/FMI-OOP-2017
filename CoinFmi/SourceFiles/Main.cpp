@@ -5,10 +5,10 @@
 #include <iostream>
 
 int main() {
-	/*printWelcomeMessage();
+	printWelcomeMessage();
 	while (true) {
 		chooseOption();
-	}*/
-	printTransactionList();
+	}
+	
 	return 0;
 }
