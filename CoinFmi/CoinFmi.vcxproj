@@ -127,11 +127,13 @@
     <ClCompile Include="SourceFiles\Commandhandler.cpp" />
     <ClCompile Include="SourceFiles\Gui.cpp" />
     <ClCompile Include="SourceFiles\Main.cpp" />
+    <ClCompile Include="SourceFiles\Transaction.cpp" />
     <ClCompile Include="SourceFiles\Wallet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\commandhandler.h" />
     <ClInclude Include="Headers\gui.h" />
+    <ClInclude Include="Headers\transaction.h" />
     <ClInclude Include="Headers\wallet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
