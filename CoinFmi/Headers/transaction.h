@@ -19,3 +19,5 @@ double calculateFmiCoins(Wallet, const char* = "transactions.dat");
 bool isSender(Wallet, Transaction);
 bool isReceiver(Wallet, Transaction);
 double extractFmiCoins(Transaction);
+void printTransaction(Transaction);
+void printTransactionList(const char* = "transactions.dat");

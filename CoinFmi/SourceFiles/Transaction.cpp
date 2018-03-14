@@ -73,3 +73,31 @@ bool isReceiver(Wallet wallet, Transaction transaction) {
 double extractFmiCoins(Transaction transaction) {
 	return transaction.fmiCoins;
 }
+
+void printTransactionList(const char* fileName) {
+	std::ifstream InFile;
+	InFile.open(fileName, std::ios::in | std::ios::binary);
+
+	if (!InFile.is_open()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_SUCCESS);
+	}
+
+	while (!InFile.eof()) {
+		Transaction tempTransaction;
+		InFile.read((char*)&tempTransaction, sizeof(Transaction));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+		else if (InFile.eof()) {
+			break;
+		}
+		printTransaction(tempTransaction);
+	}
+}
+
+void printTransaction(Transaction transaction) {
+	std::cout << "From: " << transaction.senderId << " |To: " << transaction.receiverId << "| Amount: " << transaction.fmiCoins << "| Time: " << transaction.time << std::endl;
+}

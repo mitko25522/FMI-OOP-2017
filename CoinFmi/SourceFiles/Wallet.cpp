@@ -159,7 +159,7 @@ void printTopTen() {
 	}
 
 	Wallet* wallets = new Wallet[count];
-	wallets = getTopWallets(count);
+	getTopWallets(wallets, count);
 	for (int i = 0; i < 10; i++) {
 		if (i >= count) {
 			std::cout << i + 1 << ". N/A" << std::endl;
@@ -251,13 +251,11 @@ uint8_t countOfTopWallets(const char* fileName) {
 }
 
 
-Wallet* getTopWallets(uint8_t count, const char* fileName) {
-	Wallet* topWallets = new Wallet[count];
+void getTopWallets(Wallet* topWallets, uint8_t count, const char* fileName) {
 	topWallets[0] = getRichestWallet();
 	for (int i = 1; i < count; i++) {
 		topWallets[i] = getNextRichestWallet(topWallets[i - 1].fiatMoney);
 	}
-	return topWallets;
 }
 
 Wallet getRichestWallet(const char* fileName) {

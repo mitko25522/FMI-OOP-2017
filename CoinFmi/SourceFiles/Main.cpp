@@ -3,12 +3,12 @@
 #include "../Headers/commandhandler.h"
 #include "../Headers/transaction.h"
 #include <iostream>
-#include <vld.h>
 
 int main() {
-	printWelcomeMessage();
+	/*printWelcomeMessage();
 	while (true) {
 		chooseOption();
-	}
+	}*/
+	printTransactionList();
 	return 0;
 }

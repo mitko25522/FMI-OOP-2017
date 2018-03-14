@@ -12,7 +12,7 @@ void chooseOption() {
 	cin.getline(userInput, 100);
 	Choice choice = determineChoice(userInput);
 	switch (choice) {
-		case QUIT: exit(EXIT_SUCCESS); break;
+		case QUIT: delete[] userInput; exit(EXIT_SUCCESS); break;
 		case HELP: printGeneralHelp(); break;
 		case ADD_WALLET: createWallet(userInput); break;
 		case WALLET_INFO: walletInfo(userInput); break;
