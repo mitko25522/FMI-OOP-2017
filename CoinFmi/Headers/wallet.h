@@ -9,13 +9,13 @@ struct Wallet {
 
 void addWallet(char*);
 void extractName(char*, char*);
-double extractFiatMoney(const char* input);
+double extractFiatMoney(const char*);
 unsigned generateUniqueId();
 bool idAlreadyExists(unsigned, const char* = "wallets.dat");
 void saveWallet(Wallet, const char* = "wallets.dat");
 void walletInfo(char *, const char* = "wallets.dat");
 void printTopTen();
-Wallet readWallet(size_t index);
+Wallet readWallet(size_t);
 size_t strl(const char*);
 unsigned extractId(const char*);
 void printWallet(Wallet);
@@ -25,3 +25,4 @@ Wallet* getTopWallets(uint8_t, const char* = "wallets.dat");
 Wallet getRichestWallet(const char* = "wallets.dat");
 Wallet getNextRichestWallet(double, const char* = "wallets.dat");
 void printStr(char*);
+bool didNotInvest(Wallet);

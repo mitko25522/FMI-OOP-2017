@@ -128,6 +128,9 @@ bool areEqual(char* input, const char* base) {
 		if (input[i] != base[i]) {
 			return false;
 		}
+		if (base[i + 1] == '\0' && input[i + 1] != '\0') {
+			return false;
+		}
 	}
 	return true;
 }

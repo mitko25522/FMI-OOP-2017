@@ -23,7 +23,7 @@ void chooseOption() {
 	//	case MAKE_ORDER: makeOrder(userInput); break;
 		case INVALID: break;
 	}
-	delete userInput;
+	delete[] userInput;
 }
 
 void printGeneralHelp() {

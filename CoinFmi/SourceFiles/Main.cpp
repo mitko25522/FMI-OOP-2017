@@ -7,8 +7,7 @@ int main() {
 	printWelcomeMessage();
 	while (true) {
 		chooseOption();
-	}	
+	}
+
 	return 0;
 }
-
-

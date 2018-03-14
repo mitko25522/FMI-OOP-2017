@@ -5,10 +5,14 @@
 
 
 void addWallet(char* choiceChar) {
-	std::cout << "Adding wallet.." << std::endl;
 	Wallet newWallet;
 	newWallet.fiatMoney = extractFiatMoney(choiceChar);
+	if (didNotInvest(newWallet)) {
+		std::cout << "No money invested. Cannot create wallet." << std::endl << std::endl;
+		return;
+	}
 	extractName(newWallet.owner, choiceChar);
+	std::cout << "Adding wallet.." << std::endl;
 	newWallet.id = generateUniqueId();
 	saveWallet(newWallet);
 }
@@ -150,23 +154,24 @@ void printTopTen() {
 	int count = countOfTopWallets();
 
 	if (count == 0) {
-		std::cout << "No wallets exist in the database";
+		std::cout << "No wallets exist in the database" << std::endl << std::endl;
 		return;
 	}
 
 	Wallet* wallets = new Wallet[count];
 	wallets = getTopWallets(count);
-	for (int i = 0; i < count; i++) {
-		/*printWallet(wallets[i]);*/
+	for (int i = 0; i < 10; i++) {
+		if (i >= count) {
+			std::cout << i + 1 << ". N/A" << std::endl;
+			continue;
+		}
 		std::cout << i + 1 << ". " << wallets[i].id << " | ";
 		printStr(wallets[i].owner);
 		std::cout << " | " << wallets[i].fiatMoney << std::endl;
 	}
 	std::cout << std::endl;
 
-	//must print ten wallet list even when they dont exist (n/a)
-
-	delete wallets;
+	delete[] wallets;
 }
 
 Wallet readWallet(size_t index) {
@@ -275,7 +280,6 @@ Wallet* getTopWallets(uint8_t count, const char* fileName) {
 	for (int i = 1; i < count; i++) {
 		topWallets[i] = getNextRichestWallet(topWallets[i - 1].fiatMoney);
 	}
-
 	return topWallets;
 }
 
@@ -325,16 +329,26 @@ Wallet getNextRichestWallet(double previousRichestFiatMoney, const char* fileNam
 	}
 
 	Wallet nextRichestWallet;
+	nextRichestWallet.fiatMoney = 0;
+	double currentMaxMoney = 0;
 
 	while (!InFile.eof()) {
 		Wallet tempWallet;
 		InFile.read((char*)&tempWallet, sizeof(Wallet));
-		double previousRead = tempWallet.fiatMoney;
+
 		if (InFile.bad()) {
 			std::cerr << "Error reading " << fileName;
 		}
 
-		if ((tempWallet.fiatMoney < previousRichestFiatMoney) && (tempWallet.fiatMoney >= previousRead)) {
+		if (tempWallet.fiatMoney == previousRichestFiatMoney) {
+			continue;
+		}
+
+		if (tempWallet.fiatMoney > currentMaxMoney && tempWallet.fiatMoney<previousRichestFiatMoney) {
+			currentMaxMoney = tempWallet.fiatMoney;	
+		}
+
+		if (currentMaxMoney > nextRichestWallet.fiatMoney) {
 			nextRichestWallet = tempWallet;
 		}
 	}
@@ -347,4 +361,8 @@ void printStr(char* str) {
 	for (int i = 0; str[i] != '\0'; i++) {
 		std::cout << str[i];
 	}
+}
+
+bool didNotInvest(Wallet wallet) {
+	return !wallet.fiatMoney;
 }
