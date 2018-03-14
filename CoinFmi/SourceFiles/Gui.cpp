@@ -1,7 +1,4 @@
-﻿#include <iostream>
-#include "../Headers/gui.h"
-#include "../Headers/commandhandler.h"
-#include "../Headers/wallet.h"
+﻿#include "../Headers/gui.h"
 using namespace std;
 
 void printWelcomeMessage() {
@@ -17,11 +14,11 @@ void chooseOption() {
 	switch (choice) {
 		case QUIT: exit(EXIT_SUCCESS); break;
 		case HELP: printGeneralHelp(); break;
-		case ADD_WALLET: addWallet(userInput); break;
+		case ADD_WALLET: createWallet(userInput); break;
 		case WALLET_INFO: walletInfo(userInput); break;
 		case ATTRACT_INVESTORS: printTopTen(); break;
 	//	case MAKE_ORDER: makeOrder(userInput); break;
-		case INVALID: break;
+		case INVALID: printInvalidInputError(userInput); break;
 	}
 	delete[] userInput;
 }
@@ -34,4 +31,8 @@ void printGeneralHelp() {
 	cout << "make-order         Requests a payment to be made.\n";
 	cout << "attract-investors  Prints the top ten richest users in the system.\n";
 	cout << endl;
+}
+
+void printInvalidInputError(char* userInput) {
+	std::cout << "'" << userInput << "' is not recognized as a supported command." << std::endl << std::endl;
 }

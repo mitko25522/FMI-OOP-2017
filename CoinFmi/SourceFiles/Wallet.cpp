@@ -1,10 +1,7 @@
 #include "../Headers/wallet.h"
-#include <time.h>
-#include <iostream>
-#include <fstream>
+#include "../Headers/transaction.h"
 
-
-void addWallet(char* choiceChar) {
+void createWallet(char* choiceChar) {
 	Wallet newWallet;
 	newWallet.fiatMoney = extractFiatMoney(choiceChar);
 	if (didNotInvest(newWallet)) {
@@ -15,6 +12,8 @@ void addWallet(char* choiceChar) {
 	std::cout << "Adding wallet.." << std::endl;
 	newWallet.id = generateUniqueId();
 	saveWallet(newWallet);
+	Transaction transaction = createTransaction(newWallet.fiatMoney / FMI_COIN_RATE, SYSTEM_ID, newWallet.id);
+	saveTransaction(transaction);
 }
 
 void extractName(char* to, char* from) {
@@ -51,6 +50,7 @@ unsigned generateUniqueId() {
 	srand(rand() ^ time(NULL));
 	unsigned tempArr[8];
 	tempArr[0] = (rand() % 8) + 1;
+
 	for (int i = 1; i < 8; i++) {
 		tempArr[i] = rand() % 10;
 	}
@@ -122,7 +122,7 @@ void walletInfo(char * userInput, const char* fileName) {
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
 	if (!InFile.is_open()) {
-		std::cerr << "Error reading " << fileName;
+		std::cerr << "Error reading " << fileName << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -132,7 +132,7 @@ void walletInfo(char * userInput, const char* fileName) {
 		InFile.read((char*)&tempWallet, sizeof(Wallet));
 
 		if (InFile.bad()) {
-			std::cerr << "Error reading " << fileName;
+			std::cerr << "Error reading " << fileName << std::endl;
 			exit(EXIT_FAILURE);
 		}
 
@@ -144,7 +144,7 @@ void walletInfo(char * userInput, const char* fileName) {
 		}
 
 		if (InFile.eof()) {
-			std::cout << "No such wallet found in " << fileName;
+			std::cout << "No such wallet found in " << fileName << std::endl << std::endl;
 			InFile.close();
 		}
 	}
@@ -174,8 +174,8 @@ void printTopTen() {
 	delete[] wallets;
 }
 
+//potentially dangerous, needs fixing currently not suitable for use
 Wallet readWallet(size_t index) {
-	//potentially dangerous, needs fixing currently not suitable for use
 	std::ifstream InFile;
 	InFile.open("wallets.dat", std::ios::in | std::ios::binary);
 	Wallet wallet;
@@ -223,7 +223,7 @@ uint8_t countOfTopWallets(const char* fileName) {
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
 	if (!InFile.is_open()) {
-		std::cerr << "Error reading " << fileName;
+		std::cerr << "Error reading " << fileName << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -233,7 +233,7 @@ uint8_t countOfTopWallets(const char* fileName) {
 		InFile.read((char*)&tempWallet, sizeof(Wallet));
 
 		if (InFile.bad()) {
-			std::cerr << "Error reading " << fileName;
+			std::cerr << "Error reading " << fileName << std::endl;
 			exit(EXIT_FAILURE);
 		}
 
@@ -250,29 +250,6 @@ uint8_t countOfTopWallets(const char* fileName) {
 	return count;
 }
 
-void bubbleSort(Wallet* walletArr, size_t count)
-{
-	int i, j;
-	bool swapped;
-	for (i = 0; i < count - 1; i++)
-	{
-		swapped = false;
-		for (j = 0; j < count - i - 1; j++)
-		{
-			if (walletArr[j].fiatMoney > walletArr[j + 1].fiatMoney)
-			{
-				Wallet tempWallet = walletArr[j];
-				walletArr[j] = walletArr[j + 1];
-				walletArr[j + 1] = tempWallet;
-				swapped = true;
-			}
-		}
-
-		// IF no two elements were swapped by inner loop, then break
-		if (swapped == false)
-			break;
-	}
-}
 
 Wallet* getTopWallets(uint8_t count, const char* fileName) {
 	Wallet* topWallets = new Wallet[count];
@@ -288,7 +265,7 @@ Wallet getRichestWallet(const char* fileName) {
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
 	if (!InFile.is_open()) {
-		std::cerr << "Error reading " << fileName;
+		std::cerr << "Error reading " << fileName << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -296,7 +273,7 @@ Wallet getRichestWallet(const char* fileName) {
 	InFile.read((char*)&richestWallet, sizeof(Wallet));
 
 	if (InFile.bad()) {
-		std::cerr << "Error reading " << fileName;
+		std::cerr << "Error reading " << fileName << std::endl;
 		InFile.close();
 		exit(EXIT_FAILURE);
 	}
@@ -306,7 +283,7 @@ Wallet getRichestWallet(const char* fileName) {
 		InFile.read((char*)&tempWallet, sizeof(Wallet));
 
 		if (InFile.bad()) {
-			std::cerr << "Error reading " << fileName;
+			std::cerr << "Error reading " << fileName << std::endl;
 			exit(EXIT_FAILURE);
 		}
 
@@ -324,7 +301,7 @@ Wallet getNextRichestWallet(double previousRichestFiatMoney, const char* fileNam
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
 	if (!InFile.is_open()) {
-		std::cerr << "Error reading " << fileName;
+		std::cerr << "Error reading " << fileName << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -344,8 +321,8 @@ Wallet getNextRichestWallet(double previousRichestFiatMoney, const char* fileNam
 			continue;
 		}
 
-		if (tempWallet.fiatMoney > currentMaxMoney && tempWallet.fiatMoney<previousRichestFiatMoney) {
-			currentMaxMoney = tempWallet.fiatMoney;	
+		if (tempWallet.fiatMoney > currentMaxMoney && tempWallet.fiatMoney < previousRichestFiatMoney) {
+			currentMaxMoney = tempWallet.fiatMoney;
 		}
 
 		if (currentMaxMoney > nextRichestWallet.fiatMoney) {
