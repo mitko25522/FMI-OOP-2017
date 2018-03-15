@@ -1,5 +1,6 @@
 #include "../Headers/wallet.h"
 #include "../Headers/transaction.h"
+#include "../Headers/commandhandler.h"
 
 void createWallet(char* choiceChar) {
 	Wallet newWallet;
@@ -17,15 +18,16 @@ void createWallet(char* choiceChar) {
 }
 
 void extractName(char* to, char* from) {
-	size_t len = strl(from);
-	int index = len - 3;
-	while (from[index - 1] != '*') {
-		index--;
+	int observedIndex = 11;
+
+	while (!isLetter(from[observedIndex])) {
+		observedIndex++;
 	}
 
-	for (int i = 0; from[index] != '*'; i++, index++) {
-		to[i] = from[index];
-		if (from[index + 1] == '*') {
+	for (int i = 0; from[observedIndex] != '\0'; i++, observedIndex++) {
+		to[i] = from[observedIndex];
+
+		if (from[observedIndex + 1] == '\0') {
 			to[i + 1] = '\0';
 		}
 	}
@@ -34,14 +36,16 @@ void extractName(char* to, char* from) {
 
 double extractFiatMoney(const char * input) {
 	double fiatMoney = 0;
-	int index = 13;
-	while (input[index + 1] != '*') {
+	int index = 11;
+
+	while (input[index + 1] != ' ') {
 		index++;
 	}
 
-	for (int j = 1; input[index] != '*'; j *= 10, index--) {
+	for (int j = 1; input[index] != ' '; j *= 10, index--) {
 		fiatMoney += (input[index] - '0')*j;
 	}
+
 	return fiatMoney;
 }
 
@@ -194,16 +198,17 @@ size_t strl(const char* str) {
 	return len;
 }
 
+//intended for use with wallet-info
 unsigned extractId(const char* input) {
 	unsigned id = 0;
-	int index = 14;
+	int index = 0;
 
-	while (input[index + 1] != '*') {
+	while (input[index] != '\0') {
 		index++;
 	}
-
-	for (int j = 1; input[index] != '*'; j *= 10, index--) {
-		id += (input[index] - '0')*j;
+	index--;
+	for (int j = 1; input[index] != ' '; j *= 10, index--) {
+		id += (input[index] - '0') * j;
 	}
 
 	return id;

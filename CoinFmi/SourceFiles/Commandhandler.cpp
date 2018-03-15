@@ -33,7 +33,7 @@ void convertToLowerCase(char* input) {
 }
 
 bool isAddWallet(char* input) {
-	const char* base = "add-wallet **";
+	const char* base = "add-wallet ";
 	int observedIndex = 0;
 
 	for (; base[observedIndex] != '\0'; observedIndex++) {
@@ -42,47 +42,23 @@ bool isAddWallet(char* input) {
 		}
 	}
 
-	for (; input[observedIndex] != '*'; observedIndex++) {
+	for (; input[observedIndex] != ' '; observedIndex++) {
 		if (!isNumber(input[observedIndex])) {
 			return false;
 		}
 	}
 
-	if (input[++observedIndex] != '*') {
-		return false;
-	}
-
-	if (input[++observedIndex] != ' ') {
-		return false;
-	}
-
-	if (input[++observedIndex] != '*') {
-		return false;
-	}
-
-	if (input[(++observedIndex)++] != '*') {
-		return false;
-	}
-
-	for (; input[observedIndex] != '*'; observedIndex++) {
+	for (; input[observedIndex] != '\0'; observedIndex++) {
 		if (!isLetter(input[observedIndex]) && !isSpace(input[observedIndex])) {
 			return false;
 		}
-	}
-
-	if (input[++observedIndex] != '*') {
-		return false;
-	}
-
-	if (input[++observedIndex] != '\0') {
-		return false;
 	}
 
 	return true;
 }
 
 bool isWalletInfo(char* input) {
-	const char* base = "wallet-info **";
+	const char* base = "wallet-info ";
 	int observedIndex = 0;
 
 	for (; base[observedIndex] != '\0'; observedIndex++) {
@@ -95,14 +71,6 @@ bool isWalletInfo(char* input) {
 		if (!isNumber(input[observedIndex])) {
 			return false;
 		}
-	}
-
-	if (input[observedIndex++] != '*') {
-		return false;
-	}
-
-	if (input[observedIndex++] != '*') {
-		return false;
 	}
 
 	if (input[observedIndex] != '\0') {

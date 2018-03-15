@@ -18,7 +18,7 @@ Choice determineChoice(char*);
 void convertToLowerCase(char*);
 bool isAddWallet(char*);
 bool isWalletInfo(char*);
-bool isMakeOrder(char*);
+bool isMakeOrder(char*);//needs work
 bool isNumber(char);
 bool isLetter(char);
 bool isSpace(char);

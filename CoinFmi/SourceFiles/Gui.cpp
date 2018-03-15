@@ -11,16 +11,16 @@ void chooseOption() {
 	std::cin.getline(userInput, 100);
 	Choice choice = determineChoice(userInput);
 	switch (choice) {
-	case QUIT: delete[] userInput; exit(EXIT_SUCCESS); break;
-	case HELP: printGeneralHelp(); break;
-	case ADD_WALLET: createWallet(userInput); break;
-	case WALLET_INFO: walletInfo(userInput); break;
-	case ATTRACT_INVESTORS: printTopTen(); break;
-	case TRANSACTION_LOG: printTransactionLog(); break;
-	case WALLET_LIST: printWalletList(); break;
-	case CLEAR_DATA: clearData(); break;
+		case QUIT: delete[] userInput; exit(EXIT_SUCCESS); break;
+		case HELP: printGeneralHelp(); break;
+		case ADD_WALLET: createWallet(userInput); break;
+		case WALLET_INFO: walletInfo(userInput); break;
+		case ATTRACT_INVESTORS: printTopTen(); break;
+		case TRANSACTION_LOG: printTransactionLog(); break;
+		case WALLET_LIST: printWalletList(); break;
+		case CLEAR_DATA: clearData(); break;
 	//	case MAKE_ORDER: makeOrder(userInput); break;
-	case INVALID: printInvalidInputError(userInput); break;
+		case INVALID: printInvalidInputError(userInput); break;
 	}
 	delete[] userInput;
 }

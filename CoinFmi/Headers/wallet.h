@@ -12,8 +12,8 @@ struct Wallet {
 };
 
 void createWallet(char*);
-void extractName(char*, char*);
 double extractFiatMoney(const char*);
+void extractName(char*, char*);
 unsigned generateUniqueId();
 bool idAlreadyExists(unsigned, const char* = "wallets.dat");
 void saveWallet(Wallet, const char* = "wallets.dat");
