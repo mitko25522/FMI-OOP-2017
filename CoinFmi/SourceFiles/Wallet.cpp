@@ -4,14 +4,14 @@
 
 void createWallet(char* choiceChar) {
 	Wallet newWallet;
-	newWallet.fiatMoney = extractFiatMoney(choiceChar);
-	if (didNotInvest(newWallet)) {
+	if (didNotInvest(extractFiatMoney(choiceChar))) {
 		std::cout << "No money invested. Cannot create wallet." << std::endl << std::endl;
 		return;
 	}
-	extractName(newWallet.owner, choiceChar);
-	std::cout << "Adding wallet.." << std::endl;
+	std::cout << "Creating wallet.." << std::endl;
 	newWallet.id = generateUniqueId();
+	newWallet.fiatMoney = extractFiatMoney(choiceChar);
+	extractName(newWallet.owner, choiceChar);
 	saveWallet(newWallet);
 	Transaction transaction = createTransaction(newWallet.fiatMoney / FMI_COIN_RATE, SYSTEM_ID, newWallet.id);
 	saveTransaction(transaction);
@@ -68,7 +68,7 @@ unsigned generateUniqueId() {
 		generateUniqueId();
 	}
 
-	std::cout << "Generated id: " << id << std::endl << std::endl;
+	std::cout << "Generated id: " << id << std::endl;
 	return id;
 }
 
@@ -100,6 +100,7 @@ bool idAlreadyExists(unsigned generatedId, const char* fileName) {
 }
 
 void saveWallet(Wallet wallet, const char* fileName) {
+	std::cout << "Saving wallet..";
 	std::ofstream OutFile;
 	OutFile.open(fileName, std::ios::out | std::ios::binary | std::ios::app);
 
@@ -115,7 +116,7 @@ void saveWallet(Wallet wallet, const char* fileName) {
 		std::cerr << "Error opening " << fileName << std::endl;
 		exit(EXIT_FAILURE);
 	}
-
+	std::cout << "Done" << std::endl << std::endl;
 	OutFile.close();
 }
 
@@ -164,14 +165,15 @@ void printTopTen() {
 
 	Wallet* wallets = new Wallet[count];
 	getTopWallets(wallets, count);
+
 	for (int i = 0; i < 10; i++) {
 		if (i >= count) {
 			std::cout << i + 1 << ". N/A" << std::endl;
 			continue;
 		}
-		std::cout << i + 1 << ". " << wallets[i].id << " | ";
+		std::cout << i + 1 << ". " << "ID: " <<wallets[i].id << " | Name: ";
 		printStr(wallets[i].owner);
-		std::cout << " | " << wallets[i].fiatMoney << std::endl;
+		std::cout << " | Fmi coins: " << calculateFmiCoins(wallets[i]) <<  std::endl;
 	}
 	std::cout << std::endl;
 
@@ -217,10 +219,13 @@ unsigned extractId(const char* input) {
 void printWallet(Wallet wallet) {
 	std::cout << "Wallet id: " << wallet.id << std::endl;
 	std::cout << "Owner  name: ";
+
 	for (int i = 0; wallet.owner[i] != '\0'; i++) {
 		std::cout << wallet.owner[i];
 	}
-	std::cout << std::endl << "Fiat money: " << wallet.fiatMoney << std::endl << std::endl;
+
+	std::cout << std::endl << "Fiat money: " << wallet.fiatMoney << std::endl;
+	std::cout << "Fmi coins: " << calculateFmiCoins(wallet) << std::endl << std::endl;
 }
 
 uint8_t countOfTopWallets(const char* fileName) {
@@ -343,8 +348,8 @@ void printStr(char* str) {
 	}
 }
 
-bool didNotInvest(Wallet wallet) {
-	return !wallet.fiatMoney;
+bool didNotInvest(double fiatMoney) {
+	return !fiatMoney;
 }
 
 void printWalletList(const char* fileName) {
@@ -377,5 +382,5 @@ void compactPrintWallet(Wallet wallet) {
 	for (int i = 0; wallet.owner[i] != '\0'; i++) {
 		std::cout << wallet.owner[i];
 	}
-	std::cout << " | Fiat money: " << wallet.fiatMoney << std::endl;
+	std::cout << " | Fmi coins: " << calculateFmiCoins(wallet) << std::endl;
 }

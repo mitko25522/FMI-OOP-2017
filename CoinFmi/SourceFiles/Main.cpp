@@ -9,6 +9,5 @@ int main() {
 	while (true) {
 		chooseOption();
 	}
-	
 	return 0;
 }

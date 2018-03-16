@@ -95,6 +95,7 @@ void printTransactionLog(const char* fileName) {
 			std::cout << std::endl;
 			break;
 		}
+
 		printTransaction(tempTransaction);
 	}
 }

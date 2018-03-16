@@ -11,16 +11,18 @@ void chooseOption() {
 	std::cin.getline(userInput, 100);
 	Choice choice = determineChoice(userInput);
 	switch (choice) {
-		case QUIT: delete[] userInput; exit(EXIT_SUCCESS); break;
-		case HELP: printGeneralHelp(); break;
-		case ADD_WALLET: createWallet(userInput); break;
-		case WALLET_INFO: walletInfo(userInput); break;
-		case ATTRACT_INVESTORS: printTopTen(); break;
-		case TRANSACTION_LOG: printTransactionLog(); break;
-		case WALLET_LIST: printWalletList(); break;
-		case CLEAR_DATA: clearData(); break;
-	//	case MAKE_ORDER: makeOrder(userInput); break;
-		case INVALID: printInvalidInputError(userInput); break;
+	case QUIT: delete[] userInput; exit(EXIT_SUCCESS); break;
+	case HELP: printGeneralHelp(); break;
+	case ORDER_SELL: makeOrderSell(userInput); break;
+	case ORDER_BUY: makeOrderBuy(userInput); break;
+	case ADD_WALLET: createWallet(userInput); break;
+	case WALLET_INFO: walletInfo(userInput); break;
+	case ATTRACT_INVESTORS: printTopTen(); break;
+	case TRANSACTION_LOG: printTransactionLog(); break;
+	case WALLET_LIST: printWalletList(); break;
+	case CLEAR_DATA: clearData(); break;
+	case INVALID: printInvalidInputError(userInput); break;
+	case EMPTY: break;
 	}
 	delete[] userInput;
 }
@@ -45,8 +47,22 @@ void printInvalidInputError(char* userInput) {
 void clearData(const char* wallets, const char* transactions) {
 	std::ofstream InFile;
 	InFile.open(wallets, std::ios::trunc);
+
+	if (!InFile.good()) {
+		std::cerr << "Error clearing " << wallets << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	std::cout << "'" << wallets << "' has been cleared." << std::endl;
 	InFile.close();
 	InFile.open(transactions, std::ios::trunc);
+
+	if (!InFile.good()) {
+		std::cerr << "Error clearing " << transactions << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	std::cout << "'" << transactions << "' has been cleared." << std::endl;
 	InFile.close();
 	std::cout << "All stored data has been cleared." << std::endl << std::endl;
 }

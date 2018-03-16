@@ -6,6 +6,10 @@ Choice determineChoice(char* choiceStr) {
 		return QUIT;
 	else if (areEqual(choiceStr, "help"))
 		return HELP;
+	else if (isMakeOrder(choiceStr, "sell"))
+		return ORDER_SELL;
+	else if (isMakeOrder(choiceStr, "buy"))
+		return ORDER_BUY;
 	else if (isAddWallet(choiceStr))
 		return ADD_WALLET;
 	else if (isWalletInfo(choiceStr))
@@ -18,8 +22,8 @@ Choice determineChoice(char* choiceStr) {
 		return WALLET_LIST;
 	else if (areEqual(choiceStr, "clear-data"))
 		return CLEAR_DATA;
-	else if (isMakeOrder(choiceStr))
-		return MAKE_ORDER;
+	else if (isEmpty(choiceStr))
+		return EMPTY;
 	else
 		return INVALID;
 }
@@ -80,10 +84,6 @@ bool isWalletInfo(char* input) {
 	return true;
 }
 
-bool isMakeOrder(char* input) {
-	return false;
-}
-
 bool isNumber(char character) {
 	return (character >= '0' && character <= '9');
 }
@@ -91,7 +91,6 @@ bool isNumber(char character) {
 bool isLetter(char character) {
 	return (character >= 'a' && character <= 'z');
 }
-
 
 bool isSpace(char character) {
 	return character == ' ';
@@ -107,4 +106,69 @@ bool areEqual(char* input, const char* base) {
 		}
 	}
 	return true;
+}
+
+bool isMakeOrder(const char* input, const char* type) {
+	const char* base = "make-order ";
+
+	int index = 0;
+
+	for (; base[index] != '\0'; index++) {
+		if (input[index] != base[index]) {
+			return false;
+		}
+	}
+
+	for (int i=0; type[i] != '\0'; index++, i++) {
+		if (input[index] != type[i]) {
+			return false;
+		}
+	}
+
+	if (input[index++] != ' ') {
+		return false;
+	}
+
+	int dotCount = 0;
+
+	if (!isNumber(input[index])) {
+		return false;
+	}
+
+	index++;
+
+	for (; input[index] != ' '; index++) {
+
+		if (input[index] != '.' && !isNumber(input[index])) {
+			return false;
+		}
+
+		if (input[index] == '.') {
+			dotCount++;
+		}
+
+		if (dotCount >= 2) {
+			return false;
+		}
+	}
+
+	index++;
+
+	for (int i = 0; i < 8; i++) {
+
+		if (!isNumber(input[index++])) {
+			return false;
+		}
+
+	}
+
+	if (input[index] != '\0') {
+		return false;
+	}
+
+	return true;
+}
+
+bool isEmpty(const char* input) {
+	return input[0] == '\0';
 }

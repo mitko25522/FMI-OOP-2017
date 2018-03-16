@@ -4,6 +4,7 @@
 #include "../Headers/commandhandler.h"
 #include "../Headers/wallet.h"
 #include "../Headers/transaction.h"
+#include "../Headers/order.h"
 
 void printWelcomeMessage();
 void chooseOption();
