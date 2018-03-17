@@ -216,8 +216,34 @@ void compactPrintOrder(Order order) {
 }
 
 void completeCompatibleOrders(const char* fileName) {
-	//work here make one transaction between existing compatible orders
+	while (compatibleOrdersExist()) {
+		Order sale, purchase;
+		determineSB(sale, purchase);
+		std::streampos salePos = getPos(sale);
+		std::streampos purchasePos = getPos(purchase);
 
+		if (sale.fmiCoins > purchase.fmiCoins) {
+			modifyOrder(sale, salePos);
+			removeOrder(purchase,purchasePos);
+			modifyFiatMoney(sale, purchase);
+			Transaction transaction = createTransaction(purchase.fmiCoins, sale.walletId, purchase.walletId);
+			saveTransaction(transaction);
+		}
+		else if (sale.fmiCoins == purchase.fmiCoins) {
+			modifyFiatMoney(sale, purchase);
+			removeOrder(sale, salePos);
+			removeOrder(purchase, purchasePos);
+			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
+			saveTransaction(transaction);
+		}
+		else if (sale.fmiCoins < purchase.fmiCoins) {
+			modifyOrder(purchase, purchasePos);
+			removeOrder(sale, salePos);
+			modifyFiatMoney(sale, purchase);
+			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
+			saveTransaction(transaction);
+		}
+	}
 }
 
 bool compatibleOrdersExist(const char* fileName) {
@@ -226,31 +252,36 @@ bool compatibleOrdersExist(const char* fileName) {
 
 	if (!InFile.is_open()) {
 		std::cerr << "Error reading " << fileName << std::endl;
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 
 	if (countOrders() < 2) {
 		return false;
 	}
 
-
 	while (!InFile.eof()) {
 		Order currentOrder;
 		InFile.read((char*)&currentOrder, sizeof(Order));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
 
 		if (InFile.eof()) {
 			break;
 		}
 
-		int currentPos = InFile.tellg();
-
 		while (!InFile.eof()) {
 			Order tempOrder;
 			InFile.read((char*)&tempOrder, sizeof(Order));
-			if (areCompatible(currentOrder, tempOrder)) {
-				return true;
+			
+			if (InFile.bad()) {
+				std::cerr << "Error reading " << fileName << std::endl;
+				exit(EXIT_FAILURE);
 			}
-			if (areCompatible(tempOrder, currentOrder)) {
+
+			if (areCompatible(currentOrder, tempOrder)) {
 				return true;
 			}
 		}
@@ -266,14 +297,19 @@ int countOrders(const char* fileName) {
 
 	if (!InFile.is_open()) {
 		std::cerr << "Error reading " << fileName << std::endl;
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 
 	int orderCount = 0;
-
 	while (!InFile.eof()) {
 		Order tempOrder;
 		InFile.read((char*)&tempOrder, sizeof(Order));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
 		if (!InFile.eof()) {
 			orderCount++;
 		}
@@ -288,14 +324,10 @@ bool areCompatible(Order orderOne, Order orderTwo) {
 	}
 
 	if (isSale(orderOne) && isPurchase(orderTwo)) {
-		if (orderOne.fmiCoins >= orderTwo.fmiCoins) {
-			return true;
-		}
+		return true;
 	}
 	else if (isPurchase(orderOne) && isSale(orderTwo)) {
-		if (orderOne.fmiCoins <= orderTwo.fmiCoins) {
-			return true;
-		}
+		return true;
 	}
 	return false;
 }
@@ -306,4 +338,85 @@ bool isSale(Order order) {
 
 bool isPurchase(Order order) {
 	return order.type == order.BUY;
+}
+
+void determineSB(Order& seller, Order& buyer, const char* fileName) {
+	std::ifstream InFile;
+	InFile.open(fileName, std::ios::in | std::ios::binary);
+
+	if (!InFile.is_open()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	while (!InFile.eof()) {
+		Order currentOrder;
+		InFile.read((char*)&currentOrder, sizeof(Order));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
+		if (InFile.eof()) {
+			break;
+		}
+
+		int currentPos = InFile.tellg();
+
+		while (!InFile.eof()) {
+			Order tempOrder;
+			InFile.read((char*)&tempOrder, sizeof(Order));
+
+			if (InFile.bad()) {
+				std::cerr << "Error reading " << fileName << std::endl;
+				exit(EXIT_FAILURE);
+			}
+
+			if (areCompatible(currentOrder, tempOrder)) {
+				if (isSale(currentOrder)) {
+					seller = currentOrder;
+					buyer = tempOrder;
+					return;
+				}
+				else if (isPurchase(currentOrder)) {
+					buyer = currentOrder;
+					seller = tempOrder;
+					return;
+				}
+			}
+		}
+	}
+
+	InFile.close();
+}
+
+std::streampos getPos(Order searchedOrder, const char* fileName) {
+	std::ifstream InFile;
+	InFile.open(fileName, std::ios::in | std::ios::binary);
+
+	if (!InFile.is_open()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	while (!InFile.eof()) {
+		Order tempOrder;
+		InFile.read((char*)&tempOrder, sizeof(Order));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
+		if (areEqual(tempOrder, searchedOrder)) {
+			return InFile.tellg();
+		}
+	}
+}
+
+bool areEqual(Order orderOne, Order orderTwo) {
+	return (orderOne.type == orderTwo.type) &&
+		(orderOne.walletId == orderTwo.walletId) &&
+		(orderOne.fmiCoins == orderTwo.fmiCoins);
 }

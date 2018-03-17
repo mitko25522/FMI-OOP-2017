@@ -9,9 +9,7 @@ int main() {
 	printWelcomeMessage();
 
 	while (true) {
-		if (compatibleOrdersExist()) {
-			completeCompatibleOrders();
-		}
+		completeCompatibleOrders();
 		chooseOption();
 	}
 
