@@ -18,6 +18,6 @@ void saveTransaction(Transaction, const char* = "transactions.dat");
 double calculateFmiCoins(Wallet, const char* = "transactions.dat");
 bool isSender(Wallet, Transaction);
 bool isReceiver(Wallet, Transaction);
-double extractFmiCoins(Transaction);
+double extractTransactionFmiCoins(Transaction);
 void printTransaction(Transaction);
 void printTransactionLog(const char* = "transactions.dat");

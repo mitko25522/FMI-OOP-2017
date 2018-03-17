@@ -1,4 +1,5 @@
 #include "../Headers/commandhandler.h"
+#include "../Headers/order.h"
 
 Choice determineChoice(char* choiceStr) {
 	convertToLowerCase(choiceStr);
@@ -14,6 +15,8 @@ Choice determineChoice(char* choiceStr) {
 		return ADD_WALLET;
 	else if (isWalletInfo(choiceStr))
 		return WALLET_INFO;
+	else if (areEqual(choiceStr, "order-list"))
+		return ORDER_LIST;
 	else if (areEqual(choiceStr, "attract-investors"))
 		return ATTRACT_INVESTORS;
 	else if (areEqual(choiceStr, "transaction-log"))
@@ -138,7 +141,6 @@ bool isMakeOrder(const char* input, const char* type) {
 	index++;
 
 	for (; input[index] != ' '; index++) {
-
 		if (input[index] != '.' && !isNumber(input[index])) {
 			return false;
 		}
@@ -155,14 +157,20 @@ bool isMakeOrder(const char* input, const char* type) {
 	index++;
 
 	for (int i = 0; i < 8; i++) {
-
 		if (!isNumber(input[index++])) {
 			return false;
 		}
-
 	}
 
 	if (input[index] != '\0') {
+		return false;
+	}
+
+	if (dotExists(input)) {
+		index = getDotIndex(input);
+	}
+
+	if (input[++index] == ' ') {
 		return false;
 	}
 

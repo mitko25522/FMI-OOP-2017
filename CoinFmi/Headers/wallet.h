@@ -12,14 +12,14 @@ struct Wallet {
 };
 
 void createWallet(char*);
-double extractFiatMoney(const char*);
+double extractInteger(const char*, int);
 void extractName(char*, char*);
 unsigned generateUniqueId();
-bool idAlreadyExists(unsigned, const char* = "wallets.dat");
+bool idExists(unsigned, const char* = "wallets.dat");
 void saveWallet(Wallet, const char* = "wallets.dat");
 void walletInfo(char *, const char* = "wallets.dat");
 void printTopTen();
-Wallet readWallet(size_t);
+Wallet readWallet(unsigned, const char* = "wallets.dat");
 size_t strl(const char*);
 unsigned extractId(const char*);
 void printWallet(Wallet);

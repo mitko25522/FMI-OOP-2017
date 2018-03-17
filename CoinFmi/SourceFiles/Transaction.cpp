@@ -47,15 +47,15 @@ double calculateFmiCoins(Wallet wallet, const char* fileName) {
 			std::cerr << "Error reading " << fileName << std::endl;
 			exit(EXIT_FAILURE);
 		}
-		else if (InFile.eof()) { 
+		else if (InFile.eof()) {
 			break;
 		}
 
 		if (isSender(wallet, tempTransaction)) {
-			fmiCoins -= extractFmiCoins(tempTransaction);
+			fmiCoins -= extractTransactionFmiCoins(tempTransaction);
 		}
 		else if (isReceiver(wallet, tempTransaction)) {
-			fmiCoins += extractFmiCoins(tempTransaction);
+			fmiCoins += extractTransactionFmiCoins(tempTransaction);
 		}
 
 	}
@@ -70,7 +70,7 @@ bool isReceiver(Wallet wallet, Transaction transaction) {
 	return wallet.id == transaction.receiverId;
 }
 
-double extractFmiCoins(Transaction transaction) {
+double extractTransactionFmiCoins(Transaction transaction) {
 	return transaction.fmiCoins;
 }
 
@@ -83,8 +83,21 @@ void printTransactionLog(const char* fileName) {
 		exit(EXIT_SUCCESS);
 	}
 
+	Transaction tempTransaction;
+	InFile.read((char*)&tempTransaction, sizeof(Transaction));
+
+	if (InFile.bad()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	else if (InFile.eof()) {
+		std::cout << "No transactions stored in '" << fileName << "'" << std::endl << std::endl;
+		return;
+	}
+
+	printTransaction(tempTransaction);
+
 	while (!InFile.eof()) {
-		Transaction tempTransaction;
 		InFile.read((char*)&tempTransaction, sizeof(Transaction));
 
 		if (InFile.bad()) {
@@ -95,7 +108,6 @@ void printTransactionLog(const char* fileName) {
 			std::cout << std::endl;
 			break;
 		}
-
 		printTransaction(tempTransaction);
 	}
 }

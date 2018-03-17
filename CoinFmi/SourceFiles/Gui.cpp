@@ -9,21 +9,24 @@ void chooseOption() {
 	std::cout << "Enter command> ";
 	char * userInput = new char[100];
 	std::cin.getline(userInput, 100);
+
 	Choice choice = determineChoice(userInput);
 	switch (choice) {
-	case QUIT: delete[] userInput; exit(EXIT_SUCCESS); break;
-	case HELP: printGeneralHelp(); break;
-	case ORDER_SELL: makeOrderSell(userInput); break;
-	case ORDER_BUY: makeOrderBuy(userInput); break;
-	case ADD_WALLET: createWallet(userInput); break;
-	case WALLET_INFO: walletInfo(userInput); break;
-	case ATTRACT_INVESTORS: printTopTen(); break;
-	case TRANSACTION_LOG: printTransactionLog(); break;
-	case WALLET_LIST: printWalletList(); break;
-	case CLEAR_DATA: clearData(); break;
-	case INVALID: printInvalidInputError(userInput); break;
-	case EMPTY: break;
+		case QUIT: delete[] userInput; exit(EXIT_SUCCESS); break;
+		case HELP: printGeneralHelp(); break;
+		case ORDER_SELL: makeOrderSell(userInput); break;
+		case ORDER_BUY: makeOrderBuy(userInput); break;
+		case ADD_WALLET: createWallet(userInput); break;
+		case WALLET_INFO: walletInfo(userInput); break;
+		case ORDER_LIST: printActiveOrders(); break;
+		case ATTRACT_INVESTORS: printTopTen(); break;
+		case TRANSACTION_LOG: printTransactionLog(); break;
+		case WALLET_LIST: printWalletList(); break;
+		case CLEAR_DATA: clearData(); break;
+		case INVALID: printInvalidInputError(userInput); break;
+		case EMPTY: break;
 	}
+
 	delete[] userInput;
 }
 
@@ -32,11 +35,12 @@ void printGeneralHelp() {
 	std::cout << "add-wallet         Adds a new wallet to the database. \n";
 	std::cout << "wallet-info        Displays info for a certain wallet. \n";
 	std::cout << "quit               Exits the program saving current the changes made in the files.\n";
-	std::cout << "make-order         Requests a payment to be made.\n";
+	std::cout << "make-order         Creates an order.\n";
 	std::cout << "attract-investors  Prints the top ten richest users in the system.\n";
 	std::cout << "transaction-log    Prints a log of the completed transactions.\n";
 	std::cout << "wallet-list        Prints a list of existing wallets.\n";
 	std::cout << "clear-data         Erases all data (WARNING this operation is not reversible).\n";
+	std::cout << "order-list         Prints a list of all uncompleted orders.\n";
 	std::cout << std::endl;
 }
 
@@ -44,7 +48,7 @@ void printInvalidInputError(char* userInput) {
 	std::cout << "'" << userInput << "' is not recognized as a supported command." << std::endl << std::endl;
 }
 
-void clearData(const char* wallets, const char* transactions) {
+void clearData(const char* wallets, const char* transactions, const char* orders) {
 	std::ofstream InFile;
 	InFile.open(wallets, std::ios::trunc);
 
@@ -63,6 +67,15 @@ void clearData(const char* wallets, const char* transactions) {
 	}
 
 	std::cout << "'" << transactions << "' has been cleared." << std::endl;
+	InFile.close();
+	InFile.open(orders, std::ios::trunc);
+
+	if (!InFile.good()) {
+		std::cerr << "Error clearing " << orders << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	std::cout << "'" << orders << "' has been cleared." << std::endl;
 	InFile.close();
 	std::cout << "All stored data has been cleared." << std::endl << std::endl;
 }

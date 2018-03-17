@@ -10,6 +10,7 @@ enum Choice
 	ORDER_BUY,
 	ADD_WALLET,
 	WALLET_INFO,
+	ORDER_LIST,
 	ATTRACT_INVESTORS,
 	TRANSACTION_LOG,
 	WALLET_LIST,
@@ -26,3 +27,4 @@ bool isSpace(char);
 bool areEqual(char*, const char*);
 bool isMakeOrder(const char*, const char*);
 bool isEmpty(const char*);
+double toNum(const char*, int);

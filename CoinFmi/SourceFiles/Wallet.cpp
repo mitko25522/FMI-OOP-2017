@@ -4,19 +4,20 @@
 
 void createWallet(char* choiceChar) {
 	Wallet newWallet;
-	if (didNotInvest(extractFiatMoney(choiceChar))) {
+	if (didNotInvest(extractInteger(choiceChar, 11))) {
 		std::cout << "No money invested. Cannot create wallet." << std::endl << std::endl;
 		return;
 	}
 	std::cout << "Creating wallet.." << std::endl;
 	newWallet.id = generateUniqueId();
-	newWallet.fiatMoney = extractFiatMoney(choiceChar);
+	newWallet.fiatMoney = extractInteger(choiceChar, 11);
 	extractName(newWallet.owner, choiceChar);
 	saveWallet(newWallet);
 	Transaction transaction = createTransaction(newWallet.fiatMoney / FMI_COIN_RATE, SYSTEM_ID, newWallet.id);
 	saveTransaction(transaction);
 }
 
+//intended for use only with add-wallet
 void extractName(char* to, char* from) {
 	int observedIndex = 11;
 
@@ -34,9 +35,9 @@ void extractName(char* to, char* from) {
 
 }
 
-double extractFiatMoney(const char * input) {
+//intended for use only with add-wallet
+double extractInteger(const char * input, int index) {
 	double fiatMoney = 0;
-	int index = 11;
 
 	while (input[index + 1] != ' ') {
 		index++;
@@ -51,6 +52,7 @@ double extractFiatMoney(const char * input) {
 
 //needs total reconstruction
 unsigned generateUniqueId() {
+	std::cout << "Generating id.. ";
 	srand(rand() ^ time(NULL));
 	unsigned tempArr[8];
 	tempArr[0] = (rand() % 8) + 1;
@@ -64,15 +66,15 @@ unsigned generateUniqueId() {
 		id += tempArr[i] * j;
 	}
 
-	if (idAlreadyExists(id)) {
+	if (idExists(id)) {
 		generateUniqueId();
 	}
 
-	std::cout << "Generated id: " << id << std::endl;
+	std::cout << "[" << id << "]" << std::endl;
 	return id;
 }
 
-bool idAlreadyExists(unsigned generatedId, const char* fileName) {
+bool idExists(unsigned generatedId, const char* fileName) {
 	std::ifstream InFile;
 	InFile.open("wallets.dat", std::ios::in | std::ios::binary);
 
@@ -100,7 +102,7 @@ bool idAlreadyExists(unsigned generatedId, const char* fileName) {
 }
 
 void saveWallet(Wallet wallet, const char* fileName) {
-	std::cout << "Saving wallet..";
+	std::cout << "Saving wallet.. " << std::endl;
 	std::ofstream OutFile;
 	OutFile.open(fileName, std::ios::out | std::ios::binary | std::ios::app);
 
@@ -171,25 +173,43 @@ void printTopTen() {
 			std::cout << i + 1 << ". N/A" << std::endl;
 			continue;
 		}
-		std::cout << i + 1 << ". " << "ID: " <<wallets[i].id << " | Name: ";
+		std::cout << i + 1 << ". " << "ID: " << wallets[i].id << " | Name: ";
 		printStr(wallets[i].owner);
-		std::cout << " | Fmi coins: " << calculateFmiCoins(wallets[i]) <<  std::endl;
+		std::cout << " | Fmi coins: " << calculateFmiCoins(wallets[i]) << std::endl;
 	}
 	std::cout << std::endl;
 
 	delete[] wallets;
 }
 
-//potentially dangerous, needs fixing currently not suitable for use
-Wallet readWallet(size_t index) {
+//reads a wallet from wallets database using it's id. Use if only you are certain the id exists!
+Wallet readWallet(unsigned searchedId, const char* fileName) {
 	std::ifstream InFile;
-	InFile.open("wallets.dat", std::ios::in | std::ios::binary);
-	Wallet wallet;
-	Wallet* pWallet = &wallet;
-	InFile.seekg(index * sizeof(Wallet));
-	InFile.read((char*)pWallet, sizeof(Wallet));
+	InFile.open(fileName, std::ios::in | std::ios::binary);
+
+	if (!InFile.is_open()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	Wallet readWallet;
+	while (!InFile.eof()) {
+		Wallet tempWallet;
+		InFile.read((char*)&tempWallet, sizeof(Wallet));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
+		if (tempWallet.id == searchedId) {
+			readWallet = tempWallet;
+		}
+
+	}
+
 	InFile.close();
-	return wallet;
+	return readWallet;
 }
 
 size_t strl(const char* str) {
@@ -200,7 +220,6 @@ size_t strl(const char* str) {
 	return len;
 }
 
-//intended for use with wallet-info
 unsigned extractId(const char* input) {
 	unsigned id = 0;
 	int index = 0;
@@ -208,7 +227,9 @@ unsigned extractId(const char* input) {
 	while (input[index] != '\0') {
 		index++;
 	}
+
 	index--;
+
 	for (int j = 1; input[index] != ' '; j *= 10, index--) {
 		id += (input[index] - '0') * j;
 	}
@@ -361,8 +382,21 @@ void printWalletList(const char* fileName) {
 		exit(EXIT_SUCCESS);
 	}
 
+	Wallet tempWallet;
+	InFile.read((char*)&tempWallet, sizeof(Wallet));
+
+	if (InFile.bad()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	else if (InFile.eof()) {
+		std::cout << "No wallets stored in '" << fileName << "'" << std::endl << std::endl;
+		return;
+	}
+
+	compactPrintWallet(tempWallet);
+
 	while (!InFile.eof()) {
-		Wallet tempWallet;
 		InFile.read((char*)&tempWallet, sizeof(Wallet));
 
 		if (InFile.bad()) {
@@ -373,7 +407,7 @@ void printWalletList(const char* fileName) {
 			std::cout << std::endl;
 			break;
 		}
-		compactPrintWallet(tempWallet);;
+		compactPrintWallet(tempWallet);
 	}
 }
 
@@ -382,5 +416,5 @@ void compactPrintWallet(Wallet wallet) {
 	for (int i = 0; wallet.owner[i] != '\0'; i++) {
 		std::cout << wallet.owner[i];
 	}
-	std::cout << " | Fmi coins: " << calculateFmiCoins(wallet) << std::endl;
+	std::cout << " | Fmi coins: " << calculateFmiCoins(wallet) << " | Fiat money: " << wallet.fiatMoney << std::endl;
 }
