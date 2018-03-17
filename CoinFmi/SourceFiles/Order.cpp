@@ -425,10 +425,11 @@ void removeOrder(Order, std::streampos, const char* fileName) {
 
 }
 
-void removeOrder(Order, std::streampos, const char* fileName) {
+void modifyOrder(Order, std::streampos, const char* fileName) {
 
 }
 
-void removeOrder(Order, std::streampos, const char* = "orders.dat") {
+
+void modifyFiatMoney(Order, Order, const char* fileName) {
 
 }
