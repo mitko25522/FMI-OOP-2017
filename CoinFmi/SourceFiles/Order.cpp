@@ -224,7 +224,7 @@ void completeCompatibleOrders(const char* fileName) {
 
 		if (sale.fmiCoins > purchase.fmiCoins) {
 			modifyOrder(sale, salePos);
-			removeOrder(purchase,purchasePos);
+			removeOrder(purchase, purchasePos);
 			modifyFiatMoney(sale, purchase);
 			Transaction transaction = createTransaction(purchase.fmiCoins, sale.walletId, purchase.walletId);
 			saveTransaction(transaction);
@@ -275,7 +275,7 @@ bool compatibleOrdersExist(const char* fileName) {
 		while (!InFile.eof()) {
 			Order tempOrder;
 			InFile.read((char*)&tempOrder, sizeof(Order));
-			
+
 			if (InFile.bad()) {
 				std::cerr << "Error reading " << fileName << std::endl;
 				exit(EXIT_FAILURE);
@@ -419,4 +419,16 @@ bool areEqual(Order orderOne, Order orderTwo) {
 	return (orderOne.type == orderTwo.type) &&
 		(orderOne.walletId == orderTwo.walletId) &&
 		(orderOne.fmiCoins == orderTwo.fmiCoins);
+}
+
+void removeOrder(Order, std::streampos, const char* fileName) {
+
+}
+
+void removeOrder(Order, std::streampos, const char* fileName) {
+
+}
+
+void removeOrder(Order, std::streampos, const char* = "orders.dat") {
+
 }

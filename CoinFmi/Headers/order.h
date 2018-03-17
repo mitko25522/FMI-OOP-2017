@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fstream>
 
 struct Order {
 	enum Type {
