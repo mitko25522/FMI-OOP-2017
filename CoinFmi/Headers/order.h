@@ -31,6 +31,6 @@ bool isPurchase(Order);
 void determineSB(Order&, Order&, const char* = "orders.dat");
 std::streampos getPos(Order, const char* = "orders.dat");
 bool areEqual(Order, Order);
-void removeOrder(Order, std::streampos, const char* = "orders.dat");
-void modifyOrder(Order, std::streampos, const char* = "orders.dat");
+void removeOrder(std::streampos, const char* = "orders.dat");
+void reduceOrderFmiCoins(Order, std::streampos, double, const char* = "orders.dat");
 void modifyFiatMoney(Order, Order, const char* = "orders.dat");

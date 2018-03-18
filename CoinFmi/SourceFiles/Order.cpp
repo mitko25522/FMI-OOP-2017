@@ -223,22 +223,22 @@ void completeCompatibleOrders(const char* fileName) {
 		std::streampos purchasePos = getPos(purchase);
 
 		if (sale.fmiCoins > purchase.fmiCoins) {
-			modifyOrder(sale, salePos);
-			removeOrder(purchase, purchasePos);
+			reduceOrderFmiCoins(sale, salePos, purchase.fmiCoins);
+			removeOrder(purchasePos);
 			modifyFiatMoney(sale, purchase);
 			Transaction transaction = createTransaction(purchase.fmiCoins, sale.walletId, purchase.walletId);
 			saveTransaction(transaction);
 		}
 		else if (sale.fmiCoins == purchase.fmiCoins) {
 			modifyFiatMoney(sale, purchase);
-			removeOrder(sale, salePos);
-			removeOrder(purchase, purchasePos);
+			removeOrder(salePos);
+			removeOrder(purchasePos);
 			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
 			saveTransaction(transaction);
 		}
 		else if (sale.fmiCoins < purchase.fmiCoins) {
-			modifyOrder(purchase, purchasePos);
-			removeOrder(sale, salePos);
+			reduceOrderFmiCoins(purchase, purchasePos, sale.fmiCoins);
+			removeOrder(salePos);
 			modifyFiatMoney(sale, purchase);
 			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
 			saveTransaction(transaction);
@@ -421,11 +421,55 @@ bool areEqual(Order orderOne, Order orderTwo) {
 		(orderOne.fmiCoins == orderTwo.fmiCoins);
 }
 
-void removeOrder(Order, std::streampos, const char* fileName) {
+//problem when rewriting the file
+void removeOrder(std::streampos orderPos, const char* fileName) {
+	std::fstream file;
+	file.open(fileName, std::ios::in | std::ios::binary);
 
+	if (!file.is_open()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	int orderCount = countOrders();
+
+	if (orderPos > orderCount) {
+		std::cout << "Error" << std::endl;
+		file.close();
+		return;
+	}
+
+	Order* orderList = new Order[orderCount];
+
+	int index = 0;
+	while (!file.eof()) {
+		file.read((char*)&orderList[index++], sizeof(Order));
+
+		if (file.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
+		if (file.eof()) {
+			break;
+		}
+	}
+
+	file.close();
+	file.open(fileName, std::ios::out | std::ios::binary | std::ios::trunc);
+	for (int i = 0; i < orderCount; i++) {
+		if (i == (int)orderPos)  {
+			continue;
+		}
+		else {
+			file.write((char*)&orderList[i], sizeof(Order));
+		}
+	}
+
+	file.close();
 }
 
-void modifyOrder(Order, std::streampos, const char* fileName) {
+void reduceOrderFmiCoins(Order order, std::streampos orderPos, double amount, const char* fileName) {
 
 }
 

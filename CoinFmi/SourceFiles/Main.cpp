@@ -6,10 +6,11 @@
 #include <iostream>
 
 int main() {
+	
 	printWelcomeMessage();
-
+	
 	while (true) {
-		completeCompatibleOrders();
+		//completeCompatibleOrders();
 		chooseOption();
 	}
 
