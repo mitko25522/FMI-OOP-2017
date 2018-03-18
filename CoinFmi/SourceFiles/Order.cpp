@@ -3,6 +3,40 @@
 #include "../Headers/transaction.h"
 #include "../Headers/commandhandler.h"
 
+void completeCompatibleOrders(const char* fileName) {
+	while (compatibleOrdersExist()) {
+		Order sale, purchase;
+		determineSB(sale, purchase);
+		int salePos = getPos(sale);
+		int purchasePos = getPos(purchase);
+
+		if (sale.fmiCoins > purchase.fmiCoins) {
+			reduceOrderFmiCoins(salePos, purchase.fmiCoins);
+			removeOrder(purchasePos);
+			salePos = getPos(sale);
+			modifyFiatMoney(sale, purchase);
+			Transaction transaction = createTransaction(purchase.fmiCoins, sale.walletId, purchase.walletId);
+			saveTransaction(transaction);
+		}
+		else if (sale.fmiCoins == purchase.fmiCoins) {
+			modifyFiatMoney(sale, purchase);
+			removeOrder(salePos);
+			purchasePos = getPos(purchase);
+			removeOrder(purchasePos);
+			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
+			saveTransaction(transaction);
+		}
+		else if (sale.fmiCoins < purchase.fmiCoins) {
+			reduceOrderFmiCoins(purchasePos, sale.fmiCoins);
+			removeOrder(salePos);
+			purchasePos = getPos(purchase);
+			modifyFiatMoney(sale, purchase);
+			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
+			saveTransaction(transaction);
+		}
+	}
+}
+
 void makeOrderBuy(const char* input) {
 	std::cout << "Initiating order.." << std::endl;
 	Order order;
@@ -215,36 +249,6 @@ void compactPrintOrder(Order order) {
 	std::cout << " | Amount: " << order.fmiCoins << std::endl;
 }
 
-void completeCompatibleOrders(const char* fileName) {
-	while (compatibleOrdersExist()) {
-		Order sale, purchase;
-		determineSB(sale, purchase);
-		std::streampos salePos = getPos(sale);
-		std::streampos purchasePos = getPos(purchase);
-
-		if (sale.fmiCoins > purchase.fmiCoins) {
-			reduceOrderFmiCoins(sale, salePos, purchase.fmiCoins);
-			removeOrder(purchasePos);
-			modifyFiatMoney(sale, purchase);
-			Transaction transaction = createTransaction(purchase.fmiCoins, sale.walletId, purchase.walletId);
-			saveTransaction(transaction);
-		}
-		else if (sale.fmiCoins == purchase.fmiCoins) {
-			modifyFiatMoney(sale, purchase);
-			removeOrder(salePos);
-			removeOrder(purchasePos);
-			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
-			saveTransaction(transaction);
-		}
-		else if (sale.fmiCoins < purchase.fmiCoins) {
-			reduceOrderFmiCoins(purchase, purchasePos, sale.fmiCoins);
-			removeOrder(salePos);
-			modifyFiatMoney(sale, purchase);
-			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
-			saveTransaction(transaction);
-		}
-	}
-}
 
 bool compatibleOrdersExist(const char* fileName) {
 	std::ifstream InFile;
@@ -329,6 +333,7 @@ bool areCompatible(Order orderOne, Order orderTwo) {
 	else if (isPurchase(orderOne) && isSale(orderTwo)) {
 		return true;
 	}
+
 	return false;
 }
 
@@ -391,7 +396,7 @@ void determineSB(Order& seller, Order& buyer, const char* fileName) {
 	InFile.close();
 }
 
-std::streampos getPos(Order searchedOrder, const char* fileName) {
+int getPos(Order searchedOrder, const char* fileName) {
 	std::ifstream InFile;
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
@@ -410,7 +415,7 @@ std::streampos getPos(Order searchedOrder, const char* fileName) {
 		}
 
 		if (areEqual(tempOrder, searchedOrder)) {
-			return InFile.tellg();
+			return ((int)InFile.tellg() - sizeof(Order));
 		}
 	}
 }
@@ -421,7 +426,7 @@ bool areEqual(Order orderOne, Order orderTwo) {
 		(orderOne.fmiCoins == orderTwo.fmiCoins);
 }
 
-//problem when rewriting the file
+
 void removeOrder(std::streampos orderPos, const char* fileName) {
 	std::fstream file;
 	file.open(fileName, std::ios::in | std::ios::binary);
@@ -433,8 +438,8 @@ void removeOrder(std::streampos orderPos, const char* fileName) {
 
 	int orderCount = countOrders();
 
-	if (orderPos > orderCount) {
-		std::cout << "Error" << std::endl;
+	if ((int)orderPos + 1 > orderCount) {
+		std::cout << "Error you are attempting to delete an order beyond the end of " << fileName << std::endl;
 		file.close();
 		return;
 	}
@@ -458,7 +463,7 @@ void removeOrder(std::streampos orderPos, const char* fileName) {
 	file.close();
 	file.open(fileName, std::ios::out | std::ios::binary | std::ios::trunc);
 	for (int i = 0; i < orderCount; i++) {
-		if (i == (int)orderPos)  {
+		if (i == (int)orderPos) {
 			continue;
 		}
 		else {
@@ -467,10 +472,39 @@ void removeOrder(std::streampos orderPos, const char* fileName) {
 	}
 
 	file.close();
+	delete[] orderList;
 }
 
-void reduceOrderFmiCoins(Order order, std::streampos orderPos, double amount, const char* fileName) {
+void reduceOrderFmiCoins(std::streampos orderPos, double amount, const char* fileName) {
+	std::fstream InFile;
+	InFile.open(fileName, std::ios::in | std::ios::out | std::ios::binary);
 
+	if (!InFile.is_open()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	int orderCount = countOrders();
+
+	if ((int)orderPos + 1 > orderCount) {
+		std::cout << "Error! You are attempting to read beyond the end of '" << fileName << "'" << std::endl;
+		InFile.close();
+		return;
+	}
+
+	while (!InFile.eof()) {
+		Order tempOrder;
+		InFile.read((char*)&tempOrder, sizeof(Order));
+		if ((int)InFile.tellg() - sizeof(Order) == orderPos) {
+			InFile.seekp((int)InFile.tellg() - sizeof(Order));
+			tempOrder.fmiCoins -= amount;
+			InFile.write((char*)&tempOrder, sizeof(Order));
+			InFile.close();
+			return;
+		}
+	}
+
+	InFile.close();
 }
 
 
