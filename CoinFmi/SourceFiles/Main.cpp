@@ -7,7 +7,8 @@
 
 int main() {
 	printWelcomeMessage();
-	
+	createFiles();
+
 	while (true) {
 		completeCompatibleOrders();
 		chooseOption();

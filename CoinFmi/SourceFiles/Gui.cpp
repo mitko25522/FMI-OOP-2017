@@ -79,3 +79,32 @@ void clearData(const char* wallets, const char* transactions, const char* orders
 	InFile.close();
 	std::cout << "All stored data has been cleared." << std::endl << std::endl;
 }
+
+void createFiles(const char* wallets, const char* transactions, const char* orders) {
+	std::ofstream InFile;
+	InFile.open(wallets, std::ios::out | std::ios::app);
+
+	if (!InFile.good()) {
+		std::cerr << "Error loading " << wallets << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	InFile.close();
+	InFile.open(transactions, std::ios::out | std::ios::app);
+
+	if (!InFile.good()) {
+		std::cerr << "Error loading " << transactions << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+
+	InFile.close();
+	InFile.open(orders, std::ios::out | std::ios::app);
+
+	if (!InFile.good()) {
+		std::cerr << "Error loading " << orders << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	InFile.close();
+}

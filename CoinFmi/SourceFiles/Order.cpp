@@ -4,11 +4,11 @@
 #include "../Headers/commandhandler.h"
 
 void completeCompatibleOrders(const char* fileName) {
-	while (compatibleOrdersExist()) {
+	if (compatibleOrdersExist()) {
 		Order sale, purchase;
 		determineSB(sale, purchase);
-		int salePos = getPos(sale);
-		int purchasePos = getPos(purchase);
+		int salePos = getPos(sale) / sizeof(Order);
+		int purchasePos = getPos(purchase) / sizeof(Order);
 
 		if (sale.fmiCoins > purchase.fmiCoins) {
 			reduceOrderFmiCoins(salePos, purchase.fmiCoins);
@@ -286,6 +286,7 @@ bool compatibleOrdersExist(const char* fileName) {
 			}
 
 			if (areCompatible(currentOrder, tempOrder)) {
+				InFile.close();
 				return true;
 			}
 		}
@@ -382,11 +383,14 @@ void determineSB(Order& seller, Order& buyer, const char* fileName) {
 				if (isSale(currentOrder)) {
 					seller = currentOrder;
 					buyer = tempOrder;
+					InFile.close();
 					return;
 				}
 				else if (isPurchase(currentOrder)) {
 					buyer = currentOrder;
 					seller = tempOrder;
+
+					InFile.close();
 					return;
 				}
 			}
@@ -438,7 +442,7 @@ void removeOrder(std::streampos orderPos, const char* fileName) {
 
 	int orderCount = countOrders();
 
-	if ((int)orderPos + 1 > orderCount) {
+	if ((int)orderPos > orderCount) {
 		std::cout << "Error you are attempting to delete an order beyond the end of " << fileName << std::endl;
 		file.close();
 		return;

@@ -121,10 +121,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="transactions.dat" />
-    <None Include="wallets.dat" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="SourceFiles\Commandhandler.cpp" />
     <ClCompile Include="SourceFiles\Gui.cpp" />
     <ClCompile Include="SourceFiles\Main.cpp" />

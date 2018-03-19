@@ -13,7 +13,6 @@ Transaction createTransaction(double fmiCoins, unsigned senderId, unsigned recei
 void saveTransaction(Transaction transaction, const char* fileName) {
 	std::ofstream OutFile;
 	OutFile.open(fileName, std::ios::out | std::ios::binary | std::ios::app);
-	std::cout << "Transaction created:\nFrom: " << transaction.senderId << " | To: " << transaction.receiverId << " | Time: " << transaction.time << " | Fmi coins: " << transaction.fmiCoins << std::endl << std::endl;
 	if (OutFile.is_open()) {
 		OutFile.write((char *)&transaction, sizeof(transaction));
 		if (OutFile.bad()) {
@@ -26,6 +25,7 @@ void saveTransaction(Transaction transaction, const char* fileName) {
 		exit(EXIT_FAILURE);
 	}
 
+	std::cout << "Transaction created:\nFrom: " << transaction.senderId << " | To: " << transaction.receiverId << " | Time: " << transaction.time << " | Fmi coins: " << transaction.fmiCoins << std::endl << std::endl;
 	OutFile.close();
 }
 

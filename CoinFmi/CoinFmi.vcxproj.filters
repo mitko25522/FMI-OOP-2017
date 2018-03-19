@@ -15,14 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="wallets.dat">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="transactions.dat">
-      <Filter>Source Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="SourceFiles\Commandhandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

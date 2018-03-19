@@ -250,7 +250,7 @@ void printWallet(Wallet wallet) {
 }
 
 uint8_t countOfTopWallets(const char* fileName) {
-	std::ifstream InFile;
+	std::fstream InFile;
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
 	if (!InFile.is_open()) {
@@ -280,7 +280,6 @@ uint8_t countOfTopWallets(const char* fileName) {
 	InFile.close();
 	return count;
 }
-
 
 void getTopWallets(Wallet* topWallets, uint8_t count, const char* fileName) {
 	topWallets[0] = getRichestWallet();
