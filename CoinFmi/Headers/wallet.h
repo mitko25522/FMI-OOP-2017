@@ -31,3 +31,4 @@ void printStr(char*);
 bool didNotInvest(double);
 void printWalletList(const char* = "wallets.dat");
 void compactPrintWallet(Wallet);
+int findWalletPos(unsigned, const char* = "wallets.dat");

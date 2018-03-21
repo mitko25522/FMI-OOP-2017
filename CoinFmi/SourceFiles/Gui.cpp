@@ -48,6 +48,7 @@ void printInvalidInputError(char* userInput) {
 	std::cout << "'" << userInput << "' is not recognized as a supported command." << std::endl << std::endl;
 }
 
+//Opens the files in truncate mode clearing all previously stored data
 void clearData(const char* wallets, const char* transactions, const char* orders) {
 	std::ofstream InFile;
 	InFile.open(wallets, std::ios::trunc);
@@ -80,6 +81,9 @@ void clearData(const char* wallets, const char* transactions, const char* orders
 	std::cout << "All stored data has been cleared." << std::endl << std::endl;
 }
 
+//Needs to be used before doing anything else becouse at some points of
+//the execution it is possible to request to read a file even though it
+//doesn't exist. (makes sure all files are existent)
 void createFiles(const char* wallets, const char* transactions, const char* orders) {
 	std::ofstream InFile;
 	InFile.open(wallets, std::ios::out | std::ios::app);

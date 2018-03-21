@@ -13,8 +13,7 @@ void createWallet(char* choiceChar) {
 	newWallet.fiatMoney = extractInteger(choiceChar, 11);
 	extractName(newWallet.owner, choiceChar);
 	saveWallet(newWallet);
-	Transaction transaction = createTransaction(newWallet.fiatMoney / FMI_COIN_RATE, SYSTEM_ID, newWallet.id);
-	saveTransaction(transaction);
+	createTransaction(newWallet.fiatMoney / FMI_COIN_RATE, SYSTEM_ID, newWallet.id);
 }
 
 //intended for use only with add-wallet
@@ -416,4 +415,28 @@ void compactPrintWallet(Wallet wallet) {
 		std::cout << wallet.owner[i];
 	}
 	std::cout << " | Fmi coins: " << calculateFmiCoins(wallet) << " | Fiat money: " << wallet.fiatMoney << std::endl;
+}
+
+int findWalletPos(unsigned walletId, const char* fileName) {
+	std::ifstream InFile;
+	InFile.open(fileName, std::ios::in | std::ios::binary);
+
+	if (!InFile.is_open()) {
+		std::cerr << "Error reading " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	while (!InFile.eof()) {
+		Wallet tempWallet;
+		InFile.read((char*)&tempWallet, sizeof(Wallet));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
+		if (tempWallet.id == walletId) {
+			return ((int)InFile.tellg() - sizeof(Wallet));
+		}
+	}
 }

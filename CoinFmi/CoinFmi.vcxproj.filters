@@ -51,4 +51,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="orders.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="transactions.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="wallets.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

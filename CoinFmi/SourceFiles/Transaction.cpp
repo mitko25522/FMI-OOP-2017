@@ -1,13 +1,41 @@
 #include "../Headers/wallet.h"
 #include "../Headers/transaction.h"
 
-Transaction createTransaction(double fmiCoins, unsigned senderId, unsigned receiverId, time_t timeOfTransaction) {
+void createTransaction(double fmiCoins, unsigned senderId, unsigned receiverId, time_t timeOfTransaction) {
 	Transaction newTransaction;
 	newTransaction.fmiCoins = fmiCoins;
 	newTransaction.senderId = senderId;
 	newTransaction.receiverId = receiverId;
+
+	if (senderId != SYSTEM_ID) {
+	//	modifyFiatMoney(newTransaction.receiverId, newTransaction.fmiCoins * FMI_COIN_RATE);
+	}
+
 	newTransaction.time = timeOfTransaction;
-	return newTransaction;
+	saveTransaction(newTransaction);
+}
+
+void modifyFiatMoney(unsigned walletId, double fiatMoneyToDeduct, const char* fileName) {
+	Wallet walletToModify = readWallet(walletId);
+	walletToModify.fiatMoney -= fiatMoneyToDeduct;
+	int walletPos = findWalletPos(walletId);
+	std::ofstream OutFile;
+	OutFile.open(fileName);
+
+	if (!OutFile.is_open()) {
+		std::cerr << "Error opening " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	OutFile.seekp(walletPos);
+	OutFile.write((const char*)&walletToModify, sizeof(Wallet));
+
+	if (OutFile.bad()) {
+		std::cerr << "Error writing in " << fileName << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	OutFile.close();
 }
 
 void saveTransaction(Transaction transaction, const char* fileName) {
@@ -29,13 +57,14 @@ void saveTransaction(Transaction transaction, const char* fileName) {
 	OutFile.close();
 }
 
+//Calculates fmi coins taking into account all transactions that affect the specified wallet
 double calculateFmiCoins(Wallet wallet, const char* fileName) {
 	std::ifstream InFile;
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
 	if (!InFile.is_open()) {
-		std::cerr << "Error reading " << fileName << std::endl;
-		exit(EXIT_SUCCESS);
+		std::cerr << "Error opening " << fileName << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	double fmiCoins = 0;
@@ -80,7 +109,7 @@ void printTransactionLog(const char* fileName) {
 
 	if (!InFile.is_open()) {
 		std::cerr << "Error reading " << fileName << std::endl;
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 
 	Transaction tempTransaction;

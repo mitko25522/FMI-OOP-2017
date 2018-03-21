@@ -135,6 +135,11 @@
     <ClInclude Include="Headers\transaction.h" />
     <ClInclude Include="Headers\wallet.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="orders.dat" />
+    <None Include="transactions.dat" />
+    <None Include="wallets.dat" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

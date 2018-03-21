@@ -7,32 +7,27 @@ void completeCompatibleOrders(const char* fileName) {
 	if (compatibleOrdersExist()) {
 		Order sale, purchase;
 		determineSB(sale, purchase);
-		int salePos = getPos(sale) / sizeof(Order);
-		int purchasePos = getPos(purchase) / sizeof(Order);
+		int saleOrderPos = findOrderPos(sale) / sizeof(Order);
+		int purchaseOrderPos = findOrderPos(purchase) / sizeof(Order);
 
 		if (sale.fmiCoins > purchase.fmiCoins) {
-			reduceOrderFmiCoins(salePos, purchase.fmiCoins);
-			removeOrder(purchasePos);
-			salePos = getPos(sale);
-			modifyFiatMoney(sale, purchase);
-			Transaction transaction = createTransaction(purchase.fmiCoins, sale.walletId, purchase.walletId);
-			saveTransaction(transaction);
+			//issue here
+			reduceOrderFmiCoins(saleOrderPos, purchase.fmiCoins);
+			removeOrder(purchaseOrderPos);
+			createTransaction(purchase.fmiCoins, sale.walletId, purchase.walletId);
 		}
 		else if (sale.fmiCoins == purchase.fmiCoins) {
-			modifyFiatMoney(sale, purchase);
-			removeOrder(salePos);
-			purchasePos = getPos(purchase);
-			removeOrder(purchasePos);
-			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
-			saveTransaction(transaction);
+			removeOrder(saleOrderPos);
+			purchaseOrderPos = findOrderPos(purchase);
+			removeOrder(purchaseOrderPos);
+			createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
+			
 		}
 		else if (sale.fmiCoins < purchase.fmiCoins) {
-			reduceOrderFmiCoins(purchasePos, sale.fmiCoins);
-			removeOrder(salePos);
-			purchasePos = getPos(purchase);
-			modifyFiatMoney(sale, purchase);
-			Transaction transaction = createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
-			saveTransaction(transaction);
+			reduceOrderFmiCoins(purchaseOrderPos, sale.fmiCoins);
+			removeOrder(saleOrderPos);
+			purchaseOrderPos = findOrderPos(purchase);
+			createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
 		}
 	}
 }
@@ -55,6 +50,7 @@ void makeOrderBuy(const char* input) {
 		std::cout << "Purchase of 0 fmi coins can not be completed" << std::endl << std::endl;
 		return;
 	}
+
 	if (!hasEnoughFiatMoney(order.walletId, order.fmiCoins)) {
 		std::cout << "Wallet does not have enough fiat money.. Canceling order" << std::endl << std::endl;
 		return;
@@ -153,7 +149,7 @@ void writeOrder(Order order, const char* fileName) {
 	OutFile.open(fileName, std::ios::out | std::ios::binary | std::ios::app);
 
 	if (OutFile.is_open()) {
-		OutFile.write((char*)&order, sizeof(Order));
+		OutFile.write((const char*)&order, sizeof(Order));
 		if (OutFile.bad()) {
 			std::cerr << "Error writing in " << fileName << std::endl;
 			exit(EXIT_FAILURE);
@@ -400,7 +396,7 @@ void determineSB(Order& seller, Order& buyer, const char* fileName) {
 	InFile.close();
 }
 
-int getPos(Order searchedOrder, const char* fileName) {
+int findOrderPos(Order searchedOrder, const char* fileName) {
 	std::ifstream InFile;
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
@@ -431,11 +427,11 @@ bool areEqual(Order orderOne, Order orderTwo) {
 }
 
 
-void removeOrder(std::streampos orderPos, const char* fileName) {
-	std::fstream file;
-	file.open(fileName, std::ios::in | std::ios::binary);
+void removeOrder(int orderPos, const char* fileName) {
+	std::fstream File;
+	File.open(fileName, std::ios::in | std::ios::binary);
 
-	if (!file.is_open()) {
+	if (!File.is_open()) {
 		std::cerr << "Error reading " << fileName << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -444,42 +440,42 @@ void removeOrder(std::streampos orderPos, const char* fileName) {
 
 	if ((int)orderPos > orderCount) {
 		std::cout << "Error you are attempting to delete an order beyond the end of " << fileName << std::endl;
-		file.close();
+		File.close();
 		return;
 	}
 
 	Order* orderList = new Order[orderCount];
 
 	int index = 0;
-	while (!file.eof()) {
-		file.read((char*)&orderList[index++], sizeof(Order));
+	while (!File.eof()) {
+		File.read((char*)&orderList[index++], sizeof(Order));
 
-		if (file.bad()) {
+		if (File.bad()) {
 			std::cerr << "Error reading " << fileName << std::endl;
 			exit(EXIT_FAILURE);
 		}
 
-		if (file.eof()) {
+		if (File.eof()) {
 			break;
 		}
 	}
 
-	file.close();
-	file.open(fileName, std::ios::out | std::ios::binary | std::ios::trunc);
+	File.close();
+	File.open(fileName, std::ios::out | std::ios::binary | std::ios::trunc);
 	for (int i = 0; i < orderCount; i++) {
 		if (i == (int)orderPos) {
 			continue;
 		}
 		else {
-			file.write((char*)&orderList[i], sizeof(Order));
+			File.write((const char*)&orderList[i], sizeof(Order));
 		}
 	}
 
-	file.close();
+	File.close();
 	delete[] orderList;
 }
 
-void reduceOrderFmiCoins(std::streampos orderPos, double amount, const char* fileName) {
+void reduceOrderFmiCoins(int orderPos, double amount, const char* fileName) {
 	std::fstream InFile;
 	InFile.open(fileName, std::ios::in | std::ios::out | std::ios::binary);
 
@@ -491,7 +487,7 @@ void reduceOrderFmiCoins(std::streampos orderPos, double amount, const char* fil
 	int orderCount = countOrders();
 
 	if ((int)orderPos + 1 > orderCount) {
-		std::cout << "Error! You are attempting to read beyond the end of '" << fileName << "'" << std::endl;
+		std::cerr << "Error! You are attempting to read beyond the end of '" << fileName << "'" << std::endl;
 		InFile.close();
 		return;
 	}
@@ -499,19 +495,26 @@ void reduceOrderFmiCoins(std::streampos orderPos, double amount, const char* fil
 	while (!InFile.eof()) {
 		Order tempOrder;
 		InFile.read((char*)&tempOrder, sizeof(Order));
+
+		if (InFile.bad()) {
+			std::cerr << "Error reading " << fileName << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
 		if ((int)InFile.tellg() - sizeof(Order) == orderPos) {
 			InFile.seekp((int)InFile.tellg() - sizeof(Order));
 			tempOrder.fmiCoins -= amount;
-			InFile.write((char*)&tempOrder, sizeof(Order));
+			InFile.write((const char*)&tempOrder, sizeof(Order));
+
+			if (InFile.bad()) {
+				std::cerr << "Error reading " << fileName << std::endl;
+				exit(EXIT_FAILURE);
+			}
+
 			InFile.close();
 			return;
 		}
 	}
 
 	InFile.close();
-}
-
-
-void modifyFiatMoney(Order, Order, const char* fileName) {
-
 }

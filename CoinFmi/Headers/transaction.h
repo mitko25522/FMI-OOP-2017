@@ -13,7 +13,7 @@ struct Transaction {
 	long long time;
 };
 
-Transaction createTransaction(double, unsigned, unsigned, time_t = time(0));
+void createTransaction(double, unsigned, unsigned, time_t = time(0));
 void saveTransaction(Transaction, const char* = "transactions.dat");
 double calculateFmiCoins(Wallet, const char* = "transactions.dat");
 bool isSender(Wallet, Transaction);
@@ -21,3 +21,4 @@ bool isReceiver(Wallet, Transaction);
 double extractTransactionFmiCoins(Transaction);
 void printTransaction(Transaction);
 void printTransactionLog(const char* = "transactions.dat");
+void modifyFiatMoney(unsigned , double, const char* = "wallets.dat");
