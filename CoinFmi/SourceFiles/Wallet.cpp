@@ -49,7 +49,7 @@ double extractInteger(const char * input, int index) {
 	return fiatMoney;
 }
 
-//needs total reconstruction becouse this method is inefficient - generating a new ID requires checking all existing ones
+//needs total reconstruction becouse this method is too inefficient - generating a new ID requires checking all existing ones
 unsigned generateUniqueId() {
 	std::cout << "Generating id.. ";
 	srand(rand() ^ time(NULL));
@@ -286,7 +286,7 @@ uint8_t countOfTopWallets(const char* fileName) {
 void getTopWallets(Wallet* topWallets, uint8_t count, const char* fileName) {
 	topWallets[0] = getRichestWallet();
 	for (int i = 1; i < count; i++) {
-		topWallets[i] = getNextRichestWallet(topWallets[i - 1].fiatMoney);
+		topWallets[i] = getNextRichestWallet(calculateFmiCoins(topWallets[i - 1]));
 	}
 }
 
@@ -317,7 +317,7 @@ Wallet getRichestWallet(const char* fileName) {
 			exit(EXIT_FAILURE);
 		}
 
-		if (tempWallet.fiatMoney > richestWallet.fiatMoney) {
+		if (calculateFmiCoins(tempWallet) > calculateFmiCoins(richestWallet)) {
 			richestWallet = tempWallet;
 		}
 	}
@@ -326,7 +326,7 @@ Wallet getRichestWallet(const char* fileName) {
 	return richestWallet;
 }
 
-Wallet getNextRichestWallet(double previousRichestFiatMoney, const char* fileName) {
+Wallet getNextRichestWallet(double currentRichestWalletFmiCoins, const char* fileName) {
 	std::ifstream InFile;
 	InFile.open(fileName, std::ios::in | std::ios::binary);
 
@@ -336,7 +336,7 @@ Wallet getNextRichestWallet(double previousRichestFiatMoney, const char* fileNam
 	}
 
 	Wallet nextRichestWallet;
-	nextRichestWallet.fiatMoney = 0;
+	double nextRichestWalletFmiCoins = 0;
 	double currentMaxMoney = 0;
 
 	while (!InFile.eof()) {
@@ -347,16 +347,17 @@ Wallet getNextRichestWallet(double previousRichestFiatMoney, const char* fileNam
 			std::cerr << "Error reading " << fileName;
 		}
 
-		if (tempWallet.fiatMoney == previousRichestFiatMoney) {
+		if (calculateFmiCoins(tempWallet) == currentRichestWalletFmiCoins) {
 			continue;
 		}
 
-		if (tempWallet.fiatMoney > currentMaxMoney && tempWallet.fiatMoney < previousRichestFiatMoney) {
-			currentMaxMoney = tempWallet.fiatMoney;
+		if (calculateFmiCoins(tempWallet) > currentMaxMoney && calculateFmiCoins(tempWallet) < currentRichestWalletFmiCoins) {
+			currentMaxMoney = calculateFmiCoins(tempWallet);
 		}
 
-		if (currentMaxMoney > nextRichestWallet.fiatMoney) {
+		if (currentMaxMoney > nextRichestWalletFmiCoins) {
 			nextRichestWallet = tempWallet;
+			nextRichestWalletFmiCoins = calculateFmiCoins(tempWallet);
 		}
 	}
 
