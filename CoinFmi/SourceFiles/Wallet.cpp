@@ -34,7 +34,7 @@ void extractName(char* to, char* from) {
 
 }
 
-//intended for use only with add-wallet
+//extracts integer from requested index ownards upon reaching <space>
 double extractInteger(const char * input, int index) {
 	double fiatMoney = 0;
 
@@ -49,7 +49,7 @@ double extractInteger(const char * input, int index) {
 	return fiatMoney;
 }
 
-//needs total reconstruction
+//needs total reconstruction becouse this method is inefficient - generating a new ID requires checking all existing ones
 unsigned generateUniqueId() {
 	std::cout << "Generating id.. ";
 	srand(rand() ^ time(NULL));
@@ -156,7 +156,7 @@ void walletInfo(char * userInput, const char* fileName) {
 	}
 }
 
-void printTopTen() {
+void attractInvestors() {
 	int count = countOfTopWallets();
 
 	if (count == 0) {
@@ -166,7 +166,12 @@ void printTopTen() {
 
 	Wallet* wallets = new Wallet[count];
 	getTopWallets(wallets, count);
+	printTopWallets(wallets, count);
 
+	delete[] wallets;
+}
+
+void printTopWallets(Wallet* wallets, uint8_t count) {
 	for (int i = 0; i < 10; i++) {
 		if (i >= count) {
 			std::cout << i + 1 << ". N/A" << std::endl;
@@ -177,8 +182,6 @@ void printTopTen() {
 		std::cout << " | Fmi coins: " << calculateFmiCoins(wallets[i]) << std::endl;
 	}
 	std::cout << std::endl;
-
-	delete[] wallets;
 }
 
 //reads a wallet from wallets database using it's id. Use if only you are certain the id exists!

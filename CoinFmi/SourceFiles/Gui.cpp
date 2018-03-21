@@ -19,7 +19,7 @@ void chooseOption() {
 		case ADD_WALLET: createWallet(userInput); break;
 		case WALLET_INFO: walletInfo(userInput); break;
 		case ORDER_LIST: printActiveOrders(); break;
-		case ATTRACT_INVESTORS: printTopTen(); break;
+		case ATTRACT_INVESTORS: attractInvestors(); break;
 		case TRANSACTION_LOG: printTransactionLog(); break;
 		case WALLET_LIST: printWalletList(); break;
 		case CLEAR_DATA: clearData(); break;

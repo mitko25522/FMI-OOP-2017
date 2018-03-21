@@ -21,7 +21,6 @@ void completeCompatibleOrders(const char* fileName) {
 			purchaseOrderPos = findOrderPos(purchase);
 			removeOrder(purchaseOrderPos);
 			createTransaction(sale.fmiCoins, sale.walletId, purchase.walletId);
-			
 		}
 		else if (sale.fmiCoins < purchase.fmiCoins) {
 			reduceOrderFmiCoins(purchaseOrderPos, sale.fmiCoins);
@@ -91,7 +90,12 @@ double extractFmiCoins(const char* input) {
 		return extractDouble(input);
 	}
 	else {
-		return extractInteger(input, 16);
+		if (isMakeOrder(input, "sell")) {
+			return extractInteger(input, 16);
+		}
+		else if (isMakeOrder(input, "buy")) {
+			return extractInteger(input, 15);
+		}
 	}
 }
 
@@ -500,8 +504,8 @@ void reduceOrderFmiCoins(int orderPos, double amount, const char* fileName) {
 			std::cerr << "Error reading " << fileName << std::endl;
 			exit(EXIT_FAILURE);
 		}
-
-		if ((int)InFile.tellg() - sizeof(Order) == orderPos) {
+		//problem here in case when value is different than 0
+		if ((int)InFile.tellg() - sizeof(Order) == orderPos *sizeof(Order)) {
 			InFile.seekp((int)InFile.tellg() - sizeof(Order));
 			tempOrder.fmiCoins -= amount;
 			InFile.write((const char*)&tempOrder, sizeof(Order));
