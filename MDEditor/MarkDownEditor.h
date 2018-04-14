@@ -1,10 +1,17 @@
 #pragma once
 #include "Text.h"
-#include "Directory.h"
+#include "CommandParser.h"
+#include <fstream>
 
 class MarkDownEditor {
-	void loadText(const char*);
+private:
 	Text loadedText;
+	char* fileDirectory;
+	void loadText();
+	int countLines();
 public:
-	MarkDownEditor(const char*);
-};
+	MarkDownEditor();
+	MarkDownEditor(char*);
+	~MarkDownEditor();
+	void editText(CommandParser&);
+};	

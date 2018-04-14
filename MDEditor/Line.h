@@ -1,5 +1,10 @@
 #pragma once
 
 class Line {
-	char letter[1024];
+private:
+	char* letter;
+public:
+	char* getLetterPointer() { return letter; };
+	Line();
+	~Line();
 };

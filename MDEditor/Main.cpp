@@ -1,21 +1,26 @@
 #include <iostream>
-#include "Directory.h"
 #include "MarkDownEditor.h"
+#include "CommandParser.h"
+#include <fstream>
+#include <string>
 
-Directory getFileDirectory();
+void getFileDirectory(char*);
 
 int main() {
-	Directory directory(getFileDirectory());
-	MarkDownEditor markDownEditor(directory.getDirectory());
+	char* directory = new char[256];
+	getFileDirectory(directory);
+	MarkDownEditor markdownEditor(directory);
+	CommandParser command;
+	while (command.promptInput()) {
+		markdownEditor.editText(command);
+	}
+	//markdownEditor.saveChanges();
 	return 0;
 }
 
-Directory getFileDirectory() {
-	Directory * directory = new Directory;
-	while (!directory->isValid()) {
-		std::cerr << "Invalid path.\n";
-		delete directory;
-		directory = new Directory;
-	}
-	return *directory;
+void getFileDirectory(char* dir) {
+	std::cout << "Enter file directory: ";
+	char directory[256];
+	std::cin.getline(directory, 256);
+	strcpy_s(dir, 256, directory);
 }
