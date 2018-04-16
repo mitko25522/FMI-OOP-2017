@@ -13,8 +13,9 @@ int main() {
 	CommandParser command;
 	while (command.promptInput()) {
 		markdownEditor.editText(command);
+		command.clearData();
 	}
-	//markdownEditor.saveChanges();
+	markdownEditor.saveChanges();
 	return 0;
 }
 

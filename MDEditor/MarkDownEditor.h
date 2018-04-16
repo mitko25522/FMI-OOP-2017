@@ -6,12 +6,16 @@
 class MarkDownEditor {
 private:
 	Text loadedText;
-	char* fileDirectory;
+	char* inputFileDirectory;
+	char* outputFileDirectory;
+
 	void loadText();
 	int countLines();
+	void setOuputFileDirectory();
 public:
 	MarkDownEditor();
 	MarkDownEditor(char*);
 	~MarkDownEditor();
+	void saveChanges();
 	void editText(CommandParser&);
 };	

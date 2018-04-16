@@ -4,25 +4,27 @@
 #include <string>
 
 MarkDownEditor::MarkDownEditor(char * fileDirectory) {
-	this->fileDirectory = new char[strlen(fileDirectory + 1)];
+	this->inputFileDirectory = new char[strlen(fileDirectory + 1)];
+	this->outputFileDirectory = new char[strlen(fileDirectory)];
+
 	for (int i = 0; fileDirectory[i] != '\0'; i++) {
-		this->fileDirectory[i] = fileDirectory[i];
+		this->inputFileDirectory[i] = fileDirectory[i];
 		if (fileDirectory[i + 1] == '\0') {
-			this->fileDirectory[i + 1] = '\0';
+			this->inputFileDirectory[i + 1] = '\0';
 		}
 	}
+	setOuputFileDirectory();
 	loadText();
 }
 
 void MarkDownEditor::loadText() {
 	int lineCount = countLines();
 	loadedText.setMemory(lineCount);
-	loadedText.copyLines(fileDirectory, lineCount);
+	loadedText.copyLines(inputFileDirectory, lineCount);
 }
 
-
 int MarkDownEditor::countLines() {
-	std::ifstream inputFile(fileDirectory);
+	std::ifstream inputFile(inputFileDirectory);
 	std::string temp;
 	int count = 0;
 
@@ -35,9 +37,36 @@ int MarkDownEditor::countLines() {
 }
 
 void MarkDownEditor::editText(CommandParser& command) {
-	std::cout << command.text;
+	switch (command.getType()) {
+	case CommandParser::MAKE_HEADING: loadedText.line[command.getLine()].makeHeading(); break;
+	case CommandParser::MAKE_ITALIC: loadedText.line[command.getLine()].italicize(command.getFrom(), command.getTo()); break;
+	}
+
 }
 
 MarkDownEditor::~MarkDownEditor() {
-	delete[] fileDirectory;
+	delete[] inputFileDirectory;
+	delete[] outputFileDirectory;
+}
+
+void MarkDownEditor::saveChanges() {
+	std::ofstream outFile(outputFileDirectory);
+	for (int i = 0; i < loadedText.getNumberOfLines(); i++) {
+		outFile << loadedText.line[i].getLetterPointer() << std::endl;
+	}
+	outFile.close();
+}
+
+void MarkDownEditor::setOuputFileDirectory() {
+	int i = 0;
+	while (inputFileDirectory[i] != '\0') {
+		outputFileDirectory[i] = inputFileDirectory[i];
+		i++;
+	}
+	i--;
+	outputFileDirectory[i] = '\0';
+	i--;
+	outputFileDirectory[i] = 'd';
+	i--;
+	outputFileDirectory[i] = 'm';
 }

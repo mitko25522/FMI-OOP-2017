@@ -5,8 +5,9 @@
 class Text {
 private:
 	unsigned numberOfLines;
-	Line* line;
 public:
+	Line* line;
+	unsigned getNumberOfLines();
 	void setMemory(unsigned);
 	void copyLines(char*, unsigned);
 	Text();

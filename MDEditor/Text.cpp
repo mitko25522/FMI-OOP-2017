@@ -27,6 +27,10 @@ void Text::copyLines(char* fileDirectory, unsigned lineCount) {
 	inputFile.close();
 }
 
+unsigned Text::getNumberOfLines() {
+	return this->numberOfLines;
+}
+
 Text::~Text() {
 	delete[] line;
 }
