@@ -16,6 +16,7 @@ void Line::makeHeading() {
 	this->letter[1] = ' ';
 }
 
+//possibly not working
 void Line::shiftRightOnce(int from) {
 	int index = 0;
 	while (this->letter[index] != '\0') {
@@ -27,16 +28,42 @@ void Line::shiftRightOnce(int from) {
 	}
 }
 
+//not working
 void Line::italicize(int from, int to) {
 	from = findWordFirstLetterIndex(from);
 	to = findWordLastLetterIndex(to);
-	//implement
+	shiftRightOnce(findWordFirstLetterIndex(from));
+	this->letter[from] = '*';
+	shiftRightOnce(findWordLastLetterIndex(to));
+	this->letter[to] = '*';
 }
 
+//not working
 int Line::findWordFirstLetterIndex(int wordNumber) {
-	//implement
+	int spacesCounted = 1;
+	for (int i = 0; spacesCounted <= wordNumber; i++) {
+		if (this->letter[i] == ' ') {
+			spacesCounted++;
+		}
+		if (spacesCounted == wordNumber) {
+			return i;
+		}
+	}
 }
 
+//not working
 int Line::findWordLastLetterIndex(int wordNumber) {
-	//implement
+	int spacesCounted = 1;
+	for (int i = 0; spacesCounted <= wordNumber; i++) {
+		if (this->letter[i] == ' ') {
+			spacesCounted++;
+		}
+		if (spacesCounted == wordNumber) {
+			for (int j = i; this->letter[i] != ' '; j++) {
+				if (this->letter[i] == ' ') {
+					return j;
+				}
+			}
+		}
+	}
 }
