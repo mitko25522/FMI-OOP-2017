@@ -1,11 +1,13 @@
 #include <iostream>
 #include "MarkDownEditor.h"
 #include "CommandParser.h"
+#include "Test.h"
 #include <fstream>
 #include <string>
 
 void getFileDirectory(char*);
 
+//makeBold issues
 int main() {
 	char* directory = new char[256];
 	getFileDirectory(directory);

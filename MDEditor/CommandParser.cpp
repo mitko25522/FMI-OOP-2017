@@ -27,7 +27,7 @@ void CommandParser::determineType() {
 	if (arePartialyEqual("makeHeading")) {
 		type = MAKE_HEADING;
 		setLine();
-		
+
 	}
 	else if (arePartialyEqual("makeItalic")) {
 		type = MAKE_ITALIC;
@@ -49,6 +49,7 @@ void CommandParser::determineType() {
 	}
 	else if (arePartialyEqual("addLine")) {
 		type = ADD_LINE;
+		setAddLineText();
 	}
 	else if (arePartialyEqual("removeLine")) {
 		type = REMOVE_LINE;
@@ -59,14 +60,17 @@ void CommandParser::determineType() {
 	}
 }
 
+//issue here?
 void CommandParser::setLine() {
 	int index = 0;
-	while (!isNumber(this->text[index])) {
+	while (this->text[index] != ' ') {
 		index++;
 	}
+	index++;
 	while (isNumber(this->text[index])) {
 		index++;
 	}
+	index--;
 	int lineIndex = 0;
 	for (int j = 1; isNumber(this->text[index]); j *= 10) {
 		lineIndex += (this->text[index] - '0')*j;
@@ -83,6 +87,7 @@ void CommandParser::setFrom() {
 	while (this->text[index] != ' ') {
 		index--;
 	}
+	index--;
 	int fromIndex = 0;
 	for (int j = 1; isNumber(this->text[index]); j *= 10) {
 		fromIndex += (this->text[index] - '0')*j;
@@ -96,6 +101,7 @@ void CommandParser::setTo() {
 	while (this->text[index] != '\0') {
 		index++;
 	}
+	index--;
 	int toIndex = 0;
 	for (int j = 1; isNumber(this->text[index]); j *= 10) {
 		toIndex += (this->text[index] - '0')*j;
@@ -143,4 +149,17 @@ char* CommandParser::getText() {
 
 CommandParser::~CommandParser() {
 	delete[] text;
+}
+
+char* CommandParser::getAddLineText() {
+	return this->addLineText;
+}
+
+void CommandParser::setAddLineText() {
+	for (int i = 0; this->text[i] != '\0'; i++) {
+		if (this->text[i] == ' ') {
+			addLineText = &text[i + 1];
+			return;
+		}
+	}
 }

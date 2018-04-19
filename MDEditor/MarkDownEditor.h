@@ -13,9 +13,8 @@ private:
 	int countLines();
 	void setOuputFileDirectory();
 public:
-	MarkDownEditor();
 	MarkDownEditor(char*);
 	~MarkDownEditor();
 	void saveChanges();
 	void editText(CommandParser&);
-};	
+};

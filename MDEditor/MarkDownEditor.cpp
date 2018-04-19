@@ -3,8 +3,8 @@
 #include "iostream"
 #include <string>
 
-MarkDownEditor::MarkDownEditor(char * fileDirectory) {
-	this->inputFileDirectory = new char[strlen(fileDirectory + 1)];
+MarkDownEditor::MarkDownEditor(char * fileDirectory) : inputFileDirectory(NULL), outputFileDirectory(NULL) {
+	this->inputFileDirectory = new char[strlen(fileDirectory)];
 	this->outputFileDirectory = new char[strlen(fileDirectory)];
 
 	for (int i = 0; fileDirectory[i] != '\0'; i++) {
@@ -39,14 +39,19 @@ int MarkDownEditor::countLines() {
 void MarkDownEditor::editText(CommandParser& command) {
 	switch (command.getType()) {
 	case CommandParser::MAKE_HEADING: loadedText.line[command.getLine()].makeHeading(); break;
-	case CommandParser::MAKE_ITALIC: loadedText.line[command.getLine()].italicize(command.getFrom(), command.getTo()); break;
+	case CommandParser::MAKE_ITALIC: loadedText.line[command.getLine()].makeItalic(command.getFrom(), command.getTo()); break;
+	case CommandParser::MAKE_BOLD: loadedText.line[command.getLine()].makeBold(command.getFrom(), command.getTo()); break;
+	case CommandParser::MAKE_COMBINE: loadedText.line[command.getLine()].makeCombine(command.getFrom(), command.getTo()); break;
+	case CommandParser::ADD_LINE: loadedText.addLine(command.getAddLineText()); break;
+	case CommandParser::REMOVE_LINE: loadedText.removeLine(command.getLine() + 1); break;
 	}
 
 }
 
+//heap corruption
 MarkDownEditor::~MarkDownEditor() {
-	delete[] inputFileDirectory;
-	delete[] outputFileDirectory;
+	/*delete[] inputFileDirectory;
+	delete[] outputFileDirectory;*/
 }
 
 void MarkDownEditor::saveChanges() {
