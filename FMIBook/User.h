@@ -6,12 +6,12 @@ class User {
 private:
 	Permissions permissions;
 	char* name;
-	uint8_t age;
+	int age;
 
 	User();
 public:
-	User(const char*, uint8_t, int);
-	virtual ~User();
-	virtual void printInformation();
-	virtual bool compareWith(const char*);
-};
+	User(const char*, int, int);
+	~User();
+	void printInformation();
+	bool compareWith(const char*);
+};	

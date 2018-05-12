@@ -12,6 +12,17 @@
 //}
 
 void FMIBook::createAdministrator() {
-	User administrator("Admin", 20, ADMIN_PERMISSIONS);
-	FMIBook::user_list.push_back(&administrator);
+	User* administrator = new User("Admin", 20, ADMIN_PERMISSIONS);
+	FMIBook::user_list.push_back(administrator);
+}
+
+FMIBook::~FMIBook() {
+	
+}
+
+void FMIBook::clearAllocatedMemory() {
+	int numberOfCopies = FMIBook::user_list.size();
+	for (int i = 0; i < numberOfCopies; i++) {
+		delete FMIBook::user_list.at(i);
+	}
 }

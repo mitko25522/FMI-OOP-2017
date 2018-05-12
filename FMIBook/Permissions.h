@@ -44,7 +44,6 @@ public:
 	void printCurrentState();
 	void blockPosting();
 	void unblockPosting();
-
 	bool canViewAllPosts();
 	bool canViewCertainPost();
 	bool canRemoveAnyPost();
@@ -57,4 +56,5 @@ public:
 	bool canRemoveUser();
 	bool canAddUser();
 	bool canAddModerator();
+	int getCurrentPermissions();
 };

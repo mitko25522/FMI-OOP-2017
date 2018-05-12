@@ -9,13 +9,17 @@ void permissionTests_constructors();
 std::vector<User*> FMIBook::user_list;
 
 int main() {
-	//FMIBook::createAdministrator();
-	User user("user1", 10, USER_PERMISSIONS);
-	FMIBook::user_list.push_back(&user);
+	FMIBook::createAdministrator();
 
 
+	User* user = new User("user1", 10, USER_PERMISSIONS);
+	FMIBook::user_list.push_back(user);
+	User* user2 = new User("user2", 17, USER_PERMISSIONS);
+	FMIBook::user_list.push_back(user2);
 
 	FMIBook::user_list[0]->printInformation();
+	FMIBook::user_list[1]->printInformation();
+	FMIBook::user_list[2]->printInformation();
 
 
 
@@ -28,6 +32,7 @@ int main() {
 	//	//FMIBook fmiBook(pCommand);
 	//}
 
+	FMIBook::clearAllocatedMemory();
 	return 0;
 }
 

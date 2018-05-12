@@ -119,3 +119,7 @@ bool Permissions::canAddUser() {
 bool Permissions::canAddModerator() {
 	return booleanVector & PERMISSION_ADD_MODERATOR;
 }
+
+int Permissions::getCurrentPermissions() {
+	return booleanVector;
+}
