@@ -1,4 +1,5 @@
 #include "FMIBook.h"
+#include "Permissions.h"
 
 //May throw invalid_agrument if such user does not exist in the user list
 //size_t FMIBook::getUserPosition(const char* name) {
@@ -11,5 +12,6 @@
 //}
 
 void FMIBook::createAdministrator() {
-	
+	User administrator("Admin", 20, ADMIN_PERMISSIONS);
+	FMIBook::user_list.push_back(&administrator);
 }

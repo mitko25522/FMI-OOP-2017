@@ -141,14 +141,16 @@ Command::~Command() {
 
 bool Command::hasActor()
 {
-	return this->type != INFO &&
+	return
+		this->type != INFO &&
 		this->type != QUIT &&
 		this->type != INVALID_COMMAND;
 }
 
 bool Command::hasSubject()
 {
-	return this->type == ADD_MODERATOR || this->type == ADD_USER ||
+	return 
+		this->type == ADD_MODERATOR || this->type == ADD_USER ||
 		this->type == REMOVE_USER || this->type == BLOCK_USER ||
 		this->type == UNBLOCK_USER;
 }
@@ -158,7 +160,8 @@ bool Command::hasSubjectAge() {
 }
 
 bool Command::hasPostId() {
-	return this->type == REMOVE_USER || this->type == BLOCK_USER ||
+	return
+		this->type == REMOVE_USER || this->type == BLOCK_USER ||
 		this->type == UNBLOCK_USER || this->type == REMOVE_POST ||
 		this->type == VIEW_CERTAIN_POST || this->type == VIEW_ALL_POSTS;
 }

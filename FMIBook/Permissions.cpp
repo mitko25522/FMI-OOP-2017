@@ -1,94 +1,121 @@
 #include "Permissions.h"
 #include <iostream>
 
+//Default constructor sets permissions to basic user. 
 Permissions::Permissions() {
-	std::cout << "Basic User permissions granted.\n";
 	booleanVector = 0;
+	std::cout << "Basic User permissions granted.\n";
 	booleanVector = USER_PERMISSIONS;
 }
 
-Permissions::Permissions(const int permissions_type) {
+//Use one of the permisson presets:
+//        -USER_PERMISSIONS 
+//        -MOD_PERMISSIONS  
+//        -ADMIN_PERMISSIONS
+Permissions::Permissions(const int permissions_preset) {
 	booleanVector = 0;
-	switch (permissions_type) {
-	case USER_PERMISSIONS: booleanVector = USER_PERMISSIONS; break;
-	case MOD_PERMISSIONS: booleanVector = MOD_PERMISSIONS; break;
-	case ADMIN_PERMISSION: booleanVector = ADMIN_PERMISSION; break;
+	switch (permissions_preset) {
+	case USER_PERMISSIONS: setPermissions(USER_PERMISSIONS); break;
+	case MOD_PERMISSIONS: setPermissions(MOD_PERMISSIONS); break;
+	case ADMIN_PERMISSIONS: setPermissions(ADMIN_PERMISSIONS); break;
+	default: 
+		std::cerr << "Invalid permissions request. Basic User permissions granted." << std::endl;
+		booleanVector = USER_PERMISSIONS;
+	}
+}
+
+Permissions::~Permissions() {
+	std::cout << "Permissions destructor called.\n";
+}
+
+void Permissions::setPermissions(const int permissions_preset) {
+	if (permissions_preset == USER_PERMISSIONS) {
+		std::cout << "Basic user permissions granted." << std::endl;
+		booleanVector = USER_PERMISSIONS;
+	}
+	else if (permissions_preset == MOD_PERMISSIONS) {
+		std::cout << "Moderator permissions granted." << std::endl;
+		booleanVector = MOD_PERMISSIONS;
+	}
+	else if (permissions_preset == ADMIN_PERMISSIONS) {
+		std::cout << "Administrator permissions granted." << std::endl;
+		booleanVector = ADMIN_PERMISSIONS;
 	}
 }
 
 void Permissions::printCurrentState() {
-	std::cout << "VIEW_ALL_POSTS    " << canViewAllPosts() << std::endl;
-	std::cout << "VIEW_CERTAIN_POST " << canViewCertainPost() << std::endl;
-	std::cout << "REMOVE_ANY_POST   " << canRemoveAnyPost() << std::endl;
-	std::cout << "REMOVE_OWN_POST   " << canRemoveOwnPost() << std::endl;
-	std::cout << "POST_TEXT         " << canPostText() << std::endl;
-	std::cout << "POST_URL          " << canPostUrl() << std::endl;
-	std::cout << "POST_IMAGE        " << canPostImage() << std::endl;
-	std::cout << "UNBLOCK_USER      " << canUnblockUser() << std::endl;
-	std::cout << "BLOCK_USER        " << canBlockUser() << std::endl;
-	std::cout << "REMOVE_USER       " << canRemoveUser() << std::endl;
-	std::cout << "ADD_USER          " << canAddUser() << std::endl;
-	std::cout << "ADD_MODERATOR     " << canAddModerator() << std::endl;
+	std::cout << "PERMISSION_VIEW_ALL_POSTS    " << canViewAllPosts() << std::endl;
+	std::cout << "PERMISSION_VIEW_CERTAIN_POST " << canViewCertainPost() << std::endl;
+	std::cout << "PERMISSION_REMOVE_ANY_POST   " << canRemoveAnyPost() << std::endl;
+	std::cout << "PERMISSION_REMOVE_OWN_POST   " << canRemoveOwnPost() << std::endl;
+	std::cout << "PERMISSION_POST_TEXT         " << canPostText() << std::endl;
+	std::cout << "PERMISSION_POST_URL          " << canPostUrl() << std::endl;
+	std::cout << "PERMISSION_POST_IMAGE        " << canPostImage() << std::endl;
+	std::cout << "PERMISSION_UNBLOCK_USER      " << canUnblockUser() << std::endl;
+	std::cout << "PERMISSION_BLOCK_USER        " << canBlockUser() << std::endl;
+	std::cout << "PERMISSION_REMOVE_USER       " << canRemoveUser() << std::endl;
+	std::cout << "PERMISSION_ADD_USER          " << canAddUser() << std::endl;
+	std::cout << "PERMISSION_ADD_MODERATOR     " << canAddModerator() << std::endl;
 }
 
 void Permissions::blockPosting() {
 	std::cout << "User has been blocked from posting.\n";
-	booleanVector &= ~POST_IMAGE;
-	booleanVector &= ~POST_URL;
-	booleanVector &= ~POST_TEXT;
+	booleanVector &= ~PERMISSION_POST_IMAGE;
+	booleanVector &= ~PERMISSION_POST_URL;
+	booleanVector &= ~PERMISSION_POST_TEXT;
 }
 
 void Permissions::unblockPosting() {
 	std::cout << "User has been unblocked from posting.\n";
-	booleanVector |= POST_IMAGE;
-	booleanVector |= POST_URL;
-	booleanVector |= POST_TEXT;
+	booleanVector |= PERMISSION_POST_IMAGE;
+	booleanVector |= PERMISSION_POST_URL;
+	booleanVector |= PERMISSION_POST_TEXT;
 }
 
 bool Permissions::canViewAllPosts() {
-	return booleanVector & VIEW_ALL_POSTS;
+	return booleanVector & PERMISSION_VIEW_ALL_POSTS;
 }
 
 bool Permissions::canViewCertainPost() {
-	return booleanVector & VIEW_CERTAIN_POST;
+	return booleanVector & PERMISSION_VIEW_CERTAIN_POST;
 }
 
 bool Permissions::canRemoveAnyPost() {
-	return booleanVector & REMOVE_ANY_POST;
+	return booleanVector & PERMISSION_REMOVE_ANY_POST;
 }
 
 bool Permissions::canRemoveOwnPost() {
-	return booleanVector & REMOVE_OWN_POST;
+	return booleanVector & PERMISSION_REMOVE_OWN_POST;
 }
 
 bool Permissions::canPostText() {
-	return booleanVector & POST_TEXT;
+	return booleanVector & PERMISSION_POST_TEXT;
 }
 
 bool Permissions::canPostUrl() {
-	return booleanVector & POST_URL;
+	return booleanVector & PERMISSION_POST_URL;
 }
 
 bool Permissions::canPostImage() {
-	return bool(booleanVector & POST_IMAGE);
+	return booleanVector & PERMISSION_POST_IMAGE;
 }
 
 bool Permissions::canUnblockUser() {
-	return bool(booleanVector & UNBLOCK_USER);
+	return booleanVector & PERMISSION_UNBLOCK_USER;
 }
 
 bool Permissions::canBlockUser() {
-	return bool(booleanVector & BLOCK_USER);
+	return booleanVector & PERMISSION_BLOCK_USER;
 }
 
 bool Permissions::canRemoveUser() {
-	return bool(booleanVector & REMOVE_USER);
+	return booleanVector & PERMISSION_REMOVE_USER;
 }
 
 bool Permissions::canAddUser() {
-	return bool(booleanVector & ADD_USER);
+	return booleanVector & PERMISSION_ADD_USER;
 }
 
 bool Permissions::canAddModerator() {
-	return bool(booleanVector & ADD_MODERATOR);
+	return booleanVector & PERMISSION_ADD_MODERATOR;
 }
