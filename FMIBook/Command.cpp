@@ -5,7 +5,6 @@ Command::Command(const char* command) {
 	//Acces violation when I use this
 	//size_t len = strlen(command) + 1;
 	//std::cout << "\nLen: " << len << std::endl;
-	this->backedUpCommandValue = new char[1024];
 	strcpy_s(this->backedUpCommandValue, 1025, command);
 	determineType();
 
@@ -28,7 +27,6 @@ void Command::setActorNameFromInput() {
 		sizeOfActorName++;
 	}
 
-	actor = new char[sizeOfActorName + 1];
 
 	for (int i = 0; backedUpCommandValue[i] != ' '; i++) {
 		this->actor[i] = this->backedUpCommandValue[i];
@@ -61,11 +59,10 @@ void Command::setSubjectNameFromInput() {
 	}
 
 	index -= sizeOfSubjectName;
-	subject = new char[sizeOfSubjectName + 1];
 
 	int subjectIndex = 0;
 
-	while (backedUpCommandValue[index] != ' ') {
+	while (backedUpCommandValue[index] != ' ' && backedUpCommandValue[index] != '\0') {
 		subject[subjectIndex] = backedUpCommandValue[index];
 		index++;
 		subjectIndex++;
@@ -86,7 +83,7 @@ void Command::determineType() {
 		return;
 	}
 
-	
+
 
 	char* typeStr = new char[1024];
 	int index = 0;
@@ -139,15 +136,15 @@ void Command::determineType() {
 }
 
 Command::~Command() {
-	if (hasSubject())
-	{
-		delete[] subject;
-	}
+	//if (hasSubject())
+	//{
+	//	delete[] subject;
+	//}
 
-	if (hasActor())
-	{
-		delete[] actor;
-	}
+	//if (hasActor())
+	//{
+	//	delete[] actor;
+	//}
 
 
 	//delete[] backedUpCommandValue;

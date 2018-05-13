@@ -5,13 +5,16 @@
 class User {
 private:
 	Permissions permissions;
-	char* name;
+	char nickname[1024];
 	int age;
 
 	User();
 public:
-	User(const char*, int, int);
+	User(const char* nickname, int age, int permission_preset);
+	User(const User& other);
 	~User();
 	void printInformation();
-	bool compareWith(const char*);
+	void printInformationCompact();
+	Permissions* getPermissions();
+	bool compareWith(const char* nickname);
 };	

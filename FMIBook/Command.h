@@ -4,28 +4,28 @@
 
 enum Type
 {
-	ADD_MODERATOR,
-	ADD_USER,
+	ADD_MODERATOR,//
+	ADD_USER,//
 	REMOVE_USER,
-	BLOCK_USER,
-	UNBLOCK_USER,
+	BLOCK_USER,//
+	UNBLOCK_USER,//
 	POST_IMAGE,
 	POST_URL,
 	POST_TEXT,
 	REMOVE_POST,
 	VIEW_CERTAIN_POST,
 	VIEW_ALL_POSTS,
-	INFO,
-	QUIT,
-	INVALID_COMMAND
+	INFO,//
+	QUIT,//
+	INVALID_COMMAND//
 };
 
 //All commands have an actor except INFO and Quit
 class Command {
 	Type type;
-	char* backedUpCommandValue;
-	char* actor;
-	char* subject;
+	char backedUpCommandValue[1024];
+	char actor[1024];
+	char subject[1024];
 	size_t number;
 
 	Command();

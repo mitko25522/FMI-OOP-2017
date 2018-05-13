@@ -4,7 +4,7 @@
 //Default constructor sets permissions to basic user. 
 Permissions::Permissions() {
 	booleanVector = 0;
-	std::cout << "Basic User permissions granted.\n";
+	std::cout << "		Basic User permissions granted.\n";
 	booleanVector = USER_PERMISSIONS;
 }
 
@@ -18,27 +18,27 @@ Permissions::Permissions(const int permissions_preset) {
 	case USER_PERMISSIONS: setPermissions(USER_PERMISSIONS); break;
 	case MOD_PERMISSIONS: setPermissions(MOD_PERMISSIONS); break;
 	case ADMIN_PERMISSIONS: setPermissions(ADMIN_PERMISSIONS); break;
-	default: 
+	default:
 		std::cerr << "Invalid permissions request. Basic User permissions granted." << std::endl;
 		booleanVector = USER_PERMISSIONS;
 	}
 }
 
 Permissions::~Permissions() {
-	std::cout << "Permissions destructor called.\n";
+	std::cout << "		Permissions destructor called.\n";
 }
 
 void Permissions::setPermissions(const int permissions_preset) {
 	if (permissions_preset == USER_PERMISSIONS) {
-		std::cout << "Basic user permissions granted." << std::endl;
+		std::cout << "		Basic user permissions granted." << std::endl;
 		booleanVector = USER_PERMISSIONS;
 	}
 	else if (permissions_preset == MOD_PERMISSIONS) {
-		std::cout << "Moderator permissions granted." << std::endl;
+		std::cout << "		Moderator permissions granted." << std::endl;
 		booleanVector = MOD_PERMISSIONS;
 	}
 	else if (permissions_preset == ADMIN_PERMISSIONS) {
-		std::cout << "Administrator permissions granted." << std::endl;
+		std::cout << "		Administrator permissions granted." << std::endl;
 		booleanVector = ADMIN_PERMISSIONS;
 	}
 }
@@ -59,17 +59,32 @@ void Permissions::printCurrentState() {
 }
 
 void Permissions::blockPosting() {
-	std::cout << "User has been blocked from posting.\n";
-	booleanVector &= ~PERMISSION_POST_IMAGE;
-	booleanVector &= ~PERMISSION_POST_URL;
-	booleanVector &= ~PERMISSION_POST_TEXT;
+	if (!isBlockedFromPosting()) {
+		booleanVector &= ~PERMISSION_POST_IMAGE;
+		booleanVector &= ~PERMISSION_POST_URL;
+		booleanVector &= ~PERMISSION_POST_TEXT;
+		std::cout << "User has been blocked from posting.\n";
+	}
+	else {
+		std::cout << "User is already blocked from posting\n";
+	}
+}
+
+bool Permissions::isBlockedFromPosting() {
+	return !(canPostImage() && canPostUrl() && canPostText());
 }
 
 void Permissions::unblockPosting() {
-	std::cout << "User has been unblocked from posting.\n";
-	booleanVector |= PERMISSION_POST_IMAGE;
-	booleanVector |= PERMISSION_POST_URL;
-	booleanVector |= PERMISSION_POST_TEXT;
+	if (isBlockedFromPosting()) {
+		booleanVector |= PERMISSION_POST_IMAGE;
+		booleanVector |= PERMISSION_POST_URL;
+		booleanVector |= PERMISSION_POST_TEXT;
+		std::cout << "User has been unblocked from posting.\n";
+	}
+	else {
+		std::cout << "User is not blocked from posting\n";
+	}
+
 }
 
 bool Permissions::canViewAllPosts() {
@@ -122,4 +137,8 @@ bool Permissions::canAddModerator() {
 
 int Permissions::getCurrentPermissions() {
 	return booleanVector;
+}
+
+Permissions::Permissions(const Permissions& other) {
+	this->booleanVector = other.booleanVector;
 }

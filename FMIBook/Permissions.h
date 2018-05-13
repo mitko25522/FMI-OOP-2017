@@ -40,9 +40,11 @@ private:
 public:
 	Permissions();
 	~Permissions();
+	Permissions(const Permissions& other);
 	Permissions(const int permissions_preset);
 	void printCurrentState();
 	void blockPosting();
+	bool isBlockedFromPosting();
 	void unblockPosting();
 	bool canViewAllPosts();
 	bool canViewCertainPost();

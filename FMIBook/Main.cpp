@@ -6,22 +6,19 @@
 void permissionTests_block_unblock();
 void permissionTests_constructors();
 
-std::vector<User*> FMIBook::user_list;
+std::vector<User> FMIBook::user_list;
+
+//TODO:
+//Add rename command and functions
+//Add posts system
+//Add youngest & oldest to printInfo
+//Add option to input admin data or use default ones
+
+//Known issues
+//Sometimes crashes when removing a user
 
 int main() {
 	FMIBook::createAdministrator();
-
-
-	//User* user = new User("user1", 10, USER_PERMISSIONS);
-	//FMIBook::user_list.push_back(user);
-	//User* user2 = new User("user2", 17, USER_PERMISSIONS);
-	//FMIBook::user_list.push_back(user2);
-
-	//FMIBook::user_list[0]->printInformation();
-	//FMIBook::user_list[1]->printInformation();
-	//FMIBook::user_list[2]->printInformation();
-
-
 
 	while (true) {
 		char* input = new char[1024];
@@ -32,10 +29,15 @@ int main() {
 		try {
 			FMIBook fmiBook(&command);
 		}
-		catch (const std::exception&) {
-			FMIBook::clearAllocatedMemory();
-			return 0;
+		catch (const std::exception& e) {
+			if (strcmp(e.what(), "Exit") == 0) {
+				//FMIBook::clearAllocatedMemory();
+				return 0;
+			}
+			std::cout << e.what() << std::endl;
+			//FMIBook::clearAllocatedMemory();
 		}
+		std::cout << std::endl;
 	}
 
 	FMIBook::clearAllocatedMemory();
