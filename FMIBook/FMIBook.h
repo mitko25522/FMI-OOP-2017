@@ -12,4 +12,5 @@ public:
 	static std::vector<User*> user_list;
 	static void createAdministrator();
 	static void clearAllocatedMemory();
+	static size_t findUserPos(const char*);
 };

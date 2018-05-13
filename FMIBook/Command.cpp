@@ -2,7 +2,10 @@
 #include "FMIBook.h"
 
 Command::Command(const char* command) {
-	this->backedUpCommandValue = new char[strlen(command) + 1];
+	//Acces violation when I use this
+	//size_t len = strlen(command) + 1;
+	//std::cout << "\nLen: " << len << std::endl;
+	this->backedUpCommandValue = new char[1024];
 	strcpy_s(this->backedUpCommandValue, 1025, command);
 	determineType();
 
@@ -74,54 +77,65 @@ void Command::setSubjectNameFromInput() {
 }
 
 void Command::determineType() {
-	char* type = new char[1024];
+	if (strncmp(backedUpCommandValue, "quit", 5) == 0) {
+		this->type = QUIT;
+		return;
+	}
+	else if (strncmp(backedUpCommandValue, "info", 5) == 0) {
+		this->type = INFO;
+		return;
+	}
+
+	
+
+	char* typeStr = new char[1024];
 	int index = 0;
 
 	while (backedUpCommandValue[index] != ' ') {
 		index++;
+		if (backedUpCommandValue[index] == '\0') {
+			this->type = INVALID_COMMAND;
+			return;
+		}
 	}
 
 	index++;
 
 	int typeIndex = 0;
 	while (backedUpCommandValue[index] != ' ') {
-		type[typeIndex] = backedUpCommandValue[index];
+		typeStr[typeIndex] = backedUpCommandValue[index];
 		typeIndex++;
 		index++;
 	}
 
-	type[typeIndex] = '\0';
+	typeStr[typeIndex] = '\0';
 
-	if (strcmp(type, "add_moderator") == 0)
+	if (strcmp(typeStr, "add_moderator") == 0)
 		this->type = ADD_MODERATOR;
-	else if (strcmp(type, "add_user") == 0)
+	else if (strcmp(typeStr, "add_user") == 0)
 		this->type = ADD_USER;
-	else if (strcmp(type, "remove_user") == 0)
+	else if (strcmp(typeStr, "remove_user") == 0)
 		this->type = REMOVE_USER;
-	else if (strcmp(type, "block_user") == 0)
+	else if (strcmp(typeStr, "block_user") == 0)
 		this->type = BLOCK_USER;
-	else if (strcmp(type, "unblock_user") == 0)
+	else if (strcmp(typeStr, "unblock_user") == 0)
 		this->type = UNBLOCK_USER;
-	else if (strcmp(type, "post_image") == 0)
+	else if (strcmp(typeStr, "post_image") == 0)
 		this->type = POST_IMAGE;
-	else if (strcmp(type, "post_url") == 0)
+	else if (strcmp(typeStr, "post_url") == 0)
 		this->type = POST_URL;
-	else if (strcmp(type, "post_text") == 0)
+	else if (strcmp(typeStr, "post_text") == 0)
 		this->type = POST_TEXT;
-	else if (strcmp(type, "remove_post") == 0)
+	else if (strcmp(typeStr, "remove_post") == 0)
 		this->type = REMOVE_POST;
-	else if (strcmp(type, "view_post") == 0)
+	else if (strcmp(typeStr, "view_post") == 0)
 		this->type = VIEW_CERTAIN_POST;
-	else if (strcmp(type, "view_all_posts") == 0)
+	else if (strcmp(typeStr, "view_all_posts") == 0)
 		this->type = VIEW_ALL_POSTS;
-	else if (strcmp(type, "info") == 0)
-		this->type = INFO;
-	else if (strcmp(type, "quit") == 0)
-		this->type = QUIT;
 	else
 		this->type = INVALID_COMMAND;
 
-	delete[] type;
+	delete[] typeStr;
 }
 
 Command::~Command() {
@@ -136,7 +150,7 @@ Command::~Command() {
 	}
 
 
-	delete[] backedUpCommandValue;
+	//delete[] backedUpCommandValue;
 }
 
 bool Command::hasActor()
@@ -149,7 +163,7 @@ bool Command::hasActor()
 
 bool Command::hasSubject()
 {
-	return 
+	return
 		this->type == ADD_MODERATOR || this->type == ADD_USER ||
 		this->type == REMOVE_USER || this->type == BLOCK_USER ||
 		this->type == UNBLOCK_USER;
@@ -181,4 +195,32 @@ void Command::extractNumber() {
 	}
 
 	this->number = number;
+}
+
+char* Command::getActor() {
+	if (this->hasActor()) {
+		return actor;
+	}
+}
+
+char* Command::getSubject() {
+	if (this->hasSubject()) {
+		return subject;
+	}
+}
+
+size_t Command::getSubjectAge() {
+	if (this->hasSubjectAge()) {
+		return number;
+	}
+}
+
+size_t Command::getPostId() {
+	if (this->hasPostId()) {
+		return number;
+	}
+}
+
+Type Command::getType() {
+	return type;
 }

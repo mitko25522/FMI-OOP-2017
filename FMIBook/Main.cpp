@@ -12,25 +12,31 @@ int main() {
 	FMIBook::createAdministrator();
 
 
-	User* user = new User("user1", 10, USER_PERMISSIONS);
-	FMIBook::user_list.push_back(user);
-	User* user2 = new User("user2", 17, USER_PERMISSIONS);
-	FMIBook::user_list.push_back(user2);
+	//User* user = new User("user1", 10, USER_PERMISSIONS);
+	//FMIBook::user_list.push_back(user);
+	//User* user2 = new User("user2", 17, USER_PERMISSIONS);
+	//FMIBook::user_list.push_back(user2);
 
-	FMIBook::user_list[0]->printInformation();
-	FMIBook::user_list[1]->printInformation();
-	FMIBook::user_list[2]->printInformation();
+	//FMIBook::user_list[0]->printInformation();
+	//FMIBook::user_list[1]->printInformation();
+	//FMIBook::user_list[2]->printInformation();
 
 
 
-	//while (true) {
-	//	char* input = new char[1024];
-	//	std::cin.getline(input, 1025);
-	//	Command command(input);
-	//	Command* pCommand = &command;
-	//	delete[] input;
-	//	//FMIBook fmiBook(pCommand);
-	//}
+	while (true) {
+		char* input = new char[1024];
+		std::cout << "Enter command: ";
+		std::cin.getline(input, 1025);
+		Command command(input);
+		delete[] input;
+		try {
+			FMIBook fmiBook(&command);
+		}
+		catch (const std::exception&) {
+			FMIBook::clearAllocatedMemory();
+			return 0;
+		}
+	}
 
 	FMIBook::clearAllocatedMemory();
 	return 0;

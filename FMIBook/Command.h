@@ -2,29 +2,31 @@
 #include <iostream>
 #include "User.h"
 
+enum Type
+{
+	ADD_MODERATOR,
+	ADD_USER,
+	REMOVE_USER,
+	BLOCK_USER,
+	UNBLOCK_USER,
+	POST_IMAGE,
+	POST_URL,
+	POST_TEXT,
+	REMOVE_POST,
+	VIEW_CERTAIN_POST,
+	VIEW_ALL_POSTS,
+	INFO,
+	QUIT,
+	INVALID_COMMAND
+};
+
 //All commands have an actor except INFO and Quit
 class Command {
+	Type type;
 	char* backedUpCommandValue;
 	char* actor;
 	char* subject;
 	size_t number;
-	enum Type
-	{
-		ADD_MODERATOR,
-		ADD_USER,
-		REMOVE_USER,
-		BLOCK_USER,
-		UNBLOCK_USER,
-		POST_IMAGE,
-		POST_URL,
-		POST_TEXT,
-		REMOVE_POST,
-		VIEW_CERTAIN_POST,
-		VIEW_ALL_POSTS,
-		INFO,
-		QUIT,
-		INVALID_COMMAND
-	}type;
 
 	Command();
 	void setActorNameFromInput();
@@ -38,4 +40,10 @@ class Command {
 public:
 	Command(const char*);
 	~Command();
+
+	char* getActor();
+	char* getSubject();
+	size_t getSubjectAge();
+	size_t getPostId();
+	Type getType();
 };
