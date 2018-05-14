@@ -16,5 +16,7 @@ public:
 	void printInformation();
 	void printInformationCompact();
 	Permissions* getPermissions();
+	char* getNickname();
+	int getAge();
 	bool compareWith(const char* nickname);
 };	

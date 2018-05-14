@@ -28,14 +28,6 @@ void User::printInformation() {
 
 }
 
-bool User::compareWith(const char* nickname) {
-	return strcmp(nickname, this->nickname) == 0;
-}
-
-Permissions* User::getPermissions() {
-	return &permissions;
-}
-
 void User::printInformationCompact() {
 	std::cout << "Name: " << this->nickname << " | ";
 	std::cout << "Age: "<< this->age << " | ";
@@ -50,6 +42,21 @@ void User::printInformationCompact() {
 	std::cout << std::endl;
 }
 
+
+Permissions* User::getPermissions() {
+	return &permissions;
+}
+
+char * User::getNickname()
+{
+	return nickname;
+}
+
+int User::getAge()
+{
+	return this->age;
+}
+
 User::User(const User& other) {
 	this->permissions = other.permissions;
 	for (int i = 0; other.nickname[i] != '\0'; i++) {
@@ -59,4 +66,8 @@ User::User(const User& other) {
 		}
 	}
 	this->age = other.age;
+}
+
+bool User::compareWith(const char* nickname) {
+	return strcmp(nickname, this->nickname) == 0;
 }

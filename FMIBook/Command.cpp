@@ -67,7 +67,7 @@ void Command::setSubjectNameFromInput() {
 		index++;
 		subjectIndex++;
 
-		if (backedUpCommandValue[index] == ' ') {
+		if (backedUpCommandValue[index] == ' ' || backedUpCommandValue[index] == '\0') {
 			subject[subjectIndex] = '\0';
 		}
 	}
@@ -129,6 +129,8 @@ void Command::determineType() {
 		this->type = VIEW_CERTAIN_POST;
 	else if (strcmp(typeStr, "view_all_posts") == 0)
 		this->type = VIEW_ALL_POSTS;
+	else if (strcmp(typeStr, "rename") == 0)
+		this->type = RENAME;
 	else
 		this->type = INVALID_COMMAND;
 
@@ -163,7 +165,7 @@ bool Command::hasSubject()
 	return
 		this->type == ADD_MODERATOR || this->type == ADD_USER ||
 		this->type == REMOVE_USER || this->type == BLOCK_USER ||
-		this->type == UNBLOCK_USER;
+		this->type == UNBLOCK_USER || this->type == RENAME;
 }
 
 bool Command::hasSubjectAge() {

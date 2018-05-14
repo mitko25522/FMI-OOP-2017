@@ -12,6 +12,7 @@ FMIBook::FMIBook(Command* command) {
 	case UNBLOCK_USER:		unblockUser(command); break;
 	case INFO:				printInfo(); break;
 	case REMOVE_USER:		removeUser(command); break;
+	case RENAME:			renameUser(command); break;
 	}
 
 }
@@ -26,17 +27,9 @@ FMIBook::~FMIBook() {
 
 }
 
-void FMIBook::clearAllocatedMemory() {
-	/*int numberOfUsers = FMIBook::user_list.size();
-
-	for (int i = 0; i < numberOfUsers; i++) {
-		delete FMIBook::user_list.at(i);
-	}*/
-}
-
 size_t FMIBook::findUserPos(const char* userName) {
 	if (FMIBook::userExists(userName)) {
-		int numberOfUsers = FMIBook::user_list.size();
+		size_t numberOfUsers = FMIBook::user_list.size();
 
 		for (int i = 0; i < numberOfUsers; i++) {
 			if (FMIBook::user_list[i].compareWith(userName)) {
@@ -50,11 +43,17 @@ size_t FMIBook::findUserPos(const char* userName) {
 }
 
 void FMIBook::printInfo() {
-	int numberOfUsers = FMIBook::user_list.size();
-
+	size_t numberOfUsers = FMIBook::user_list.size();
 	for (int i = 0; i < numberOfUsers; i++) {
 		FMIBook::user_list[i].printInformationCompact();
 	}
+	std::cout << "Oldest user: " << FMIBook::user_list[getOldestUserIndex()].getNickname();
+	std::cout << ", " << FMIBook::user_list[getOldestUserIndex()].getAge() << std::endl;
+	std::cout << "Youngest user: " << FMIBook::user_list[getYoungestUserIndex()].getNickname();
+	std::cout << ", " << FMIBook::user_list[getYoungestUserIndex()].getAge() << std::endl;;
+	std::cout << "Blocked users: ";
+	listBlockedUsers();
+	std::cout << std::endl;
 }
 
 void FMIBook::addModerator(Command* command) {
@@ -70,7 +69,7 @@ void FMIBook::addModerator(Command* command) {
 		std::cout << "Moderator added to database\n";
 	}
 	else {
-		throw std::logic_error("Actor does not have needed permissions.");
+		throw std::logic_error("Actor does not have needed permissions");
 	}
 }
 
@@ -88,7 +87,7 @@ void FMIBook::addUser(Command* command) {
 		std::cout << "User added to database\n";
 	}
 	else {
-		throw std::logic_error("Actor does not have needed permissions.");
+		throw std::logic_error("Actor does not have needed permissions");
 	}
 }
 
@@ -102,7 +101,7 @@ void FMIBook::blockUser(Command* command) {
 		}
 	}
 	else {
-		throw std::logic_error("Actor does not have needed permissions.");
+		throw std::logic_error("Actor does not have needed permissions");
 	}
 }
 
@@ -116,12 +115,12 @@ void FMIBook::unblockUser(Command* command) {
 		}
 	}
 	else {
-		throw std::logic_error("Actor does not have needed permissions.");
+		throw std::logic_error("Actor does not have needed permissions");
 	}
 }
 
 bool FMIBook::userExists(const char* userName) {
-	int numberOfUsers = FMIBook::user_list.size();
+	size_t numberOfUsers = FMIBook::user_list.size();
 
 	bool doesExist = false;
 	for (int i = 0; i < numberOfUsers; i++) {
@@ -143,6 +142,98 @@ void FMIBook::removeUser(Command* command) {
 		std::cout << "User has been removed";
 	}
 	else {
-		throw std::logic_error("Actor does not have needed permissions.");
+		throw std::logic_error("Actor does not have needed permissions");
+	}
+}
+
+void FMIBook::renameUser(Command* command) {
+	size_t actor_pos = findUserPos(command->getActor());
+
+	char* oldName = FMIBook::user_list.at(actor_pos).getNickname();
+	char* newName = command->getSubject();
+
+	if (userExists(newName)) {
+		throw std::logic_error("New name already exists in database");
+	}
+
+	for (int i = 0; newName[i] != '\0'; i++) {
+		oldName[i] = newName[i];
+		if (newName[i + 1] == '\0') {
+			oldName[i + 1] = '\0';
+		}
+	}
+
+	std::cout << "User has been renamed";
+}
+
+size_t FMIBook::getOldestUserIndex() {
+	size_t numberOfUsers = FMIBook::user_list.size();
+	size_t currentOldestIndex = 0;
+
+	for (int i = 0; i < numberOfUsers; i++) {
+		if (FMIBook::user_list.at(i).getAge() > FMIBook::user_list.at(currentOldestIndex).getAge()) {
+			currentOldestIndex = i;
+		}
+	}
+
+	return currentOldestIndex;
+}
+
+size_t FMIBook::getYoungestUserIndex() {
+	size_t numberOfUsers = FMIBook::user_list.size();
+	size_t currentOldestIndex = 0;
+
+	for (int i = 0; i < numberOfUsers; i++) {
+		if (FMIBook::user_list.at(i).getAge() < FMIBook::user_list.at(currentOldestIndex).getAge()) {
+			currentOldestIndex = i;
+		}
+	}
+
+	return currentOldestIndex;
+}
+
+size_t FMIBook::getBlockedUsersCount() {
+	size_t numberOfUsers = FMIBook::user_list.size();
+	size_t blockedUsersCount = 0;
+
+	for (int i = 0; i < numberOfUsers; i++) {
+		if (FMIBook::user_list.at(i).getPermissions()->isBlockedFromPosting()) {
+			blockedUsersCount++;
+		}
+	}
+
+	return blockedUsersCount;
+}
+
+void FMIBook::listBlockedUsers() {
+	size_t blockedUsersCount = getBlockedUsersCount();
+
+	if (blockedUsersCount == 0) {
+		std::cout << "N/A" << std::endl;
+	}
+	else if (blockedUsersCount > 0) {
+		int* blockedUsersIndexes = new int[blockedUsersCount];
+		getBlockedUsersIndexes(blockedUsersIndexes);
+
+		for (int i = 0; i < blockedUsersCount; i++) {
+			std::cout << FMIBook::user_list.at(blockedUsersIndexes[i]).getNickname();
+			if (i + 1 != blockedUsersCount) {
+				std::cout << ", ";
+			}
+		}
+
+		delete[] blockedUsersIndexes;
+	}
+}
+
+void FMIBook::getBlockedUsersIndexes(int* blockedUsersIndexesArray) {
+	size_t currentArrayIndex = 0;
+	size_t numberOfUsers = FMIBook::user_list.size();
+
+	for (int i = 0; i < numberOfUsers; i++) {
+		if (FMIBook::user_list.at(i).getPermissions()->isBlockedFromPosting()) {
+			blockedUsersIndexesArray[currentArrayIndex] = i;
+			currentArrayIndex++;
+		}
 	}
 }

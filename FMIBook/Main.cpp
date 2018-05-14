@@ -9,13 +9,13 @@ void permissionTests_constructors();
 std::vector<User> FMIBook::user_list;
 
 //TODO:
-//Add rename command and functions
 //Add posts system
-//Add youngest & oldest to printInfo
 //Add option to input admin data or use default ones
 
 //Known issues
 //Sometimes crashes when removing a user
+//Sometimes crashes when blocking a user
+//Sometimes crashes when renaming a user (starting to suspect reason is in commands)
 
 int main() {
 	FMIBook::createAdministrator();
@@ -31,16 +31,13 @@ int main() {
 		}
 		catch (const std::exception& e) {
 			if (strcmp(e.what(), "Exit") == 0) {
-				//FMIBook::clearAllocatedMemory();
 				return 0;
 			}
 			std::cout << e.what() << std::endl;
-			//FMIBook::clearAllocatedMemory();
 		}
 		std::cout << std::endl;
 	}
 
-	FMIBook::clearAllocatedMemory();
 	return 0;
 }
 

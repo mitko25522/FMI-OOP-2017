@@ -6,12 +6,7 @@
 class FMIBook {
 private:
 	FMIBook();
-public:
-	FMIBook(Command*);
-	~FMIBook();
 	static std::vector<User> user_list;
-	static void createAdministrator();
-	static void clearAllocatedMemory();
 	static size_t findUserPos(const char*);
 	static bool userExists(const char*);
 	static void printInfo();
@@ -20,4 +15,14 @@ public:
 	static void blockUser(Command*);
 	static void unblockUser(Command*);
 	static void removeUser(Command*);
+	static void renameUser(Command*);
+	static size_t getOldestUserIndex();
+	static size_t getYoungestUserIndex();
+	static size_t getBlockedUsersCount();
+	static void listBlockedUsers();
+	static void getBlockedUsersIndexes(int*);
+public:
+	FMIBook(Command*);
+	~FMIBook();
+	static void createAdministrator();
 };
