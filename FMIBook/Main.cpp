@@ -10,7 +10,11 @@ std::vector<User> FMIBook::user_list;
 
 //TODO:
 //Add posts system
+//   -POST_IMAGE link text
+//   -POST_URL   link text
+//   -POST_TEXT  text
 //Add option to input admin data or use default ones
+//
 
 //Known issues
 //Sometimes crashes when removing a user
