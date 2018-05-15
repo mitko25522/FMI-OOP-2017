@@ -19,14 +19,22 @@ Command::Command(const char* command) {
 	if (hasSubjectAge() || hasPostId()) {
 		extractNumber();
 	}
+
+	if (hasPath()) {
+		setPath();
+	}
+
+	if (this->type == POST_URL) {
+		extractUrlDescription();
+	}
+
+	if (this->type == POST_TEXT) {
+		extractPostText();
+	}
 }
 
 void Command::setActorNameFromInput() {
-	int sizeOfActorName = 0;
-	for (int i = 0; backedUpCommandValue[i] != ' '; i++) {
-		sizeOfActorName++;
-	}
-
+	size_t sizeOfActorName = 0;
 
 	for (int i = 0; backedUpCommandValue[i] != ' '; i++) {
 		this->actor[i] = this->backedUpCommandValue[i];
@@ -37,38 +45,28 @@ void Command::setActorNameFromInput() {
 }
 
 void Command::setSubjectNameFromInput() {
-	int index = 0;
+	size_t currentIndex = 0;
 
-	while (backedUpCommandValue[index] != ' ') {
-		index++;
+	while (backedUpCommandValue[currentIndex] != ' ') {
+		currentIndex++;
 	}
 
-	index++;
+	currentIndex++;
 
-	while (backedUpCommandValue[index] != ' ') {
-		index++;
+	while (backedUpCommandValue[currentIndex] != ' ') {
+		currentIndex++;
 	}
 
-	index++;
+	currentIndex++;
 
-	int sizeOfSubjectName = 0;
-
-	while (backedUpCommandValue[index] != ' ') {
-		sizeOfSubjectName++;
-		index++;
-	}
-
-	index -= sizeOfSubjectName;
-
-	int subjectIndex = 0;
-
-	while (backedUpCommandValue[index] != ' ' && backedUpCommandValue[index] != '\0') {
-		subject[subjectIndex] = backedUpCommandValue[index];
-		index++;
+	size_t subjectIndex = 0;
+	while (backedUpCommandValue[currentIndex] != ' ' && backedUpCommandValue[currentIndex] != '\0') {
+		helperString[subjectIndex] = backedUpCommandValue[currentIndex];
+		currentIndex++;
 		subjectIndex++;
 
-		if (backedUpCommandValue[index] == ' ' || backedUpCommandValue[index] == '\0') {
-			subject[subjectIndex] = '\0';
+		if (backedUpCommandValue[currentIndex] == ' ' || backedUpCommandValue[currentIndex] == '\0') {
+			helperString[subjectIndex] = '\0';
 		}
 	}
 }
@@ -131,6 +129,12 @@ void Command::determineType() {
 		this->type = VIEW_ALL_POSTS;
 	else if (strcmp(typeStr, "rename") == 0)
 		this->type = RENAME;
+	else if (strcmp(typeStr, "post_image") == 0)
+		this->type = POST_IMAGE;
+	else if (strcmp(typeStr, "post_url") == 0)
+		this->type = POST_URL;
+	else if (strcmp(typeStr, "post_text") == 0)
+		this->type = POST_TEXT;
 	else
 		this->type = INVALID_COMMAND;
 
@@ -140,7 +144,7 @@ void Command::determineType() {
 Command::~Command() {
 	//if (hasSubject())
 	//{
-	//	delete[] subject;
+	//	delete[] helperString;
 	//}
 
 	//if (hasActor())
@@ -179,6 +183,11 @@ bool Command::hasPostId() {
 		this->type == VIEW_CERTAIN_POST || this->type == VIEW_ALL_POSTS;
 }
 
+bool Command::hasPath() {
+	return
+		this->type == POST_IMAGE || this->type == POST_URL;
+}
+
 void Command::extractNumber() {
 	int index = 0;
 	while (backedUpCommandValue[index] != '\0') {
@@ -204,7 +213,7 @@ char* Command::getActor() {
 
 char* Command::getSubject() {
 	if (this->hasSubject()) {
-		return subject;
+		return helperString;
 	}
 }
 
@@ -220,6 +229,98 @@ size_t Command::getPostId() {
 	}
 }
 
-Type Command::getType() {
+CommandType Command::getCommandType() {
 	return type;
+}
+
+//Admin post_image C:\users\desktop\dzvera.png
+void Command::setPath() {
+	size_t spaceCounter = 0;
+	size_t currentIndex = 0;
+
+	while (spaceCounter < 2) {
+		if (backedUpCommandValue[currentIndex] == ' ') {
+			spaceCounter++;
+		}
+		currentIndex++;
+	}
+
+	size_t helperStringIndex = 0;
+	while (backedUpCommandValue[currentIndex] != '\0' &&backedUpCommandValue[currentIndex] != ' ') {
+		helperString[helperStringIndex] = backedUpCommandValue[currentIndex];
+		currentIndex++;
+		helperStringIndex++;
+
+		if (backedUpCommandValue[currentIndex] == '\0' || backedUpCommandValue[currentIndex] == ' ') {
+			helperString[helperStringIndex] = '\0';
+		}
+	}
+}
+
+char* Command::getPath() {
+	if (hasPath()) {
+		return helperString;
+	}
+}
+
+//Admin post_url www.google.bg this is a link to google
+void Command::extractUrlDescription() {
+	size_t spaceCounter = 0;
+	size_t currentIndex = 0;
+
+	while (spaceCounter < 3) {
+		if (backedUpCommandValue[currentIndex] == ' ') {
+			spaceCounter++;
+		}
+		currentIndex++;
+	}
+
+	size_t helperStringIndex = 0;
+	while (backedUpCommandValue[currentIndex] != '\0') {
+		helperStringTwo[helperStringIndex] = backedUpCommandValue[currentIndex];
+		currentIndex++;
+		helperStringIndex++;
+
+		if (backedUpCommandValue[currentIndex] == '\0') {
+			helperStringTwo[helperStringIndex] = '\0';
+		}
+	}
+}
+
+char* Command::getPostText() {
+	return helperString;
+}
+
+void Command::extractPostText() {
+	int currentIndex = 0;
+
+	while (backedUpCommandValue[currentIndex] != ' ') {
+		currentIndex++;
+	}
+
+	currentIndex++;
+
+	while (backedUpCommandValue[currentIndex] != ' ') {
+		currentIndex++;
+	}
+
+	currentIndex++;
+
+	int postTextIndex = 0;
+
+	while (backedUpCommandValue[currentIndex] != '\0') {
+		helperString[postTextIndex] = backedUpCommandValue[currentIndex];
+		currentIndex++;
+		postTextIndex++;
+
+		if (backedUpCommandValue[currentIndex] == '\0') {
+			helperString[postTextIndex] = '\0';
+		}
+	}
+}
+
+char* Command::getUrlDescription() {
+	if (this->type == POST_URL) {
+		return helperStringTwo;
+	}
 }

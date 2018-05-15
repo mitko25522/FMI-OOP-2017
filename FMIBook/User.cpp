@@ -47,13 +47,11 @@ Permissions* User::getPermissions() {
 	return &permissions;
 }
 
-char * User::getNickname()
-{
+char * User::getNickname() {
 	return nickname;
 }
 
-int User::getAge()
-{
+int User::getAge() {
 	return this->age;
 }
 

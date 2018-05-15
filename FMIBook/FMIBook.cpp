@@ -1,9 +1,7 @@
 #include "FMIBook.h"
-#include "Permissions.h"
-
 
 FMIBook::FMIBook(Command* command) {
-	switch (command->getType()) {
+	switch (command->getCommandType()) {
 	case INVALID_COMMAND:	std::cerr << "Invalid command." << std::endl; break;
 	case QUIT:				throw std::logic_error("Exit"); break; //????????
 	case ADD_MODERATOR:		addModerator(command); break;
@@ -13,6 +11,9 @@ FMIBook::FMIBook(Command* command) {
 	case INFO:				printInfo(); break;
 	case REMOVE_USER:		removeUser(command); break;
 	case RENAME:			renameUser(command); break;
+	case POST_IMAGE:		FMIBook::post_list.push_back(Post(command)); break;
+	case POST_URL:			FMIBook::post_list.push_back(Post(command)); break;
+	case POST_TEXT:			FMIBook::post_list.push_back(Post(command)); break;
 	}
 
 }
@@ -21,7 +22,6 @@ void FMIBook::createAdministrator() {
 	User administrator("Admin", 20, ADMIN_PERMISSIONS);
 	FMIBook::user_list.push_back(administrator);
 }
-
 
 FMIBook::~FMIBook() {
 
@@ -44,15 +44,21 @@ size_t FMIBook::findUserPos(const char* userName) {
 
 void FMIBook::printInfo() {
 	size_t numberOfUsers = FMIBook::user_list.size();
+
 	for (int i = 0; i < numberOfUsers; i++) {
 		FMIBook::user_list[i].printInformationCompact();
 	}
-	std::cout << "Oldest user: " << FMIBook::user_list[getOldestUserIndex()].getNickname();
-	std::cout << ", " << FMIBook::user_list[getOldestUserIndex()].getAge() << std::endl;
-	std::cout << "Youngest user: " << FMIBook::user_list[getYoungestUserIndex()].getNickname();
-	std::cout << ", " << FMIBook::user_list[getYoungestUserIndex()].getAge() << std::endl;;
+
+	if (numberOfUsers > 1) {
+		std::cout << "Oldest user: " << FMIBook::user_list[getOldestUserIndex()].getNickname();
+		std::cout << ", " << FMIBook::user_list[getOldestUserIndex()].getAge() << std::endl;
+		std::cout << "Youngest user: " << FMIBook::user_list[getYoungestUserIndex()].getNickname();
+		std::cout << ", " << FMIBook::user_list[getYoungestUserIndex()].getAge() << std::endl;;
+	}
+
 	std::cout << "Blocked users: ";
 	listBlockedUsers();
+
 	std::cout << std::endl;
 }
 
@@ -163,7 +169,7 @@ void FMIBook::renameUser(Command* command) {
 		}
 	}
 
-	std::cout << "User has been renamed";
+	std::cout << "User has been renamed" << std::endl;
 }
 
 size_t FMIBook::getOldestUserIndex() {
@@ -236,4 +242,7 @@ void FMIBook::getBlockedUsersIndexes(int* blockedUsersIndexesArray) {
 			currentArrayIndex++;
 		}
 	}
+}
+
+void FMIBook::postImage(Command* command) {
 }

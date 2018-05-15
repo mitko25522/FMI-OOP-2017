@@ -7,14 +7,14 @@ void permissionTests_block_unblock();
 void permissionTests_constructors();
 
 std::vector<User> FMIBook::user_list;
+std::vector<Post> FMIBook::post_list;
 
 //TODO:
-//Add posts system
-//   -POST_IMAGE link text
-//   -POST_URL   link text
-//   -POST_TEXT  text
 //Add option to input admin data or use default ones
-//
+//Create Post copy c-tor
+//Remove post (erase from vector)
+//Static counter for number of posts created
+//Post default c-tor // done?
 
 //Known issues
 //Sometimes crashes when removing a user

@@ -126,12 +126,14 @@
     <ClCompile Include="FMIBook.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Permissions.cpp" />
+    <ClCompile Include="Post.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
     <ClInclude Include="FMIBook.h" />
     <ClInclude Include="Permissions.h" />
+    <ClInclude Include="Post.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

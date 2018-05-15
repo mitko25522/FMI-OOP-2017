@@ -2,7 +2,7 @@
 #include <iostream>
 #include "User.h"
 
-enum Type
+enum CommandType
 {
 	ADD_MODERATOR,//
 	ADD_USER,//
@@ -14,6 +14,7 @@ enum Type
 	POST_TEXT,
 	REMOVE_POST,
 	VIEW_CERTAIN_POST,
+	VIEW_NEWS_FEED,
 	VIEW_ALL_POSTS,
 	RENAME,//
 	INFO,//
@@ -21,23 +22,29 @@ enum Type
 	INVALID_COMMAND//
 };
 
-//All commands have an actor except INFO and Quit
+///All commands have an actor except INFO and Quit
 class Command {
-	Type type;
+	CommandType type;
 	char backedUpCommandValue[1024];
 	char actor[1024];
-	char subject[1024];
+	char helperString[1024];
+	char helperStringTwo[1024];
 	size_t number;
 
 	Command();
+	void determineType();
 	void setActorNameFromInput();
 	void setSubjectNameFromInput();
-	void determineType();
+	void extractNumber();
+	void extractUrlDescription();
+	void extractPostText();
+	void setPath();
 	bool hasActor();
 	bool hasSubject();
 	bool hasSubjectAge();
 	bool hasPostId();
-	void extractNumber();
+	bool hasPath();
+
 public:
 	Command(const char*);
 	~Command();
@@ -46,5 +53,8 @@ public:
 	char* getSubject();
 	size_t getSubjectAge();
 	size_t getPostId();
-	Type getType();
+	char* getPath();
+	char* getPostText();
+	char* getUrlDescription();
+	CommandType getCommandType();
 };
