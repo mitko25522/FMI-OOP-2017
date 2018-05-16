@@ -26,7 +26,8 @@ private:
 	static size_t getLeastPostsUserPos();
 	static size_t getMostPostsUserPos();
 	static void printMostLeastPostsUsers();
-	static void erasePost(size_t);
+	static void removePost(Command*);
+	static size_t findPosterPos(size_t);
 
 public:
 	static std::vector<User> user_list;

@@ -11,8 +11,7 @@ std::vector<Post> FMIBook::post_list;
 
 //TODO:
 //Add option to input admin data or use default ones
-//Remove post (erase from vector)
-//Add enumeration when printing posts list
+//Add messages when posting stuff
 
 //Known issues
 //Sometimes crashes when removing a user

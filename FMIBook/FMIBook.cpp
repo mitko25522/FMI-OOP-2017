@@ -14,7 +14,8 @@ FMIBook::FMIBook(Command* command) {
 	case POST_IMAGE:		createPost(command); break;
 	case POST_URL:			createPost(command); break;
 	case POST_TEXT:			createPost(command); break;
-	case VIEW_POST_LIST:    printPostList();
+	case VIEW_POST_LIST:    printPostList(); break;
+	case REMOVE_POST:		removePost(command); break;
 	}
 
 }
@@ -249,6 +250,10 @@ void FMIBook::getBlockedUsersIndexes(int* blockedUsersIndexesArray) {
 void FMIBook::printPostList() {
 	size_t numberOfPosts = FMIBook::post_list.size();
 
+	if (numberOfPosts == 0) {
+		std::cout << "No posts in database" << std::endl;
+	}
+
 	for (int postIndex = 0; postIndex < numberOfPosts; postIndex++) {
 		std::cout << postIndex + 1 << ". ";
 		FMIBook::post_list.at(postIndex).printInformationCompact();
@@ -259,6 +264,11 @@ void FMIBook::printPostList() {
 void FMIBook::createPost(Command* command) {
 	try {
 		FMIBook::post_list.push_back(Post(command));
+		switch (command->getCommandType()) {
+		case POST_IMAGE: std::cout << "Image posted\n"; break;
+		case POST_URL: std::cout << "Url posted\n"; break;
+		case POST_TEXT: std::cout << "Text posted\n"; break;
+		}
 	}
 	catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
@@ -308,7 +318,39 @@ void FMIBook::printMostLeastPostsUsers() {
 	std::cout << std::endl;
 }
 
-void FMIBook::erasePost(size_t postNumber) {
-	postNumber--;
-	FMIBook::post_list.erase(FMIBook::post_list.begin());
+void FMIBook::removePost(Command* command) {
+	size_t postNumber = command->getPostId() - 1;
+	size_t postCreator = findPosterPos(postNumber);
+	size_t postRemover = findUserPos(command->getActor());
+
+	if (FMIBook::user_list.at(postRemover).getPermissions()->canRemoveAnyPost()) {
+		FMIBook::post_list.erase(FMIBook::post_list.begin() + postNumber);
+		std::cout << "Post removed";
+		return;
+	}
+
+
+	if ((postCreator == postRemover) && FMIBook::user_list.at(postRemover).getPermissions()->canRemoveOwnPost()) {
+		FMIBook::post_list.erase(FMIBook::post_list.begin() + postNumber);
+		std::cout << "Post removed";
+		return;
+	}
+
+	if ((postCreator != postRemover) && !FMIBook::user_list.at(postRemover).getPermissions()->canRemoveAnyPost()) {
+		throw std::logic_error("Actor does not have needed permissions");
+	}
+
+}
+
+size_t FMIBook::findPosterPos(size_t postId) {
+	size_t posterPos = 0;
+	size_t usersCount = FMIBook::user_list.size();
+
+	for (int currentPos = 0; currentPos < usersCount; currentPos++) {
+		if (FMIBook::post_list.at(postId).isPoster(FMIBook::user_list.at(currentPos).getNickname())) {
+			posterPos = currentPos;
+		}
+	}
+
+	return posterPos;
 }
