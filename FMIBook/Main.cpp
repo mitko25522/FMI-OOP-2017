@@ -11,10 +11,8 @@ std::vector<Post> FMIBook::post_list;
 
 //TODO:
 //Add option to input admin data or use default ones
-//Create Post copy c-tor
 //Remove post (erase from vector)
-//Static counter for number of posts created
-//Post default c-tor // done?
+//Add enumeration when printing posts list
 
 //Known issues
 //Sometimes crashes when removing a user

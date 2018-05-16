@@ -80,7 +80,10 @@ void Command::determineType() {
 		this->type = INFO;
 		return;
 	}
-
+	else if (strncmp(backedUpCommandValue, "post_list", 5) == 0) {
+		this->type = VIEW_POST_LIST;
+		return;
+	}
 
 
 	char* typeStr = new char[1024];
@@ -161,7 +164,8 @@ bool Command::hasActor()
 	return
 		this->type != INFO &&
 		this->type != QUIT &&
-		this->type != INVALID_COMMAND;
+		this->type != INVALID_COMMAND &&
+		this->type != VIEW_POST_LIST;
 }
 
 bool Command::hasSubject()

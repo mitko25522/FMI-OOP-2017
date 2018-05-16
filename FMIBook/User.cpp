@@ -1,4 +1,5 @@
 #include "User.h"
+#include "FMIBook.h"
 
 User::User() {
 	std::cout << "		User constructor called\n";
@@ -38,7 +39,7 @@ void User::printInformationCompact() {
 	case ADMIN_PERMISSIONS: std::cout << "ADMINISTRATOR | "; break;
 	}
 	std::cout << "Blocked: " << (this->getPermissions()->isBlockedFromPosting() ? "Yes | " : "No | ");
-	std::cout << "Posts: | ";
+	std::cout << "Posts: "<< getPostsCount();
 	std::cout << std::endl;
 }
 
@@ -68,4 +69,17 @@ User::User(const User& other) {
 
 bool User::compareWith(const char* nickname) {
 	return strcmp(nickname, this->nickname) == 0;
+}
+
+size_t User::getPostsCount() {
+	size_t totalPostsCount = FMIBook::post_list.size();
+	size_t currentUserPostCount = 0;
+
+	for (int i = 0; i < totalPostsCount; i++) {
+		if (FMIBook::post_list.at(i).isPoster(nickname)) {
+			currentUserPostCount++;
+		}
+	}
+
+	return currentUserPostCount;
 }

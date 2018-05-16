@@ -18,5 +18,6 @@ public:
 	Permissions* getPermissions();
 	char* getNickname();
 	int getAge();
+	size_t getPostsCount();
 	bool compareWith(const char* nickname);
 };	

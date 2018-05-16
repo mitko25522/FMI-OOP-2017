@@ -11,9 +11,10 @@ FMIBook::FMIBook(Command* command) {
 	case INFO:				printInfo(); break;
 	case REMOVE_USER:		removeUser(command); break;
 	case RENAME:			renameUser(command); break;
-	case POST_IMAGE:		FMIBook::post_list.push_back(Post(command)); break;
-	case POST_URL:			FMIBook::post_list.push_back(Post(command)); break;
-	case POST_TEXT:			FMIBook::post_list.push_back(Post(command)); break;
+	case POST_IMAGE:		createPost(command); break;
+	case POST_URL:			createPost(command); break;
+	case POST_TEXT:			createPost(command); break;
+	case VIEW_POST_LIST:    printPostList();
 	}
 
 }
@@ -58,7 +59,7 @@ void FMIBook::printInfo() {
 
 	std::cout << "Blocked users: ";
 	listBlockedUsers();
-
+	printMostLeastPostsUsers();
 	std::cout << std::endl;
 }
 
@@ -228,6 +229,7 @@ void FMIBook::listBlockedUsers() {
 			}
 		}
 
+		std::cout << std::endl;
 		delete[] blockedUsersIndexes;
 	}
 }
@@ -244,5 +246,69 @@ void FMIBook::getBlockedUsersIndexes(int* blockedUsersIndexesArray) {
 	}
 }
 
-void FMIBook::postImage(Command* command) {
+void FMIBook::printPostList() {
+	size_t numberOfPosts = FMIBook::post_list.size();
+
+	for (int postIndex = 0; postIndex < numberOfPosts; postIndex++) {
+		std::cout << postIndex + 1 << ". ";
+		FMIBook::post_list.at(postIndex).printInformationCompact();
+		std::cout << std::endl;
+	}
+}
+
+void FMIBook::createPost(Command* command) {
+	try {
+		FMIBook::post_list.push_back(Post(command));
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+}
+
+size_t FMIBook::getLeastPostsUserPos() {
+	size_t leastPostsUserPos = 0;
+	size_t usersCount = FMIBook::user_list.size();
+
+	for (int currentUserPos = 0; currentUserPos < usersCount; currentUserPos++) {
+		if (FMIBook::user_list.at(currentUserPos).getPostsCount() < FMIBook::user_list.at(leastPostsUserPos).getPostsCount()) {
+			leastPostsUserPos = currentUserPos;
+		}
+	}
+
+	return leastPostsUserPos;
+}
+
+size_t FMIBook::getMostPostsUserPos() {
+	size_t mostsPostsUserPos = 0;
+	size_t usersCount = FMIBook::user_list.size();
+
+	for (int currentUserPos = 0; currentUserPos < usersCount; currentUserPos++) {
+		if (FMIBook::user_list.at(currentUserPos).getPostsCount() > FMIBook::user_list.at(mostsPostsUserPos).getPostsCount()) {
+			mostsPostsUserPos = currentUserPos;
+		}
+	}
+	return mostsPostsUserPos;
+}
+
+void FMIBook::printMostLeastPostsUsers() {
+	size_t mostPostsUserPos = getMostPostsUserPos();
+	size_t leastPostsUserPos = getLeastPostsUserPos();
+
+	if (mostPostsUserPos == leastPostsUserPos) {
+		return;
+	}
+
+	if (FMIBook::user_list.at(leastPostsUserPos).getPostsCount() == 0) {
+		return;
+	}
+
+
+	std::cout << "Most posts: " << FMIBook::user_list.at(mostPostsUserPos).getNickname() << std::endl;
+	std::cout << "Least posts: " << FMIBook::user_list.at(leastPostsUserPos).getNickname() << std::endl;
+	std::cout << std::endl;
+}
+
+void FMIBook::erasePost(size_t postNumber) {
+	postNumber--;
+	FMIBook::post_list.erase(FMIBook::post_list.begin());
 }
