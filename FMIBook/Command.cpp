@@ -84,6 +84,10 @@ void Command::determineType() {
 		this->type = VIEW_POST_LIST;
 		return;
 	}
+	else if (strncmp(backedUpCommandValue, "news_feed", 5) == 0) {
+		this->type = VIEW_NEWS_FEED;
+		return;
+	}
 
 
 	char* typeStr = new char[1024];
@@ -165,7 +169,8 @@ bool Command::hasActor()
 		this->type != INFO &&
 		this->type != QUIT &&
 		this->type != INVALID_COMMAND &&
-		this->type != VIEW_POST_LIST;
+		this->type != VIEW_POST_LIST &&
+		this->type != VIEW_NEWS_FEED;
 }
 
 bool Command::hasSubject()
@@ -177,7 +182,8 @@ bool Command::hasSubject()
 }
 
 bool Command::hasSubjectAge() {
-	return this->type == ADD_MODERATOR || this->type == ADD_USER;
+	return
+		this->type == ADD_MODERATOR || this->type == ADD_USER;
 }
 
 bool Command::hasPostId() {

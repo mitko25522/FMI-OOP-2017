@@ -18,4 +18,8 @@ public:
 	Post& operator=(const Post&);
 	bool isPoster(const char*);
 	void printInformationCompact();
+	CommandType getType();
+	char* getPoster();
+	char* getPath();
+	char* getText();
 };

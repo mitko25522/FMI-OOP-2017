@@ -1,21 +1,23 @@
 #include "FMIBook.h"
+#include "HtmlGenerator.h"
 
 FMIBook::FMIBook(Command* command) {
 	switch (command->getCommandType()) {
-	case INVALID_COMMAND:	std::cerr << "Invalid command." << std::endl; break;
-	case QUIT:				throw std::logic_error("Exit"); break; //????????
-	case ADD_MODERATOR:		addModerator(command); break;
-	case ADD_USER:			addUser(command); break;
-	case BLOCK_USER:		blockUser(command); break;
-	case UNBLOCK_USER:		unblockUser(command); break;
-	case INFO:				printInfo(); break;
-	case REMOVE_USER:		removeUser(command); break;
-	case RENAME:			renameUser(command); break;
-	case POST_IMAGE:		createPost(command); break;
-	case POST_URL:			createPost(command); break;
-	case POST_TEXT:			createPost(command); break;
-	case VIEW_POST_LIST:    printPostList(); break;
-	case REMOVE_POST:		removePost(command); break;
+	case INVALID_COMMAND:	std::cerr << "Invalid command." << std::endl;	break;
+	case QUIT:				throw std::logic_error("Exit");					break;
+	case ADD_MODERATOR:		addModerator(command);							break;
+	case ADD_USER:			addUser(command);								break;
+	case BLOCK_USER:		blockUser(command);								break;
+	case UNBLOCK_USER:		unblockUser(command);							break;
+	case INFO:				printInfo();									break;
+	case REMOVE_USER:		removeUser(command);							break;
+	case RENAME:			renameUser(command);							break;
+	case POST_IMAGE:		createPost(command);							break;
+	case POST_URL:			createPost(command);							break;
+	case POST_TEXT:			createPost(command);							break;
+	case VIEW_POST_LIST:    printPostList();								break;
+	case REMOVE_POST:		removePost(command);							break;
+	case VIEW_NEWS_FEED:	HtmlGenerator::generateNewsFeed();				break;
 	}
 
 }
@@ -70,6 +72,7 @@ void FMIBook::addModerator(Command* command) {
 	if (userExists(command->getSubject())) {
 		throw std::logic_error("Subject already exists in database");
 	}
+
 	if (FMIBook::user_list.at(actor_pos).getPermissions()->canAddModerator()) {
 		size_t subjectAge = command->getSubjectAge();
 		User newUser(command->getSubject(), subjectAge, MOD_PERMISSIONS);
@@ -264,6 +267,7 @@ void FMIBook::printPostList() {
 void FMIBook::createPost(Command* command) {
 	try {
 		FMIBook::post_list.push_back(Post(command));
+
 		switch (command->getCommandType()) {
 		case POST_IMAGE: std::cout << "Image posted\n"; break;
 		case POST_URL: std::cout << "Url posted\n"; break;
@@ -312,7 +316,6 @@ void FMIBook::printMostLeastPostsUsers() {
 		return;
 	}
 
-
 	std::cout << "Most posts: " << FMIBook::user_list.at(mostPostsUserPos).getNickname() << std::endl;
 	std::cout << "Least posts: " << FMIBook::user_list.at(leastPostsUserPos).getNickname() << std::endl;
 	std::cout << std::endl;
@@ -325,21 +328,20 @@ void FMIBook::removePost(Command* command) {
 
 	if (FMIBook::user_list.at(postRemover).getPermissions()->canRemoveAnyPost()) {
 		FMIBook::post_list.erase(FMIBook::post_list.begin() + postNumber);
-		std::cout << "Post removed";
+		std::cout << "Post removed" << std::endl;
 		return;
 	}
 
 
 	if ((postCreator == postRemover) && FMIBook::user_list.at(postRemover).getPermissions()->canRemoveOwnPost()) {
 		FMIBook::post_list.erase(FMIBook::post_list.begin() + postNumber);
-		std::cout << "Post removed";
+		std::cout << "Post removed" << std::endl;
 		return;
 	}
 
 	if ((postCreator != postRemover) && !FMIBook::user_list.at(postRemover).getPermissions()->canRemoveAnyPost()) {
 		throw std::logic_error("Actor does not have needed permissions");
 	}
-
 }
 
 size_t FMIBook::findPosterPos(size_t postId) {

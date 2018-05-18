@@ -8,26 +8,25 @@
 class FMIBook {
 private:
 	FMIBook();
-	static bool userExists(const char*);
-	static void printInfo();
-	static void addModerator(Command*);
-	static void addUser(Command*);
-	static void blockUser(Command*);
-	static void unblockUser(Command*);
-	static void removeUser(Command*);
-	static void renameUser(Command*);
-	static size_t getOldestUserIndex();
-	static size_t getYoungestUserIndex();
-	static size_t getBlockedUsersCount();
-	static void listBlockedUsers();
-	static void getBlockedUsersIndexes(int*);
-	static void printPostList();
-	static void createPost(Command*);
-	static size_t getLeastPostsUserPos();
-	static size_t getMostPostsUserPos();
-	static void printMostLeastPostsUsers();
-	static void removePost(Command*);
-	static size_t findPosterPos(size_t);
+	void printInfo();
+	void addModerator(Command*);
+	void addUser(Command*);
+	void blockUser(Command*);
+	void unblockUser(Command*);
+	void removeUser(Command*);
+	void renameUser(Command*);
+	size_t getOldestUserIndex();
+	size_t getYoungestUserIndex();
+	size_t getBlockedUsersCount();
+	void listBlockedUsers();
+	void getBlockedUsersIndexes(int*);
+	void printPostList();
+	void createPost(Command*);
+	size_t getLeastPostsUserPos();
+	size_t getMostPostsUserPos();
+	void printMostLeastPostsUsers();
+	void removePost(Command*);
+	size_t findPosterPos(size_t);
 
 public:
 	static std::vector<User> user_list;
@@ -35,5 +34,6 @@ public:
 	FMIBook(Command*);
 	~FMIBook();
 	static void createAdministrator();
+	static bool userExists(const char*);
 	static size_t findUserPos(const char*);
 };

@@ -4,7 +4,7 @@
 //Default constructor sets permissions to basic user. 
 Permissions::Permissions() {
 	booleanVector = 0;
-	std::cout << "		Basic User permissions granted.\n";
+//	std::cout << "		Basic User permissions granted.\n";
 	booleanVector = USER_PERMISSIONS;
 }
 
@@ -25,20 +25,20 @@ Permissions::Permissions(const int permissions_preset) {
 }
 
 Permissions::~Permissions() {
-	std::cout << "		Permissions destructor called.\n";
+	//std::cout << "		Permissions destructor called.\n";
 }
 
 void Permissions::setPermissions(const int permissions_preset) {
 	if (permissions_preset == USER_PERMISSIONS) {
-		std::cout << "		Basic user permissions granted." << std::endl;
+		//std::cout << "		Basic user permissions granted." << std::endl;
 		booleanVector = USER_PERMISSIONS;
 	}
 	else if (permissions_preset == MOD_PERMISSIONS) {
-		std::cout << "		Moderator permissions granted." << std::endl;
+		//std::cout << "		Moderator permissions granted." << std::endl;
 		booleanVector = MOD_PERMISSIONS;
 	}
 	else if (permissions_preset == ADMIN_PERMISSIONS) {
-		std::cout << "		Administrator permissions granted." << std::endl;
+		//std::cout << "		Administrator permissions granted." << std::endl;
 		booleanVector = ADMIN_PERMISSIONS;
 	}
 }
