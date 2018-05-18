@@ -9,7 +9,7 @@ User::User(const char* nickname, int age, int permission_preset) : permissions(p
 	//Using this makes program throw exceptions for some reason
 	//int len = std::strlen(nickname) + 1;
 	//this->nickname = new char[len];
-	strcpy_s(this->nickname, 1025, nickname);
+	strcpy_s(this->nickname, 1024, nickname);
 	this->age = age;
 }
 

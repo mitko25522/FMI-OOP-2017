@@ -5,7 +5,7 @@ Command::Command(const char* command) {
 	//Acces violation when I use this
 	//size_t len = strlen(command) + 1;
 	//std::cout << "\nLen: " << len << std::endl;
-	strcpy_s(this->backedUpCommandValue, 1025, command);
+	strcpy_s(this->backedUpCommandValue, 1024, command);
 	determineType();
 
 	if (hasActor()) {
@@ -178,7 +178,8 @@ bool Command::hasSubject()
 	return
 		this->type == ADD_MODERATOR || this->type == ADD_USER ||
 		this->type == REMOVE_USER || this->type == BLOCK_USER ||
-		this->type == UNBLOCK_USER || this->type == RENAME;
+		this->type == UNBLOCK_USER || this->type == RENAME ||
+		this->type == VIEW_ALL_POSTS;
 }
 
 bool Command::hasSubjectAge() {
@@ -190,7 +191,7 @@ bool Command::hasPostId() {
 	return
 		this->type == REMOVE_USER || this->type == BLOCK_USER ||
 		this->type == UNBLOCK_USER || this->type == REMOVE_POST ||
-		this->type == VIEW_CERTAIN_POST || this->type == VIEW_ALL_POSTS;
+		this->type == VIEW_CERTAIN_POST;
 }
 
 bool Command::hasPath() {
@@ -219,24 +220,39 @@ char* Command::getActor() {
 	if (this->hasActor()) {
 		return actor;
 	}
+	throw std::logic_error("Unauthorized request");
 }
 
 char* Command::getSubject() {
 	if (this->hasSubject()) {
 		return helperString;
 	}
+	throw std::logic_error("Unauthorized request");
 }
 
 size_t Command::getSubjectAge() {
 	if (this->hasSubjectAge()) {
 		return number;
 	}
+	throw std::logic_error("Unauthorized request");
 }
 
 size_t Command::getPostId() {
 	if (this->hasPostId()) {
 		return number;
 	}
+	throw std::logic_error("Unauthorized request");
+}
+
+char* Command::getPath() {
+	if (hasPath()) {
+		return helperString;
+	}
+	throw std::logic_error("Unauthorized request");
+}
+
+char* Command::getPostText() {
+	return helperString;
 }
 
 CommandType Command::getCommandType() {
@@ -267,11 +283,6 @@ void Command::setPath() {
 	}
 }
 
-char* Command::getPath() {
-	if (hasPath()) {
-		return helperString;
-	}
-}
 
 //Admin post_url www.google.bg this is a link to google
 void Command::extractUrlDescription() {
@@ -297,9 +308,6 @@ void Command::extractUrlDescription() {
 	}
 }
 
-char* Command::getPostText() {
-	return helperString;
-}
 
 void Command::extractPostText() {
 	int currentIndex = 0;
@@ -332,5 +340,8 @@ void Command::extractPostText() {
 char* Command::getUrlDescription() {
 	if (this->type == POST_URL) {
 		return helperStringTwo;
+	}
+	else {
+		throw std::logic_error("Unauthorized request");
 	}
 }

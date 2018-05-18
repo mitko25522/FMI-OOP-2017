@@ -18,8 +18,9 @@ FMIBook::FMIBook(Command* command) {
 	case VIEW_POST_LIST:    printPostList();								break;
 	case REMOVE_POST:		removePost(command);							break;
 	case VIEW_NEWS_FEED:	HtmlGenerator::generateNewsFeed();				break;
+	case VIEW_ALL_POSTS:	HtmlGenerator::generateProfilePage(command);	break;
+	case VIEW_CERTAIN_POST:	HtmlGenerator::generateSinglePostPage(command);	break;
 	}
-
 }
 
 void FMIBook::createAdministrator() {
@@ -60,10 +61,8 @@ void FMIBook::printInfo() {
 		std::cout << ", " << FMIBook::user_list[getYoungestUserIndex()].getAge() << std::endl;;
 	}
 
-	std::cout << "Blocked users: ";
 	listBlockedUsers();
 	printMostLeastPostsUsers();
-	std::cout << std::endl;
 }
 
 void FMIBook::addModerator(Command* command) {
@@ -149,8 +148,9 @@ void FMIBook::removeUser(Command* command) {
 	size_t subject_pos = findUserPos(command->getSubject());
 
 	if (FMIBook::user_list[actor_pos].getPermissions()->canRemoveUser()) {
+		removeAllPosts(command->getSubject());
 		FMIBook::user_list.erase(FMIBook::user_list.begin() + subject_pos);
-		std::cout << "User has been removed";
+		std::cout << "User has been removed" << std::endl;
 	}
 	else {
 		throw std::logic_error("Actor does not have needed permissions");
@@ -217,6 +217,7 @@ size_t FMIBook::getBlockedUsersCount() {
 }
 
 void FMIBook::listBlockedUsers() {
+	std::cout << "Blocked users: ";
 	size_t blockedUsersCount = getBlockedUsersCount();
 
 	if (blockedUsersCount == 0) {
@@ -332,7 +333,6 @@ void FMIBook::removePost(Command* command) {
 		return;
 	}
 
-
 	if ((postCreator == postRemover) && FMIBook::user_list.at(postRemover).getPermissions()->canRemoveOwnPost()) {
 		FMIBook::post_list.erase(FMIBook::post_list.begin() + postNumber);
 		std::cout << "Post removed" << std::endl;
@@ -348,11 +348,21 @@ size_t FMIBook::findPosterPos(size_t postId) {
 	size_t posterPos = 0;
 	size_t usersCount = FMIBook::user_list.size();
 
-	for (int currentPos = 0; currentPos < usersCount; currentPos++) {
+	for (int currentPos = 0; currentPos < usersCount; ++currentPos) {
 		if (FMIBook::post_list.at(postId).isPoster(FMIBook::user_list.at(currentPos).getNickname())) {
 			posterPos = currentPos;
 		}
 	}
 
 	return posterPos;
+}
+
+void FMIBook::removeAllPosts(const char* nickname) {
+	size_t postsCount = FMIBook::post_list.size();
+
+	for (int currentPostIndex = 0; currentPostIndex < postsCount; ++currentPostIndex) {
+		if (FMIBook::post_list.at(currentPostIndex).isPoster(nickname)) {
+			FMIBook::post_list.erase(FMIBook::post_list.begin() + currentPostIndex);
+		}
+	}
 }

@@ -25,4 +25,6 @@ public:
 	static void appendUrlTemplate(char*, Post*, const char* = "urlTemplate.html");
 	static void appendTextTemplate(char*, Post*, const char* = "textTemplate.html");
 	static void appendHeaderCloser(char*, const char* = "headerCloserTemplate.html");
+	static void generateProfilePage(Command*);
+	static void generateSinglePostPage(Command*);
 };

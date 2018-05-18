@@ -120,10 +120,12 @@ char* Post::getPath() {
 	if (hasPath()) {
 		return this->path;
 	}
+	throw std::logic_error("Unauthorized request");
 }
 
 char* Post::getText() {
 	if (hasText()) {
 		return this->text;
 	}
+	throw std::logic_error("Unauthorized request");
 }

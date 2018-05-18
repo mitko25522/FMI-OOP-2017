@@ -10,14 +10,7 @@ std::vector<User> FMIBook::user_list;
 std::vector<Post> FMIBook::post_list;
 
 //TODO:
-//Add option to input admin data or use default ones
-//Generate news feed (append header first then posts then header closer)
-//Maybe put it in another class called html editor
-//Figure out how to store the loaded templates for html files in memory
-//Make a function to insert text into a row on the html file insert(char*, size_t 6)
-//Suppress warnings in Command getters
 //Add time stamps on posts in news feed (in posts constructor save time to a printable char*)
-
 
 //Known issues
 //Sometimes crashes when removing a user
@@ -28,13 +21,13 @@ int main() {
 	FMIBook::createAdministrator();
 
 	while (true) {
-		char* input = new char[1024];
-		std::cout << "Enter command: ";
-		std::cin.getline(input, 1025);
-		Command command(input);
-		delete[] input;
 		try {
-				FMIBook fmiBook(&command);
+			char* input = new char[1024];
+			std::cout << "Enter command: ";
+			std::cin.getline(input, 1025);
+			Command command(input);
+			delete[] input;
+			FMIBook fmiBook(&command);
 		}
 		catch (const std::exception& e) {
 			if (strcmp(e.what(), "Exit") == 0) {
