@@ -71,6 +71,12 @@ void HtmlGenerator::appendImageTemplate(char* destination, Post* post, const cha
 	char buffer[1024];
 	int currentLineIndex = 0;
 	while (imageTemplate.getline(buffer, 1024)) {
+		if (currentLineIndex == IMAGE_TEMPLATE_TIME_ROW) {
+			outputFile << post->getTimestamp() << std::endl;
+			currentLineIndex++;
+			continue;
+		}
+
 		if (currentLineIndex == IMAGE_TEMPLATE_POSTER_ROW) {
 			outputFile << post->getPoster() << std::endl;
 			currentLineIndex++;
@@ -82,6 +88,7 @@ void HtmlGenerator::appendImageTemplate(char* destination, Post* post, const cha
 			currentLineIndex++;
 			continue;
 		}
+
 		outputFile << buffer << std::endl;
 		currentLineIndex++;
 	}
@@ -97,6 +104,12 @@ void HtmlGenerator::appendUrlTemplate(char* destination, Post* post, const char*
 	char buffer[1024];
 	int currentLineIndex = 0;
 	while (imageTemplate.getline(buffer, 1024)) {
+		if (currentLineIndex == URL_TEMPLATE_TIME_ROW) {
+			outputFile << post->getTimestamp() << std::endl;
+			currentLineIndex++;
+			continue;
+		}
+
 		if (currentLineIndex == URL_TEMPLATE_POSTER_ROW) {
 			outputFile << post->getPoster() << std::endl;
 			currentLineIndex++;
@@ -114,6 +127,7 @@ void HtmlGenerator::appendUrlTemplate(char* destination, Post* post, const char*
 			currentLineIndex++;
 			continue;
 		}
+
 
 		outputFile << buffer << std::endl;
 		currentLineIndex++;
@@ -141,6 +155,13 @@ void HtmlGenerator::appendTextTemplate(char* destination, Post* post, const char
 			currentLineIndex++;
 			continue;
 		}
+
+		if (currentLineIndex == TEXT_TEMPLATE_TIME_ROW) {
+			outputFile << post->getTimestamp() << std::endl;
+			currentLineIndex++;
+			continue;
+		}
+
 		outputFile << buffer << std::endl;
 		currentLineIndex++;
 	}

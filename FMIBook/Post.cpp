@@ -1,7 +1,10 @@
 #include "Post.h"
 #include "FMIBook.h"
+#include <ctime>
 
 Post::Post(Command* command) : type(command->getCommandType()) {
+	setTime();
+
 	if (type == POST_IMAGE) {
 		strcpy_s(poster, 1024, command->getActor());
 
@@ -43,6 +46,7 @@ Post::Post(Command* command) : type(command->getCommandType()) {
 
 Post::Post(const Post& other) : type(other.type) {
 	strcpy_s(this->poster, 1024, other.poster);
+	strcpy_s(this->timestamp, 1024, other.timestamp);
 
 	if (hasPath()) {
 		strcpy_s(this->path, 1024, other.path);
@@ -128,4 +132,16 @@ char* Post::getText() {
 		return this->text;
 	}
 	throw std::logic_error("Unauthorized request");
+}
+
+char* Post::getTimestamp() {
+	return this->timestamp;
+}
+
+void Post::setTime() {
+	char timeBuffer[26] = {};
+	time_t RawTime = 0;
+	time(&RawTime);
+	ctime_s(timeBuffer, 26 * sizeof(char), &RawTime);
+	strcpy_s(this->timestamp, 1024, timeBuffer);
 }
