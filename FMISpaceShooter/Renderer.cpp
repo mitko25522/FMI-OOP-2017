@@ -29,10 +29,10 @@ void Renderer::printTextShooter() {
 	std::cout << "			 |_____/|_| |_|\\___/ \\___/ \\__\\___|_|		\n";
 }
 
-//   __
-//   \ \_____
-//###[==_____>
-//   /_/ 
+//			   __
+//			   \ \_____
+//			###[==_____>
+//			   /_/ 
 //         
 //           
 //       !
@@ -105,7 +105,7 @@ void Renderer::printTextShooterWithRocket() {
 	std::cout << "     ##          |_____/|_| |_|\\___/ \\___/ \\__\\___|_|		\n";
 }
 
-void Renderer::printGameOptions() {
+void Renderer::printMainMenu() {
 	std::cout << "\n\n\n";
 	std::cout << "                        N --> New game\n";
 	std::cout << "                        L --> Load saved game\n";
@@ -140,7 +140,7 @@ void Renderer::printStaticStartScreen() {
 	printTextFmiWithRocket();
 	printTextSpaceWithRocket();
 	printTextShooterWithRocket();
-	printGameOptions();
+	printMainMenu();
 }
 
 void Renderer::renderStartScreen() {

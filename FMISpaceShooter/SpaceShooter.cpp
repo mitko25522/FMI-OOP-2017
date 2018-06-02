@@ -11,7 +11,7 @@ char * SpaceShooter::getSavePath()
 }
 
 void SpaceShooter::printHelp() {
-
+	system("cls");
 }
 
 SpaceShooter::SpaceShooter() {

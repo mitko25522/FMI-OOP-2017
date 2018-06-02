@@ -13,7 +13,7 @@ private:
 	static void printTextFmiWithRocket();
 	static void printTextSpaceWithRocket();
 	static void printTextShooterWithRocket();
-	static void printGameOptions();
+	static void printMainMenu();
 	static void printEmptyRows(int);
 	static void printAnimation();
 	static void printStaticStartScreen();
