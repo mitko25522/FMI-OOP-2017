@@ -17,8 +17,10 @@ private:
 	static void printEmptyRows(int);
 	static void printAnimation();
 	static void printStaticStartScreen();
+	static void printDifficultyOptions();
 public:
 	static void renderStartScreen();
+	static void renderDifficultySelectionScreen();
 	Renderer();
 	~Renderer();
 };

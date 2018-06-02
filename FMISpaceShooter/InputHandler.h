@@ -11,4 +11,6 @@ enum Choice {
 class InputHandler {
 public:
 	static Choice handleGameMenu();
+	static char* getSavePath();
+	static int setDifficulty();
 };

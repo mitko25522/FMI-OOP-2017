@@ -76,10 +76,10 @@ int main() {
 	Renderer::renderStartScreen();
 
 	switch (InputHandler::handleGameMenu()) {
-		case Choice::NEW_GAME: spaceShooter = new SpaceShooter(); break;
-		case Choice::LOAD_GAME: spaceShooter = new SpaceShooter(SpaceShooter::getSavePath()); break;
-		case Choice::HELP: SpaceShooter::printHelp();
-		case Choice::EXIT: return 0;
+		case Choice::NEW_GAME:		spaceShooter = new SpaceShooter(InputHandler::setDifficulty()); break;
+		case Choice::LOAD_GAME:		spaceShooter = new SpaceShooter(InputHandler::getSavePath()); break;
+		case Choice::HELP:			SpaceShooter::printHelp(); break;
+		case Choice::EXIT:			return 0;
 	}
 
 	do {

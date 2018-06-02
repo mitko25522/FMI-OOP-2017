@@ -143,10 +143,27 @@ void Renderer::printStaticStartScreen() {
 	printMainMenu();
 }
 
+void Renderer::printDifficultyOptions() {
+	std::cout << "\n\n\n";
+	std::cout << "                        Select Difficulty \n";
+	std::cout << "                        E --> Easy\n";
+	std::cout << "                        M --> Medium\n";
+	std::cout << "                        I --> Intermediate\n";
+	std::cout << std::endl;
+}
+
 void Renderer::renderStartScreen() {
 	printAnimation();
 	printStaticStartScreen();
 	
+}
+
+void Renderer::renderDifficultySelectionScreen() {
+	system("cls");
+	printTextFmiWithRocket();
+	printTextSpaceWithRocket();
+	printTextShooterWithRocket();
+	printDifficultyOptions();
 }
 
 Renderer::Renderer() {
