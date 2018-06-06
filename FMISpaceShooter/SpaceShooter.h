@@ -5,7 +5,7 @@
 
 #define DIFFICULTY_EASY 65
 #define DIFFICULTY_MEDIUM 32
-#define DIFFICULTY_INTERMEDIATE 17
+#define DIFFICULTY_INTERMEDIATE 16
 
 //delta_ticks = 17 hard
 //delta_ticks = 32 medium
@@ -22,4 +22,5 @@ public:
 	SpaceShooter(const char*);
 	char* getPixelGrid();
 	static void printHelp();
+	int getDifficulty();
 };

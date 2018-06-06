@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "InputHandler.h"
 #include "SpaceShooter.h"
-
+#include "Entity.h"
 
 void render() {
 	static int counter = 0;
@@ -89,10 +89,10 @@ void test2() {
 
 SpaceShooter* getStartScreenInput() {
 	switch (InputHandler::handleGameMenu()) {
-	case Choice::NEW_GAME:		return new SpaceShooter(InputHandler::setDifficulty()); break;
-	case Choice::LOAD_GAME:		return new SpaceShooter(InputHandler::getSavePath()); break;
-	case Choice::HELP:			SpaceShooter::printHelp(); getStartScreenInput(); break;
-	case Choice::EXIT:			exit(EXIT_SUCCESS);
+	    case Choice::NEW_GAME:		return new SpaceShooter(InputHandler::setDifficulty()); break;
+	    case Choice::LOAD_GAME:		return new SpaceShooter(InputHandler::getSavePath()); break;
+	    case Choice::HELP:			SpaceShooter::printHelp(); getStartScreenInput(); break;
+	    case Choice::EXIT:			exit(EXIT_SUCCESS); //Obreak;
 	}
 }
 
@@ -105,17 +105,30 @@ int main() {
 	//spawnPlayer();
 	Renderer::renderGameScreen(spaceShooter);
 
+	clock_t initial_ticks = 0, delta_ticks = 0;
 	do {
-		//InputHandler::listenForCommand();
+		static bool reset = false;
+
+		if (reset) {
+			initial_ticks = clock();
+			reset = false;
+		}
+
+		delta_ticks = clock() - initial_ticks;
+
 		//completeUserCommandIfPresent();
 		//performEnemyAction();
 		//checkForCollisions();
 		//moveProjectiles();
 		//moveEnemies();
-		//spawnEnemies();
-		//renderGameScreen();
-	} while (false);
-
+		//spawnEnemy();
+		if (delta_ticks > spaceShooter->getDifficulty()) {
+			Renderer::renderGameScreen(spaceShooter);
+			std::cout << "FPS: " << CLOCKS_PER_SEC / delta_ticks;
+			reset = true;
+			delta_ticks = 0;
+		}
+	} while (true);
 
 
 	printf("\n\n\nTime taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);

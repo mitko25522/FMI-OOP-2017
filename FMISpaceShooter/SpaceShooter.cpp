@@ -25,6 +25,11 @@ void SpaceShooter::printHelp() {
 	} while (true);
 }
 
+int SpaceShooter::getDifficulty()
+{
+	return this->difficulty;
+}
+
 SpaceShooter::SpaceShooter() {
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
