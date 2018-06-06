@@ -166,11 +166,12 @@ void Renderer::renderDifficultySelectionScreen() {
 	printDifficultyOptions();
 }
 
-Renderer::Renderer() {
-
-}
-
-Renderer::~Renderer() {
-
-
+void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
+	system("cls");
+	for (int i = 0; i < SCREEN_HEIGHT; i++) {
+		for (int j = 0; j < SCREEN_WIDTH; j++) {
+			std::cout << spaceShooter->getPixelGrid()[i + j];
+		}
+		std::cout << "a\n";
+	}
 }

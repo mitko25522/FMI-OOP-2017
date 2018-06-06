@@ -69,18 +69,41 @@ void test2() {
 	}
 }
 
+
+//TODO:
+//
+//fix printHelp
+//create game loop
+//start implementing entity
+//start implementing player
+//start implementing projectiles
+//handle collisions using collision masks and probably a delegate for that
+//add moving patterns (buildings?mountains) in the background
+//add renderGameScreen to Renderer (taking SpaceShooter as an argument)
+//show difficulty in renderGameScreen
+//add enemy lives
+//add player shoot projectile
+//add player score (to renderGameScreen aswell)
+//add player lives (to renderGameScreen aswell)
+//
+
+SpaceShooter* getStartScreenInput() {
+	switch (InputHandler::handleGameMenu()) {
+	case Choice::NEW_GAME:		return new SpaceShooter(InputHandler::setDifficulty()); break;
+	case Choice::LOAD_GAME:		return new SpaceShooter(InputHandler::getSavePath()); break;
+	case Choice::HELP:			SpaceShooter::printHelp(); getStartScreenInput(); break;
+	case Choice::EXIT:			exit(EXIT_SUCCESS);
+	}
+}
+
 int main() {
 	clock_t tStart = clock();
 
-	SpaceShooter* spaceShooter;
 	Renderer::renderStartScreen();
+	SpaceShooter* spaceShooter = getStartScreenInput();
 
-	switch (InputHandler::handleGameMenu()) {
-		case Choice::NEW_GAME:		spaceShooter = new SpaceShooter(InputHandler::setDifficulty()); break;
-		case Choice::LOAD_GAME:		spaceShooter = new SpaceShooter(InputHandler::getSavePath()); break;
-		case Choice::HELP:			SpaceShooter::printHelp(); break;
-		case Choice::EXIT:			return 0;
-	}
+	//spawnPlayer();
+	Renderer::renderGameScreen(spaceShooter);
 
 	do {
 		//InputHandler::listenForCommand();
@@ -89,10 +112,9 @@ int main() {
 		//checkForCollisions();
 		//moveProjectiles();
 		//moveEnemies();
-		//system("cls");
+		//spawnEnemies();
 		//renderGameScreen();
 	} while (false);
-	
 
 
 

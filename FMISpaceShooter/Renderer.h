@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "SpaceShooter.h"
 
 #define SCREEN_HEIGTH 20
 #define SCREEN_WIDTH 60
@@ -16,11 +17,12 @@ private:
 	static void printMainMenu();
 	static void printEmptyRows(int);
 	static void printAnimation();
-	static void printStaticStartScreen();
 	static void printDifficultyOptions();
 public:
+	static void printStaticStartScreen();
 	static void renderStartScreen();
 	static void renderDifficultySelectionScreen();
+	static void renderGameScreen(SpaceShooter*);
 	Renderer();
 	~Renderer();
 };

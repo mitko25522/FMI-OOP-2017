@@ -14,10 +14,12 @@
 class SpaceShooter {
 private:
 	int difficulty;
-	char pixelGrid[SCREEN_WIDTH][SCREEN_HEIGHT];
+	char pixelGrid[SCREEN_HEIGHT][SCREEN_WIDTH];
 public:
 	SpaceShooter();
 	SpaceShooter(int);
+	SpaceShooter(const SpaceShooter&);
 	SpaceShooter(const char*);
+	char* getPixelGrid();
 	static void printHelp();
 };
