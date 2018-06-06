@@ -53,7 +53,7 @@ SpaceShooter::SpaceShooter(int difficulty) {
 	case DIFFICULTY_INTERMEDIATE: std::cout << "intermediate difficulty\n"; break;
 	}
 	std::cout << "Starting new game\n";
-	Sleep(2000);
+	Sleep(1000);
 }
 
 SpaceShooter::SpaceShooter(const SpaceShooter& other) {

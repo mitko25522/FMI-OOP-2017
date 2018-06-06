@@ -155,7 +155,7 @@ void Renderer::printDifficultyOptions() {
 void Renderer::renderStartScreen() {
 	printAnimation();
 	printStaticStartScreen();
-	
+
 }
 
 void Renderer::renderDifficultySelectionScreen() {
@@ -168,10 +168,25 @@ void Renderer::renderDifficultySelectionScreen() {
 
 void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
 	system("cls");
+
+	std::cout << "Score: " << 1720 << "   Lives: " << char(10084) << " \n";
+
+	for (int i = 0; i < SCREEN_WIDTH; i++) {
+		std::cout << "-";
+	}
+
+	std::cout << "|" << std::endl;
+
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
 			std::cout << spaceShooter->getPixelGrid()[i + j];
 		}
-		std::cout << "a\n";
+		std::cout << "|" << std::endl;
 	}
+
+	for (int i = 0; i < SCREEN_WIDTH; i++) {
+		std::cout << "-";
+	}
+	std::cout << "|";
+
 }

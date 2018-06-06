@@ -2,10 +2,6 @@
 #include <iostream>
 #include "SpaceShooter.h"
 
-#define SCREEN_HEIGTH 20
-#define SCREEN_WIDTH 60
-
-
 class Renderer {
 private:
 	static void printTextFmi();
