@@ -18,6 +18,7 @@ void test() {
 			reset = false;
 		}
 
+
 		delta_ticks = clock() - initial_ticks;
 
 		if (delta_ticks > 17) {
