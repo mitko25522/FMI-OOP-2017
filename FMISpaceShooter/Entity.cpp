@@ -1,5 +1,6 @@
-#include "Entity.h"
 #include <iostream>
+#include "Entity.h"
+#include "SpaceShooter.h"
 
 Entity::Entity() {
 	this->xPos = 0;
@@ -25,9 +26,36 @@ int Entity::getHeight() {
 	return this->height;
 }
 
-char ** Entity::getSprite()
-{
-	return sprite;
+void Entity::moveUp() {
+	if (yPos > 0) {
+		--yPos;
+	}
+}
+
+void Entity::moveDown() {
+	if (yPos + height < SCREEN_HEIGHT) {
+		++yPos;
+	}
+}
+
+void Entity::moveLeft() {
+	if (xPos > 0) {
+		--xPos;
+	}
+}
+
+void Entity::moveRight() {
+	if (xPos + width < SCREEN_WIDTH) {
+		++xPos;
+	}
+}
+
+char** Entity::getSprite() {
+	return this->sprite;
+}
+
+char Entity::getChar(int y, int x) {
+	return *(&sprite[0][0] + y * width + x);
 }
 
 Entity::Entity(int xPos, int yPos, int width, int height) {

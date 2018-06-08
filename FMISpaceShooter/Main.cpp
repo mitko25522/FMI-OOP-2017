@@ -53,10 +53,10 @@ void test() {
 
 SpaceShooter* getStartScreenInput() {
 	switch (InputHandler::handleGameMenu()) {
-	    case Choice::NEW_GAME:		return new SpaceShooter(InputHandler::setDifficulty()); break;
-	    case Choice::LOAD_GAME:		return new SpaceShooter(InputHandler::getSavePath()); break;
-	    case Choice::HELP:			SpaceShooter::printHelp(); getStartScreenInput(); break;
-	    case Choice::EXIT:			exit(EXIT_SUCCESS);	/*One step closer to the edge and I'm about to*/ break;
+	case Choice::NEW_GAME:		return new SpaceShooter(InputHandler::setDifficulty()); break;
+	case Choice::LOAD_GAME:		return new SpaceShooter(InputHandler::getSavePath()); break;
+	case Choice::HELP:			SpaceShooter::printHelp(); getStartScreenInput(); break;
+	case Choice::EXIT:			exit(EXIT_SUCCESS); break;
 	}
 }
 
@@ -78,16 +78,16 @@ int main() {
 
 		delta_ticks = clock() - initial_ticks;
 
-		//completeUserCommandIfPresent();
 		//performEnemyAction();
 		//checkForCollisions();
 		//moveProjectiles();
 		//moveEnemies();
 		//spawnEnemy();
 
-		spaceShooter->updateScreen();
 
 		if (delta_ticks > spaceShooter->getDifficulty()) {
+			spaceShooter->updateScreen();
+			InputHandler::completeUserCommands(*spaceShooter);
 			Renderer::renderGameScreen(spaceShooter);
 			std::cout << "FPS: " << CLOCKS_PER_SEC / delta_ticks;
 			itsTimeForNextFrame = true;
