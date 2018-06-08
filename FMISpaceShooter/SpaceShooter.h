@@ -19,7 +19,8 @@ private:
 	Player player;
 	int difficulty;
 	char pixelGrid[SCREEN_HEIGHT][SCREEN_WIDTH];
-	void updatePlayer();
+	void updatePlayerPositioningOnScreen();
+	void clearScreenPixelGrid();
 public:
 	std::vector<Entity> entities;
 	SpaceShooter();
@@ -29,6 +30,7 @@ public:
 	void updateScreen();
 	void spawnPlayer();
 	char* getPixelGrid();
+	Player* getPlayer();
 	static void printHelp();
 	int getDifficulty();
 };
