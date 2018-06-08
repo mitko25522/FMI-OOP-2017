@@ -42,8 +42,11 @@ void Player::moveLeft() {
 
 //Player moveRight overrides Entity moveRight to move twice as fast
 void Player::moveRight() {
-	if (xPos + width < SCREEN_WIDTH) {
+	if (xPos + width < SCREEN_WIDTH-1) {
 		xPos++;
+		xPos++;
+	}
+	else if (xPos + width < SCREEN_WIDTH) {
 		xPos++;
 	}
 }
