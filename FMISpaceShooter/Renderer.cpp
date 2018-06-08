@@ -169,17 +169,17 @@ void Renderer::renderDifficultySelectionScreen() {
 void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
 	system("cls");
 
-	std::cout << "Score: " << 1720 << "   Lives: " << char(10084) << " \n";
+	std::cout << "Score: " << 0 << "   Lives: " << 3 << " \n";
 
 	for (int i = 0; i < SCREEN_WIDTH; i++) {
 		std::cout << "-";
 	}
 
-	std::cout << "|" << std::endl;
+	std::cout << " " << std::endl;
 
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
-			std::cout << spaceShooter->getPixelGrid()[i + j];
+			std::cout << spaceShooter->getPixelGrid()[i*SCREEN_WIDTH + j];
 		}
 		std::cout << "|" << std::endl;
 	}
@@ -187,6 +187,6 @@ void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
 	for (int i = 0; i < SCREEN_WIDTH; i++) {
 		std::cout << "-";
 	}
-	std::cout << "|";
+	std::cout << " \n";
 
 }

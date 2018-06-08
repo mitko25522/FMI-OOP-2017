@@ -25,9 +25,24 @@ void SpaceShooter::printHelp() {
 	} while (true);
 }
 
-int SpaceShooter::getDifficulty()
-{
+int SpaceShooter::getDifficulty() {
 	return this->difficulty;
+}
+
+void SpaceShooter::updatePlayer() {
+	int playerPrevPosX = player.getPosX();
+	int playerPrevPosY = player.getPosY();
+
+	int currentPlayerIndexX = 0;
+	int currentPlayerIndexY = 0;
+
+	for (int i = playerPrevPosY; i < playerPrevPosY + player.getHeight(); i++) {
+		for (int j = playerPrevPosX; j < playerPrevPosX + player.getWidth(); j++) {
+			this->pixelGrid[i][j] = player.getSprite()[currentPlayerIndexY][currentPlayerIndexX];
+			currentPlayerIndexX++;
+		}
+		currentPlayerIndexY++;
+	}
 }
 
 SpaceShooter::SpaceShooter() {
@@ -68,7 +83,7 @@ SpaceShooter::SpaceShooter(const SpaceShooter& other) {
 			this->pixelGrid[i][j] = other.pixelGrid[i][j];
 		}
 	}
-	std::cout << "\n COPPY\n";
+	std::cout << "\n COPY\n";
 }
 
 SpaceShooter::SpaceShooter(const char* saveFilePath) {
@@ -76,7 +91,15 @@ SpaceShooter::SpaceShooter(const char* saveFilePath) {
 	delete[] saveFilePath;
 }
 
-char* SpaceShooter::getPixelGrid()
-{
+void SpaceShooter::updateScreen() {
+	updatePlayer();
+}
+
+void SpaceShooter::spawnPlayer() {
+	//this->player = Player();
+	//entities.push_back(player);
+}
+
+char* SpaceShooter::getPixelGrid() {
 	return &(pixelGrid[0][0]);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 class Entity {
+protected:
 	int xPos;
 	int yPos;
 	int width;
@@ -9,7 +10,12 @@ class Entity {
 	char** sprite;
 	Entity();
 public:
-	Entity(int, int, int, int);
+	int getPosX();
+	int getPosY();
+	int getWidth();
+	int getHeight();
+	char** getSprite();
+	Entity(int xPos, int yPos, int width, int height);
 	Entity(const Entity&);
 	~Entity();
 };

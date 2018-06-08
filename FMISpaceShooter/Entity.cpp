@@ -9,6 +9,27 @@ Entity::Entity() {
 	sprite = nullptr;
 }
 
+int Entity::getPosX() {
+	return this->xPos;
+}
+
+int Entity::getPosY() {
+	return this->yPos;
+}
+
+int Entity::getWidth() {
+	return this->width;
+}
+
+int Entity::getHeight() {
+	return this->height;
+}
+
+char ** Entity::getSprite()
+{
+	return sprite;
+}
+
 Entity::Entity(int xPos, int yPos, int width, int height) {
 	std::cout << "Entity(int, int, int, int) called\n";
 	this->xPos = xPos;
@@ -34,7 +55,7 @@ Entity::Entity(const Entity& other) {
 
 	this->sprite = new char*[height];
 	for (int i = 0; i < height; i++) {
-		sprite[i] = new char[width];
+		this->sprite[i] = new char[width];
 	}
 
 	for (int i = 0; i < height; i++) {
