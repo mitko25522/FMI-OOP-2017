@@ -9,15 +9,15 @@ Choice InputHandler::handleGameMenu() {
 		if (GetAsyncKeyState(0x45)) {
 			return Choice::EXIT;
 		}
-
+		
 		if (GetAsyncKeyState(0x4E)) {
 			return Choice::NEW_GAME;
 		}
-
+		 
 		if (GetAsyncKeyState(0x4C)) {
 			return Choice::LOAD_GAME;
 		}
-
+		
 		if (GetAsyncKeyState(0x48)) {
 			return Choice::HELP;
 		}
@@ -53,22 +53,4 @@ int InputHandler::setDifficulty()
 
 		Sleep(50);
 	} while (true);
-}
-
-void InputHandler::completeUserCommands(SpaceShooter& spaceShooter) {
-	if (GetAsyncKeyState(VK_UP)) {
-		spaceShooter.getPlayer()->moveUp();
-	}
-
-	if (GetAsyncKeyState(VK_DOWN)) {
-		spaceShooter.getPlayer()->moveDown();
-	}
-
-	if (GetAsyncKeyState(VK_LEFT)) {
-		spaceShooter.getPlayer()->moveLeft();
-	}
-
-	if (GetAsyncKeyState(VK_RIGHT)) {
-		spaceShooter.getPlayer()->moveRight();
-	}
 }
