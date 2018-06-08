@@ -29,7 +29,7 @@ int SpaceShooter::getDifficulty() {
 	return this->difficulty;
 }
 
-void SpaceShooter::updatePlayerPositioningOnScreen() {
+void SpaceShooter::updatePlayer() {
 	int playerPrevPosX = player.getPosX();
 	int playerPrevPosY = player.getPosY();
 
@@ -38,24 +38,19 @@ void SpaceShooter::updatePlayerPositioningOnScreen() {
 
 	for (int i = playerPrevPosY; i < playerPrevPosY + player.getHeight(); i++) {
 		for (int j = playerPrevPosX; j < playerPrevPosX + player.getWidth(); j++) {
-			this->pixelGrid[i][j] = player.getChar(currentPlayerIndexY, currentPlayerIndexX);
+			this->pixelGrid[i][j] = player.getSprite()[currentPlayerIndexY][currentPlayerIndexX];
 			currentPlayerIndexX++;
 		}
-		currentPlayerIndexX = 0;
 		currentPlayerIndexY++;
 	}
 }
 
-void SpaceShooter::clearScreenPixelGrid() {
+SpaceShooter::SpaceShooter() {
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
 			pixelGrid[i][j] = ' ';
 		}
 	}
-}
-
-SpaceShooter::SpaceShooter() {
-	clearScreenPixelGrid();
 
 	this->difficulty = DIFFICULTY_MEDIUM;
 	std::cout << "Selected medium difficulty\n";
@@ -97,8 +92,7 @@ SpaceShooter::SpaceShooter(const char* saveFilePath) {
 }
 
 void SpaceShooter::updateScreen() {
-	clearScreenPixelGrid();
-	updatePlayerPositioningOnScreen();
+	updatePlayer();
 }
 
 void SpaceShooter::spawnPlayer() {
@@ -108,8 +102,4 @@ void SpaceShooter::spawnPlayer() {
 
 char* SpaceShooter::getPixelGrid() {
 	return &(pixelGrid[0][0]);
-}
-
-Player* SpaceShooter::getPlayer() {
-	return &player;
 }

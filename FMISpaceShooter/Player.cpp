@@ -1,25 +1,26 @@
 #include "Player.h"
+#include "SpaceShooter.h"
 
 Player::Player() : Entity(0, SCREEN_HEIGHT / 2, 5, 3) {
 	this->remaningLives = 3;
 	this->score = 0;
-	this->gunPosX = 5;
-	this->gunPosY = 1;
 	sprite[0][0] = '[';
 	sprite[0][1] = '\\';
 	sprite[0][2] = ' ';
 	sprite[0][3] = ' ';
 	sprite[0][4] = ' ';	
-	sprite[0][5] = '[';
-	sprite[0][6] = ' ';
-	sprite[0][7] = '=';
-	sprite[0][8] = '=';
-	sprite[0][9] = '>';
-	sprite[0][10] = '[';
-	sprite[0][11] = '/';
-	sprite[0][12] = ' ';
-	sprite[0][13] = ' ';
-	sprite[0][14] = ' ';
+
+	sprite[1][0] = '[';
+	sprite[1][1] = ' ';
+	sprite[1][2] = '=';
+	sprite[1][3] = '=';
+	sprite[1][4] = '>';	
+	
+	sprite[2][0] = '[';
+	sprite[2][1] = '/';
+	sprite[2][2] = ' ';
+	sprite[2][3] = ' ';
+	sprite[2][4] = ' ';
 }
 
 Player::Player(const Player & other) {
@@ -32,33 +33,3 @@ Player::Player(const Player & other) {
 		}
 	}
 }
-
-//Player moveLeft overrides Entity moveLeft to move twice as fast
-void Player::moveLeft() {
-	if (xPos > 0) {
-		--xPos;
-		--xPos;
-	}
-}
-
-//Player moveRight overrides Entity moveRight to move twice as fast
-void Player::moveRight() {
-	if (xPos + width < SCREEN_WIDTH) {
-		xPos++;
-		xPos++;
-	}
-}
-
-int Player::getRemaningLives() {
-	return remaningLives;
-}
-
-int Player::getScore()
-{
-	return score;
-}
-
-//void Player::shootProjectile(SpaceShooter& spaceShooter) {
-//
-//	spaceShooter.projectiles.push_back(Projectile(gunPosX, gunPosY, true));
-//}

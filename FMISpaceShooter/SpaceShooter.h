@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "Player.h"
 #include "Entity.h"
+#include "Player.h"
 
 #define SCREEN_WIDTH 60
 #define SCREEN_HEIGHT 20
@@ -19,10 +19,9 @@ private:
 	Player player;
 	int difficulty;
 	char pixelGrid[SCREEN_HEIGHT][SCREEN_WIDTH];
-	void updatePlayerPositioningOnScreen();
-	void clearScreenPixelGrid();
+	void updatePlayer();
 public:
-	std::vector<Entity> projectiles;
+	std::vector<Entity> entities;
 	SpaceShooter();
 	SpaceShooter(int);
 	SpaceShooter(const SpaceShooter&);
@@ -30,7 +29,6 @@ public:
 	void updateScreen();
 	void spawnPlayer();
 	char* getPixelGrid();
-	Player* getPlayer();
 	static void printHelp();
 	int getDifficulty();
 };
