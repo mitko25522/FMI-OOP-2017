@@ -2,6 +2,7 @@
 #include <windows.h>
 #include "InputHandler.h"
 #include "Renderer.h"
+#include "Projectile.h"
 
 Choice InputHandler::handleGameMenu() {
 	do {
@@ -72,7 +73,10 @@ void InputHandler::completeUserCommands(SpaceShooter& spaceShooter) {
 	}
 
 	if (GetAsyncKeyState(VK_SPACE)) {
-		//Projectile newProjectile(spaceShooter.getPlayer()->gunPosX, spaceShooter.getPlayer()->gunPosY, true);
-		//spaceShooter.projectiles.push_back(newProjectile);
+		int projectilePosX = spaceShooter.getPlayer()->getGunPosX() + spaceShooter.getPlayer()->getPosX();
+		int projectilePosY = spaceShooter.getPlayer()->getGunPosY() + spaceShooter.getPlayer()->getPosY();
+
+		Projectile newProjectile(projectilePosX, projectilePosY, true);
+		spaceShooter.projectiles.push_back(newProjectile);
 	}
 }

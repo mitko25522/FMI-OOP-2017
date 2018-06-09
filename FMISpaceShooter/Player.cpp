@@ -55,3 +55,11 @@ void Player::moveRight() {
 		xPos++;
 	}
 }
+
+int Player::getGunPosX() {
+	return this->gunPosX;
+}
+
+int Player::getGunPosY() {
+	return this->gunPosY;
+}

@@ -13,6 +13,8 @@ class Player : public Entity {
 public:
 	void moveLeft();
 	void moveRight();
+	int getGunPosX();
+	int getGunPosY();
 	Player();
 	Player(const Player&);
 };

@@ -59,7 +59,6 @@ char Entity::getChar(int y, int x) {
 }
 
 Entity::Entity(int xPos, int yPos, int width, int height) {
-	std::cout << "Entity(int, int, int, int) called\n";
 	this->xPos = xPos;
 	this->yPos = yPos;
 	this->width = width;
@@ -94,8 +93,10 @@ Entity::Entity(const Entity& other) {
 }
 
 Entity::~Entity() {
-	for (int i = 0; i < height; i++) {
-		delete[] sprite[i];
+	if (sprite != nullptr) {
+		for (int i = 0; i < height; i++) {
+			delete[] sprite[i];
+		}
+		delete[] sprite;
 	}
-	delete[] sprite;
 }

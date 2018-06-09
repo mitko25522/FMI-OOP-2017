@@ -46,6 +46,22 @@ void SpaceShooter::updatePlayerPositioningOnScreen() {
 	}
 }
 
+void SpaceShooter::updateProjectilePositions() {
+	for (int i = 0; i < projectiles.size(); i++) {
+		if (projectiles.at(i).isItFromPlayer()) {
+			projectiles.at(i).moveRight();
+			this->pixelGrid[projectiles.at(i).getPosY()][projectiles.at(i).getPosX()] = this->projectiles.at(i).getChar(0, 0);
+		}
+
+		if (!projectiles.at(i).isItFromPlayer()) {
+			projectiles.at(i).moveLeft();
+			this->pixelGrid[projectiles.at(i).getPosY()][projectiles.at(i).getPosX()] = this->projectiles.at(i).getChar(0, 0);
+		}
+	}
+
+
+}
+
 void SpaceShooter::clearScreenPixelGrid() {
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
@@ -98,6 +114,7 @@ SpaceShooter::SpaceShooter(const char* saveFilePath) {
 
 void SpaceShooter::updateScreen() {
 	clearScreenPixelGrid();
+	updateProjectilePositions();
 	updatePlayerPositioningOnScreen();
 }
 

@@ -76,7 +76,7 @@ int main() {
 		}
 
 		delta_ticks = clock() - initial_ticks;
-
+		
 		//performEnemyAction();
 		//checkForCollisions();
 		//moveProjectiles();

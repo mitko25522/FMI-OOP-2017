@@ -3,6 +3,7 @@
 #include "SpaceShooter.h"
 #include "Player.h"
 #include "Entity.h"
+#include "Projectile.h"
 
 #define SCREEN_WIDTH 60
 #define SCREEN_HEIGHT 20
@@ -21,9 +22,10 @@ private:
 	int difficulty;
 	char pixelGrid[SCREEN_HEIGHT][SCREEN_WIDTH];
 	void updatePlayerPositioningOnScreen();
+	void updateProjectilePositions();
 	void clearScreenPixelGrid();
 public:
-	std::vector<Entity> projectiles;
+	std::vector<Projectile> projectiles;
 	SpaceShooter();
 	SpaceShooter(int);
 	SpaceShooter(const SpaceShooter&);
