@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
-#include "Entity.h"
+#include "SpaceShooter.h"
 #include "Player.h"
+#include "Entity.h"
 
 #define SCREEN_WIDTH 60
 #define SCREEN_HEIGHT 20
@@ -22,7 +23,7 @@ private:
 	void updatePlayerPositioningOnScreen();
 	void clearScreenPixelGrid();
 public:
-	std::vector<Entity> entities;
+	std::vector<Entity> projectiles;
 	SpaceShooter();
 	SpaceShooter(int);
 	SpaceShooter(const SpaceShooter&);

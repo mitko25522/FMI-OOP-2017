@@ -4,6 +4,8 @@
 Player::Player() : Entity(0, SCREEN_HEIGHT / 2, 5, 3) {
 	this->remaningLives = 3;
 	this->score = 0;
+	this->gunPosX = 5;
+	this->gunPosY = 1;
 	sprite[0][0] = '[';
 	sprite[0][1] = '\\';
 	sprite[0][2] = ' ';
@@ -34,15 +36,18 @@ Player::Player(const Player & other) {
 
 //Player moveLeft overrides Entity moveLeft to move twice as fast
 void Player::moveLeft() {
-	if (xPos > 0) {
+	if (xPos > 1) {
 		--xPos;
+		--xPos;
+	}
+	else if (xPos > 0) {
 		--xPos;
 	}
 }
 
 //Player moveRight overrides Entity moveRight to move twice as fast
 void Player::moveRight() {
-	if (xPos + width < SCREEN_WIDTH-1) {
+	if (xPos + width < SCREEN_WIDTH - 1) {
 		xPos++;
 		xPos++;
 	}

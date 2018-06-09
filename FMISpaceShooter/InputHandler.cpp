@@ -1,7 +1,6 @@
 #include <iostream>
 #include <windows.h>
 #include "InputHandler.h"
-#include "SpaceShooter.h"
 #include "Renderer.h"
 
 Choice InputHandler::handleGameMenu() {
@@ -70,5 +69,10 @@ void InputHandler::completeUserCommands(SpaceShooter& spaceShooter) {
 
 	if (GetAsyncKeyState(VK_RIGHT)) {
 		spaceShooter.getPlayer()->moveRight();
+	}
+
+	if (GetAsyncKeyState(VK_SPACE)) {
+		//Projectile newProjectile(spaceShooter.getPlayer()->gunPosX, spaceShooter.getPlayer()->gunPosY, true);
+		//spaceShooter.projectiles.push_back(newProjectile);
 	}
 }

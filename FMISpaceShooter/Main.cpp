@@ -1,11 +1,9 @@
 #include <iostream>
 #include <windows.h>
 #include <time.h>
+#include "SpaceShooter.h"
 #include "Renderer.h"
 #include "InputHandler.h"
-#include "SpaceShooter.h"
-#include "Entity.h"
-
 
 void test() {
 	clock_t initial_ticks = 0;

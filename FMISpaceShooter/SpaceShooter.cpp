@@ -1,6 +1,6 @@
-#include "SpaceShooter.h"
 #include <iostream>
 #include <windows.h>
+#include "SpaceShooter.h"
 #include "Renderer.h"
 
 void SpaceShooter::printHelp() {
