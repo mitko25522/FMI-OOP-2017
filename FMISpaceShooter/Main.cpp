@@ -63,7 +63,6 @@ int main() {
 	Renderer::renderStartScreen();
 	SpaceShooter* spaceShooter = getStartScreenInput();
 
-	//spaceShooter->spawnPlayer();
 	Renderer::renderGameScreen(spaceShooter);
 
 	clock_t initial_ticks = 0, delta_ticks = 0;
@@ -81,8 +80,6 @@ int main() {
 		//checkForCollisions();
 		//moveProjectiles();
 		//moveEnemies();
-		//spawnEnemy();
-
 
 		if (delta_ticks > spaceShooter->getDifficulty()) {
 			InputHandler::completeUserCommands(*spaceShooter);
