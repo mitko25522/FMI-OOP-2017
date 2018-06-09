@@ -49,12 +49,16 @@ void SpaceShooter::updatePlayerPositioningOnScreen() {
 void SpaceShooter::updateProjectilePositions() {
 	for (int i = 0; i < projectiles.size(); i++) {
 		if (projectiles.at(i).isItFromPlayer()) {
-			projectiles.at(i).moveRight();
+			projectiles.at(i).moveRight(2);
+			if (projectiles.at(i).getPosX() >= SCREEN_WIDTH - 1) {
+				projectiles.erase(projectiles.begin() + i);
+				continue;
+			}
 			this->pixelGrid[projectiles.at(i).getPosY()][projectiles.at(i).getPosX()] = this->projectiles.at(i).getChar(0, 0);
 		}
 
 		if (!projectiles.at(i).isItFromPlayer()) {
-			projectiles.at(i).moveLeft();
+			projectiles.at(i).moveLeft(2);
 			this->pixelGrid[projectiles.at(i).getPosY()][projectiles.at(i).getPosX()] = this->projectiles.at(i).getChar(0, 0);
 		}
 	}

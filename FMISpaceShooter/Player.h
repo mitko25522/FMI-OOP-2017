@@ -11,8 +11,6 @@ class Player : public Entity {
 	int gunPosX;
 	int gunPosY;
 public:
-	void moveLeft();
-	void moveRight();
 	int getGunPosX();
 	int getGunPosY();
 	Player();

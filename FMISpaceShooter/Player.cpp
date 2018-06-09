@@ -34,28 +34,6 @@ Player::Player(const Player & other) {
 	}
 }
 
-//Player moveLeft overrides Entity moveLeft to move twice as fast
-void Player::moveLeft() {
-	if (xPos > 1) {
-		--xPos;
-		--xPos;
-	}
-	else if (xPos > 0) {
-		--xPos;
-	}
-}
-
-//Player moveRight overrides Entity moveRight to move twice as fast
-void Player::moveRight() {
-	if (xPos + width < SCREEN_WIDTH - 1) {
-		xPos++;
-		xPos++;
-	}
-	else if (xPos + width < SCREEN_WIDTH) {
-		xPos++;
-	}
-}
-
 int Player::getGunPosX() {
 	return this->gunPosX;
 }

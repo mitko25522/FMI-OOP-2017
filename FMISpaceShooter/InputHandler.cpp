@@ -57,19 +57,19 @@ int InputHandler::setDifficulty()
 
 void InputHandler::completeUserCommands(SpaceShooter& spaceShooter) {
 	if (GetAsyncKeyState(VK_UP)) {
-		spaceShooter.getPlayer()->moveUp();
+		spaceShooter.getPlayer()->moveUp(1);
 	}
 
 	if (GetAsyncKeyState(VK_DOWN)) {
-		spaceShooter.getPlayer()->moveDown();
+		spaceShooter.getPlayer()->moveDown(1);
 	}
 
 	if (GetAsyncKeyState(VK_LEFT)) {
-		spaceShooter.getPlayer()->moveLeft();
+		spaceShooter.getPlayer()->moveLeft(2);
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT)) {
-		spaceShooter.getPlayer()->moveRight();
+		spaceShooter.getPlayer()->moveRight(2);
 	}
 
 	if (GetAsyncKeyState(VK_SPACE)) {

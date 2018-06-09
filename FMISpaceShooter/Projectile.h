@@ -7,5 +7,6 @@ class Projectile : public Entity {
 public:
 	Projectile(int startPosX, int startPosY, bool isFromPlayer);
 	Projectile(const Projectile&);
+	~Projectile();
 	bool isItFromPlayer();
 };

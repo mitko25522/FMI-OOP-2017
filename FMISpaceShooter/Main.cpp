@@ -85,8 +85,8 @@ int main() {
 
 
 		if (delta_ticks > spaceShooter->getDifficulty()) {
-			spaceShooter->updateScreen();
 			InputHandler::completeUserCommands(*spaceShooter);
+			spaceShooter->updateScreen();
 			Renderer::renderGameScreen(spaceShooter);
 			std::cout << "FPS: " << CLOCKS_PER_SEC / delta_ticks;
 			itsTimeForNextFrame = true;

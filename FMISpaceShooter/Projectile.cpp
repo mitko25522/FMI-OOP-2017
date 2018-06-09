@@ -22,6 +22,10 @@ Projectile::Projectile(const Projectile& other) {
 	sprite[0][0] = other.sprite[0][0];
 }
 
+Projectile::~Projectile() {
+	
+}
+
 bool Projectile::isItFromPlayer() {
 	return isFromPlayer;
 }

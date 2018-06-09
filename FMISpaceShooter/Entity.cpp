@@ -26,27 +26,59 @@ int Entity::getHeight() {
 	return this->height;
 }
 
-void Entity::moveUp() {
-	if (yPos > 0) {
-		yPos--;
+void Entity::moveUp(int offset) {
+	if (yPos > offset) {
+		yPos -= offset;
+		return;
+	}
+
+	while (offset > 0) {
+		if (yPos > 0) {
+			yPos--;
+		}
+		offset--;
 	}
 }
 
-void Entity::moveDown() {
-	if (yPos + height < SCREEN_HEIGHT) {
-		yPos++;
+void Entity::moveDown(int offset) {
+	if (yPos + height < SCREEN_HEIGHT - offset) {
+		yPos += offset;
+		return;
+	}
+
+	while (offset > 0) {
+		if (yPos + height < SCREEN_HEIGHT) {
+			yPos++;
+		}
+		offset--;
 	}
 }
 
-void Entity::moveLeft() {
-	if (xPos > 0) {
-		xPos--;
+void Entity::moveLeft(int offset) {
+	if (xPos > offset) {
+		xPos -= offset;
+		return;
+	}
+
+	while (offset > 0) {
+		if (xPos > 0) {
+			xPos--;
+		}
+		offset--;
 	}
 }
 
-void Entity::moveRight() {
-	if (xPos + width < SCREEN_WIDTH) {
-		xPos++;
+void Entity::moveRight(int offset) {
+	if (xPos + width < SCREEN_WIDTH - offset) {
+		xPos += offset;
+		return;
+	}
+
+	while (offset > 0) {
+		if (xPos + width < SCREEN_WIDTH) {
+			xPos++;
+		}
+		offset--;
 	}
 }
 
@@ -93,10 +125,10 @@ Entity::Entity(const Entity& other) {
 }
 
 Entity::~Entity() {
-	if (sprite != nullptr) {
+	/*if (sprite != nullptr) {
 		for (int i = 0; i < height; i++) {
 			delete[] sprite[i];
 		}
 		delete[] sprite;
-	}
+	}*/
 }

@@ -14,10 +14,10 @@ public:
 	int getPosY();
 	int getWidth();
 	int getHeight();
-	void moveUp();
-	void moveDown();
-	void moveLeft();
-	void moveRight();
+	void moveUp(int);
+	void moveDown(int);
+	void moveLeft(int);
+	void moveRight(int);
 	char** getSprite();
 	char getChar(int y, int x);
 	Entity(int xPos, int yPos, int width, int height);
