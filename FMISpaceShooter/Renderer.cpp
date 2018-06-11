@@ -152,6 +152,7 @@ void Renderer::printDifficultyOptions() {
 	std::cout << std::endl;
 }
 
+
 void Renderer::renderStartScreen() {
 	printAnimation();
 	printStaticStartScreen();
@@ -189,4 +190,45 @@ void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
 	}
 	std::cout << " \n";
 
+}
+
+
+//			 ______ _______ _______ _______
+//			|  ____ |_____| |  |  | |______
+//			|_____| |     | |  |  | |______
+//			                               
+//			                                             
+//			                               
+//			 _____  _    _ _______  ______ 
+//			|     |  \  /  |______ |_____/ 
+//			|_____|   \/   |______ |    \_              
+
+
+void Renderer::printGameOverScreen(SpaceShooter* spaceShooter) {
+	system("cls");
+	std::cout << "           ______ _______ _______ _______  " << std::endl;
+	std::cout << "          |  ____ |_____| |  |  | |______  " << std::endl;
+	std::cout << "          |_____| |     | |  |  | |______  " << std::endl;
+	std::cout << "                                           " << std::endl;
+	std::cout << "                                           " << std::endl;
+	std::cout << "                                           " << std::endl;
+	std::cout << "           _____  _    _ _______  ______   " << std::endl;
+	std::cout << "          |     |  \\  /  |______ |_____/  " << std::endl;
+	std::cout << "          |_____|   \\/   |______ |    \\_ " << std::endl;
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "Difficulty: ";
+
+	switch (spaceShooter->getDifficulty()) {
+		case DIFFICULTY_EASY:			std::cout << "Easy" << std::endl;			break;
+		case DIFFICULTY_MEDIUM:			std::cout << "Medium" << std::endl;			break;
+		case DIFFICULTY_INTERMEDIATE:	std::cout << "Intermediate" << std::endl;	break;
+	}
+
+	std::cout << "Score:      " << spaceShooter->getPlayer()->getScore() << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	Sleep(2000);
 }

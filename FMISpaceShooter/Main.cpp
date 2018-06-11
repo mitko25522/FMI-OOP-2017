@@ -87,7 +87,7 @@ int main() {
 		}
 
 		if (spaceShooter->getPlayer()->getRemainingLives() <= 0) {
-			//Renderer::printGameOverScreen(spaceShooter);
+			Renderer::printGameOverScreen(spaceShooter);
 			break;
 		}
 
