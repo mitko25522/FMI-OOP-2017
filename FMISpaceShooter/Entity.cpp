@@ -12,8 +12,7 @@ Entity::Entity() {
 
 bool Entity::isInCollisionWith(const Entity& other)
 {
-	return this->xPos + width - other.xPos <= 0 ||
-		   this->yPos + height - other.yPos <= 0;
+	return false;
 	
 }
 

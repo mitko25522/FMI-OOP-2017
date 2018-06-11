@@ -75,15 +75,34 @@ void SpaceShooter::clearScreenPixelGrid() {
 }
 
 void SpaceShooter::updateEnemyPositions() {
+	for (int i = 0; i < enemies_container.size(); i++) {
+		enemies_container.at(i).moveLeft(1);
 
+		if (enemies_container.at(i).getPosX() <= 0) {
+			enemies_container.erase(enemies_container.begin() + i);
+		}
+
+		for (int currentEnemyPosX = 0; currentEnemyPosX < enemies_container.at(i).getWidth(); currentEnemyPosX++) {
+			this->pixelGrid[enemies_container.at(i).getPosY()][currentEnemyPosX + enemies_container.at(i).getPosX()] = enemies_container.at(i).getChar(0, currentEnemyPosX);
+		}
+	}
 }
 
 void SpaceShooter::spawnNewEnemy() {
-	Enemy newEnemy(rand()%SCREEN_HEIGHT);
+	Enemy newEnemy(rand() % SCREEN_HEIGHT);
+	bool isInAnyCollision = false;
+
 	for (int i = 0; i < enemies_container.size(); i++) {
 		if (newEnemy.isInCollisionWith(enemies_container.at(i))) {
-
+			isInAnyCollision = true;
 		}
+	}
+
+	if (isInAnyCollision) {
+		spawnNewEnemy();
+	}
+	else {
+		enemies_container.push_back(newEnemy);
 	}
 }
 
@@ -132,8 +151,9 @@ SpaceShooter::SpaceShooter(const char* saveFilePath) {
 void SpaceShooter::updateScreen() {
 	static int updatesSinceLastSpawnedEnemy;
 	clearScreenPixelGrid();
-	if (updatesSinceLastSpawnedEnemy >= 30) {
+	if (updatesSinceLastSpawnedEnemy >= 10) {
 		spawnNewEnemy();
+		updatesSinceLastSpawnedEnemy = 0;
 	}
 	updateProjectilePositions();
 	updateEnemyPositions();

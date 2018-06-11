@@ -41,6 +41,7 @@ void test() {
 //fix spawnNewEnemy in okay periods of time
 //fix entity.isInCollisionWith
 //test collisions
+//add gun posx and posy for enemy
 
 SpaceShooter* getStartScreenInput() {
 	switch (InputHandler::handleGameMenu()) {

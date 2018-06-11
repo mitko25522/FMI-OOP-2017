@@ -10,4 +10,6 @@ class Enemy : public Entity {
 public:
 	Enemy();
 	Enemy(int startPosY);
+	Enemy(const Enemy&);
+	bool isInCollisionWith(const Enemy&);
 };
