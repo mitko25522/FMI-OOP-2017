@@ -2,7 +2,7 @@
 #include "SpaceShooter.h"
 
 Player::Player() : Entity(0, SCREEN_HEIGHT / 2, 5, 3) {
-	this->remaningLives = 3;
+	this->remainingLives = 3;
 	this->score = 0;
 	this->gunPosX = 5;
 	this->gunPosY = 1;
@@ -24,7 +24,7 @@ Player::Player() : Entity(0, SCREEN_HEIGHT / 2, 5, 3) {
 }
 
 Player::Player(const Player & other) {
-	this->remaningLives = other.remaningLives;
+	this->remainingLives = other.remainingLives;
 	this->score = other.score;
 
 	for (int i = 0; i < height; i++) {
@@ -32,6 +32,23 @@ Player::Player(const Player & other) {
 			this->sprite[i][j] = other.sprite[i][j];
 		}
 	}
+}
+
+void Player::increaseScore(int increase) {
+	this->score += increase;
+}
+
+void Player::reduceLives(int) {
+	this->remainingLives--;
+}
+
+int Player::getScore() {
+	return this->score;
+}
+
+int Player::getRemainingLives()
+{
+	return this->remainingLives;
 }
 
 int Player::getGunPosX() {

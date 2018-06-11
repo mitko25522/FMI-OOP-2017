@@ -35,7 +35,7 @@ Enemy::Enemy(int startPosY) {
 	this->sprite[0][3] = '~';
 	this->sprite[0][4] = '~';
 	this->sprite[0][5] = ')';
-	this->gunPosX = xPos - width;
+	this->gunPosX = -1;
 	this->gunPosY = yPos;
 }
 
@@ -56,7 +56,14 @@ Enemy::Enemy(const Enemy& other) {
 	this->gunPosY = other.gunPosY;
 }
 
-bool Enemy::isInCollisionWith(const Enemy& other)
-{
-	return false;
+int Enemy::getGunPosX() {
+	return gunPosX;
+}
+
+int Enemy::getGunPosY() {
+	return gunPosY;
+}
+
+bool Enemy::isInCollisionWith(const Enemy& other) {
+	return (this->yPos == other.yPos) && ((other.xPos >= this->xPos) && (other.xPos <= this->xPos + this->width));
 }

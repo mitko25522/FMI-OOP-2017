@@ -11,5 +11,7 @@ public:
 	Enemy();
 	Enemy(int startPosY);
 	Enemy(const Enemy&);
+	int getGunPosX();
+	int getGunPosY();
 	bool isInCollisionWith(const Enemy&);
 };

@@ -70,19 +70,20 @@ int main() {
 		}
 
 		delta_ticks = clock() - initial_ticks;
-		
-		//performEnemyAction();
-		//checkForCollisions();
-		//moveEnemies();
 
-
-		if (delta_ticks > spaceShooter->getDifficulty()) {
-			InputHandler::completeUserCommands(*spaceShooter);
-			spaceShooter->updateScreen();
-			Renderer::renderGameScreen(spaceShooter);
-			std::cout << "FPS: " << CLOCKS_PER_SEC / delta_ticks;
-			itsTimeForNextFrame = true;
-			delta_ticks = 0;
+		try {
+			if (delta_ticks > spaceShooter->getDifficulty()) {
+				InputHandler::completeUserCommands(*spaceShooter);
+				spaceShooter->generateEnemyProjectiles();
+				spaceShooter->updateScreen();
+				Renderer::renderGameScreen(spaceShooter);
+				std::cout << "FPS: " << CLOCKS_PER_SEC / delta_ticks;
+				itsTimeForNextFrame = true;
+				delta_ticks = 0;
+			}
+		}
+		catch (const std::out_of_range& oor) {
+			continue;
 		}
 	} while (true);
 

@@ -6,7 +6,7 @@
 void SpaceShooter::printHelp() {
 	system("cls");
 	std::cout << "Welcome to FMISpaceShooter\n";
-	std::cout << "Here you will encounter enemies_container bla bla bla..\n";
+	std::cout << "Here you will encounter enemies bla bla bla..\n";
 	std::cout << "Bla bla bla bla bla..\n";
 	std::cout << "Bla bla bla bla bla..\n";
 	std::cout << "Bla bla bla bla bla..\n";
@@ -49,16 +49,23 @@ void SpaceShooter::updatePlayerPositioningOnScreen() {
 void SpaceShooter::updateProjectilePositions() {
 	for (int i = 0; i < projectiles_container.size(); i++) {
 		if (projectiles_container.at(i).isItFromPlayer()) {
-			projectiles_container.at(i).moveRight(2);
+			projectiles_container.at(i).moveRight(3);
+
 			if (projectiles_container.at(i).getPosX() >= SCREEN_WIDTH - 1) {
 				projectiles_container.erase(projectiles_container.begin() + i);
 				continue;
 			}
+
 			this->pixelGrid[projectiles_container.at(i).getPosY()][projectiles_container.at(i).getPosX()] = this->projectiles_container.at(i).getChar(0, 0);
 		}
 
 		if (!projectiles_container.at(i).isItFromPlayer()) {
 			projectiles_container.at(i).moveLeft(2);
+
+			if (projectiles_container.at(i).getPosX() <= 1) {
+				projectiles_container.erase(projectiles_container.begin() + i);
+			}
+
 			this->pixelGrid[projectiles_container.at(i).getPosY()][projectiles_container.at(i).getPosX()] = this->projectiles_container.at(i).getChar(0, 0);
 		}
 	}
@@ -106,6 +113,56 @@ void SpaceShooter::spawnNewEnemy() {
 	}
 }
 
+void SpaceShooter::checkForCollisionsBetweenProjectilesAndEnemies() {
+	for (int projectileIndex = 0; projectileIndex < projectiles_container.size(); ++projectileIndex) {
+		for (int enemyIndex = 0; enemyIndex < enemies_container.size(); ++enemyIndex) {
+			if (projectiles_container.at(projectileIndex).isItFromPlayer()) {
+				if (projectiles_container.at(projectileIndex).isInCollisionWith(enemies_container.at(enemyIndex))) {
+					projectiles_container.erase(projectiles_container.begin() + projectileIndex);
+					enemies_container.erase(enemies_container.begin() + enemyIndex);
+					this->player.increaseScore(10);
+					return;
+				}
+			}
+			if (!projectiles_container.at(projectileIndex).isItFromPlayer()) {
+				if (projectiles_container.at(projectileIndex).isInCollisionWith(player)) {
+					projectiles_container.erase(projectiles_container.begin() + projectileIndex);
+					this->player.reduceLives(1);
+					return;
+				}
+			}
+		}
+	}
+}
+
+void SpaceShooter::checkIfEnemySpawnRateNeedsUpdating() {
+	static int previousPlayerScore;
+	if (this->player.getScore() - previousPlayerScore >= 50) {
+		reduceGameProgressDelay();
+		previousPlayerScore = this->player.getScore();
+	}
+}
+
+void SpaceShooter::reduceGameProgressDelay() {
+	if (this->gameProgressDelay > 0) {
+		gameProgressDelay--;
+	}
+}
+
+void SpaceShooter::generateProjectileFromRandomEnemy() {
+	int enemiesCount = enemies_container.size();
+
+	if (enemiesCount <= 0) {
+		return;
+	}
+
+	int selectedEnemyIndex = rand() % enemiesCount;
+	int enemyGunPosX = enemies_container.at(selectedEnemyIndex).getGunPosX() + enemies_container.at(selectedEnemyIndex).getPosX();
+	int enemyGunPosY = enemies_container.at(selectedEnemyIndex).getGunPosY();
+	Projectile newProjectile(enemyGunPosX, enemyGunPosY, false);
+	projectiles_container.push_back(newProjectile);
+}
+
 SpaceShooter::SpaceShooter() {
 	clearScreenPixelGrid();
 
@@ -122,6 +179,7 @@ SpaceShooter::SpaceShooter(int difficulty) {
 		}
 	}
 
+	this->gameProgressDelay = 20;
 	this->difficulty = difficulty;
 	std::cout << "Selected ";
 	switch (difficulty) {
@@ -148,22 +206,31 @@ SpaceShooter::SpaceShooter(const char* saveFilePath) {
 	delete[] saveFilePath;
 }
 
+void SpaceShooter::generateEnemyProjectiles() {
+	static int updateSinceLastProjectile;
+
+	if (updateSinceLastProjectile >= gameProgressDelay / 2) {
+		generateProjectileFromRandomEnemy();
+		updateSinceLastProjectile = 0;
+	}
+	updateSinceLastProjectile++;
+}
+
 void SpaceShooter::updateScreen() {
 	static int updatesSinceLastSpawnedEnemy;
 	clearScreenPixelGrid();
-	if (updatesSinceLastSpawnedEnemy >= 10) {
+
+	if (updatesSinceLastSpawnedEnemy >= gameProgressDelay) {
 		spawnNewEnemy();
 		updatesSinceLastSpawnedEnemy = 0;
 	}
+
+	checkIfEnemySpawnRateNeedsUpdating();
+	checkForCollisionsBetweenProjectilesAndEnemies();
 	updateProjectilePositions();
 	updateEnemyPositions();
 	updatePlayerPositioningOnScreen();
 	updatesSinceLastSpawnedEnemy++;
-}
-
-void SpaceShooter::spawnPlayer() {
-	//this->player = Player();
-	//entities.push_back(player);
 }
 
 char* SpaceShooter::getPixelGrid() {

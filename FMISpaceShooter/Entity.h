@@ -11,10 +11,10 @@ protected:
 	Entity();
 public:
 	bool isInCollisionWith(const Entity&);
-	int getPosX();
-	int getPosY();
-	int getWidth();
-	int getHeight();
+	int getPosX() const;
+	int getPosY() const;
+	int getWidth() const;
+	int getHeight() const;
 	void moveUp(int);
 	void moveDown(int);
 	void moveLeft(int);

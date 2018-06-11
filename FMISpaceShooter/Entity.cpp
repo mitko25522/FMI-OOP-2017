@@ -10,25 +10,24 @@ Entity::Entity() {
 	sprite = nullptr;
 }
 
-bool Entity::isInCollisionWith(const Entity& other)
-{
-	return false;
-	
+bool Entity::isInCollisionWith(const Entity& other) {
+	return ((other.yPos >= this->yPos) && (other.yPos < this->yPos + this->height)) &&
+	       ((other.xPos >= this->xPos) && (other.xPos <= this->xPos + this->width));
 }
 
-int Entity::getPosX() {
+int Entity::getPosX() const {
 	return this->xPos;
 }
 
-int Entity::getPosY() {
+int Entity::getPosY() const {
 	return this->yPos;
 }
 
-int Entity::getWidth() {
+int Entity::getWidth() const {
 	return this->width;
 }
 
-int Entity::getHeight() {
+int Entity::getHeight() const {
 	return this->height;
 }
 

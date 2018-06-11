@@ -169,7 +169,7 @@ void Renderer::renderDifficultySelectionScreen() {
 void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
 	system("cls");
 
-	std::cout << "Score: " << 0 << "   Lives: " << 3 << " \n";
+	std::cout << "Score: " << spaceShooter->getPlayer()->getScore() << "   Lives: " << spaceShooter->getPlayer()->getRemainingLives() << " \n";
 
 	for (int i = 0; i < SCREEN_WIDTH; i++) {
 		std::cout << "-";

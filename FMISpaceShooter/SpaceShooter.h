@@ -21,12 +21,17 @@ class SpaceShooter {
 private:
 	Player player;
 	int difficulty;
+	int gameProgressDelay;
 	char pixelGrid[SCREEN_HEIGHT][SCREEN_WIDTH];
 	void updatePlayerPositioningOnScreen();
 	void updateProjectilePositions();
 	void updateEnemyPositions();
 	void clearScreenPixelGrid();
 	void spawnNewEnemy();
+	void checkForCollisionsBetweenProjectilesAndEnemies();
+	void checkIfEnemySpawnRateNeedsUpdating();
+	void reduceGameProgressDelay();
+	void generateProjectileFromRandomEnemy();
 public:
 	std::vector<Projectile> projectiles_container;
 	std::vector<Enemy> enemies_container;
@@ -34,8 +39,8 @@ public:
 	SpaceShooter(int);
 	SpaceShooter(const SpaceShooter&);
 	SpaceShooter(const char*);
+	void generateEnemyProjectiles();
 	void updateScreen();
-	void spawnPlayer();
 	char* getPixelGrid();
 	Player* getPlayer();
 	static void printHelp();

@@ -3,14 +3,18 @@
 
 //		[\ 
 //		[ ==>
-//		[/ 
+//		[/
 
 class Player : public Entity {
-	int remaningLives;
+	int remainingLives;
 	int score;
 	int gunPosX;
 	int gunPosY;
 public:
+	void increaseScore(int);
+	void reduceLives(int);
+	int getScore();
+	int getRemainingLives();
 	int getGunPosX();
 	int getGunPosY();
 	Player();
