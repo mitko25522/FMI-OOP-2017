@@ -4,6 +4,7 @@
 #include "SpaceShooter.h"
 #include "Renderer.h"
 #include "InputHandler.h"
+#include "Enemy.h"
 
 void test() {
 	clock_t initial_ticks = 0;
@@ -34,21 +35,12 @@ void test() {
 
 //TODO:
 //
-//take in account player when rendering screen
-//figure out entities vector
-//fix printHelp
-//start implementing entity
-//start implementing player
-//start implementing projectiles
 //handle collisions using collision masks and probably a delegate for that
 //add moving patterns (buildings?mountains) in the background
-//add renderGameScreen to Renderer (taking SpaceShooter as an argument)
-//show difficulty in renderGameScreen
-//add enemy lives
-//add player shoot projectile
-//add player score (to renderGameScreen aswell)
-//add player lives (to renderGameScreen aswell)
-//
+//fix updateEnemyPositions()
+//fix spawnNewEnemy in okay periods of time
+//fix entity.isInCollisionWith
+//test collisions
 
 SpaceShooter* getStartScreenInput() {
 	switch (InputHandler::handleGameMenu()) {
@@ -60,6 +52,8 @@ SpaceShooter* getStartScreenInput() {
 }
 
 int main() {
+	srand(time(NULL));
+
 	Renderer::renderStartScreen();
 	SpaceShooter* spaceShooter = getStartScreenInput();
 
@@ -78,8 +72,8 @@ int main() {
 		
 		//performEnemyAction();
 		//checkForCollisions();
-		//moveProjectiles();
 		//moveEnemies();
+
 
 		if (delta_ticks > spaceShooter->getDifficulty()) {
 			InputHandler::completeUserCommands(*spaceShooter);

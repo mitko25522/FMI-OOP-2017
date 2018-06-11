@@ -10,6 +10,13 @@ Entity::Entity() {
 	sprite = nullptr;
 }
 
+bool Entity::isInCollisionWith(const Entity& other)
+{
+	return this->xPos + width - other.xPos <= 0 ||
+		   this->yPos + height - other.yPos <= 0;
+	
+}
+
 int Entity::getPosX() {
 	return this->xPos;
 }

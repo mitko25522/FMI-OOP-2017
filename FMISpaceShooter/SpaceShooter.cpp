@@ -6,7 +6,7 @@
 void SpaceShooter::printHelp() {
 	system("cls");
 	std::cout << "Welcome to FMISpaceShooter\n";
-	std::cout << "Here you will encounter enemies bla bla bla..\n";
+	std::cout << "Here you will encounter enemies_container bla bla bla..\n";
 	std::cout << "Bla bla bla bla bla..\n";
 	std::cout << "Bla bla bla bla bla..\n";
 	std::cout << "Bla bla bla bla bla..\n";
@@ -47,19 +47,19 @@ void SpaceShooter::updatePlayerPositioningOnScreen() {
 }
 
 void SpaceShooter::updateProjectilePositions() {
-	for (int i = 0; i < projectiles.size(); i++) {
-		if (projectiles.at(i).isItFromPlayer()) {
-			projectiles.at(i).moveRight(2);
-			if (projectiles.at(i).getPosX() >= SCREEN_WIDTH - 1) {
-				projectiles.erase(projectiles.begin() + i);
+	for (int i = 0; i < projectiles_container.size(); i++) {
+		if (projectiles_container.at(i).isItFromPlayer()) {
+			projectiles_container.at(i).moveRight(2);
+			if (projectiles_container.at(i).getPosX() >= SCREEN_WIDTH - 1) {
+				projectiles_container.erase(projectiles_container.begin() + i);
 				continue;
 			}
-			this->pixelGrid[projectiles.at(i).getPosY()][projectiles.at(i).getPosX()] = this->projectiles.at(i).getChar(0, 0);
+			this->pixelGrid[projectiles_container.at(i).getPosY()][projectiles_container.at(i).getPosX()] = this->projectiles_container.at(i).getChar(0, 0);
 		}
 
-		if (!projectiles.at(i).isItFromPlayer()) {
-			projectiles.at(i).moveLeft(2);
-			this->pixelGrid[projectiles.at(i).getPosY()][projectiles.at(i).getPosX()] = this->projectiles.at(i).getChar(0, 0);
+		if (!projectiles_container.at(i).isItFromPlayer()) {
+			projectiles_container.at(i).moveLeft(2);
+			this->pixelGrid[projectiles_container.at(i).getPosY()][projectiles_container.at(i).getPosX()] = this->projectiles_container.at(i).getChar(0, 0);
 		}
 	}
 
@@ -70,6 +70,19 @@ void SpaceShooter::clearScreenPixelGrid() {
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
 			pixelGrid[i][j] = ' ';
+		}
+	}
+}
+
+void SpaceShooter::updateEnemyPositions() {
+
+}
+
+void SpaceShooter::spawnNewEnemy() {
+	Enemy newEnemy(rand()%SCREEN_HEIGHT);
+	for (int i = 0; i < enemies_container.size(); i++) {
+		if (newEnemy.isInCollisionWith(enemies_container.at(i))) {
+
 		}
 	}
 }
@@ -117,9 +130,15 @@ SpaceShooter::SpaceShooter(const char* saveFilePath) {
 }
 
 void SpaceShooter::updateScreen() {
+	static int updatesSinceLastSpawnedEnemy;
 	clearScreenPixelGrid();
+	if (updatesSinceLastSpawnedEnemy >= 30) {
+		spawnNewEnemy();
+	}
 	updateProjectilePositions();
+	updateEnemyPositions();
 	updatePlayerPositioningOnScreen();
+	updatesSinceLastSpawnedEnemy++;
 }
 
 void SpaceShooter::spawnPlayer() {
@@ -131,7 +150,6 @@ char* SpaceShooter::getPixelGrid() {
 	return &(pixelGrid[0][0]);
 }
 
-Player* SpaceShooter::getPlayer()
-{
+Player* SpaceShooter::getPlayer() {
 	return &player;
 }

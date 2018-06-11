@@ -10,6 +10,7 @@ protected:
 	char** sprite;
 	Entity();
 public:
+	bool isInCollisionWith(const Entity&);
 	int getPosX();
 	int getPosY();
 	int getWidth();

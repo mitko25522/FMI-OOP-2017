@@ -77,7 +77,7 @@ void InputHandler::completeUserCommands(SpaceShooter& spaceShooter) {
 		int projectilePosY = spaceShooter.getPlayer()->getGunPosY() + spaceShooter.getPlayer()->getPosY();
 
  		Projectile newProjectile(projectilePosX, projectilePosY, true);
-		spaceShooter.projectiles.push_back(newProjectile);
+		spaceShooter.projectiles_container.push_back(newProjectile);
 	}
 
 }
