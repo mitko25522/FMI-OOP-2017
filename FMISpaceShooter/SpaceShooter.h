@@ -29,6 +29,7 @@ private:
 	void clearScreenPixelGrid();
 	void spawnNewEnemy();
 	void checkForCollisionsBetweenProjectilesAndEnemies();
+	void checkForCollisionsBetweenPlayerAndEnemies();
 	void checkIfEnemySpawnRateNeedsUpdating();
 	void reduceGameProgressDelay();
 	void generateProjectileFromRandomEnemy();

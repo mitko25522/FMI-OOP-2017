@@ -82,9 +82,15 @@ int main() {
 				delta_ticks = 0;
 			}
 		}
-		catch (const std::out_of_range& oor) {
+		catch (const std::out_of_range&) {
 			continue;
-		}	
+		}
+
+		if (spaceShooter->getPlayer()->getRemainingLives() <= 0) {
+			//Renderer::printGameOverScreen(spaceShooter);
+			break;
+		}
+
 	} while (true);
 
 	return 0;

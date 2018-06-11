@@ -122,6 +122,15 @@ void SpaceShooter::checkForCollisionsBetweenProjectilesAndEnemies() {
 	}
 }
 
+void SpaceShooter::checkForCollisionsBetweenPlayerAndEnemies() {
+	for (int i = 0; i < this->enemies_container.size(); i++) {
+		if (this->player.isInCollisionWith(enemies_container.at(i))) {
+			player.reduceLives(1);
+			enemies_container.erase(enemies_container.begin() + i);
+		}
+	}
+}
+
 void SpaceShooter::checkIfEnemySpawnRateNeedsUpdating() {
 	static int previousPlayerScore;
 	if (this->player.getScore() - previousPlayerScore >= 50) {
@@ -200,6 +209,7 @@ void SpaceShooter::generateEnemyProjectiles() {
 		generateProjectileFromRandomEnemy();
 		updateSinceLastProjectile = 0;
 	}
+
 	updateSinceLastProjectile++;
 }
 
@@ -214,6 +224,7 @@ void SpaceShooter::updateScreen() {
 
 	checkIfEnemySpawnRateNeedsUpdating();
 	checkForCollisionsBetweenProjectilesAndEnemies();
+	checkForCollisionsBetweenPlayerAndEnemies();
 	updateProjectilePositions();
 	updateEnemyPositions();
 	updatePlayerPositioningOnScreen();

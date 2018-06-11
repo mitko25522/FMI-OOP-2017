@@ -63,7 +63,3 @@ int Enemy::getGunPosX() {
 int Enemy::getGunPosY() {
 	return gunPosY;
 }
-
-bool Enemy::isInCollisionWith(const Enemy& other) {
-	return (this->yPos == other.yPos) && ((other.xPos >= this->xPos) && (other.xPos <= this->xPos + this->width));
-}

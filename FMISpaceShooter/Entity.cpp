@@ -11,8 +11,15 @@ Entity::Entity() {
 }
 
 bool Entity::isInCollisionWith(const Entity& other) {
-	return ((other.yPos >= this->yPos) && (other.yPos < this->yPos + this->height)) &&
-	       ((other.xPos >= this->xPos) && (other.xPos < this->xPos + this->width));
+	if ((this->xPos >= other.xPos + other.width) || (other.xPos >= this->xPos + this->width)) {
+		return false;
+	}
+
+	if ((this->yPos + height <= other.yPos) || (other.yPos + other.height <= this->yPos)) {
+		return false;
+	}
+
+	return true;
 }
 
 int Entity::getPosX() const {
