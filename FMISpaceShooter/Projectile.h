@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "Enemy.h"
 
 class Projectile : public Entity {
 	bool isFromPlayer;
@@ -7,6 +8,7 @@ class Projectile : public Entity {
 public:
 	Projectile(int startPosX, int startPosY, bool isFromPlayer);
 	Projectile(const Projectile&);
+	Projectile(const Enemy&);
 	~Projectile();
 	bool isItFromPlayer();
 };

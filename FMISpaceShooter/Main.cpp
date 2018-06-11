@@ -84,7 +84,7 @@ int main() {
 		}
 		catch (const std::out_of_range& oor) {
 			continue;
-		}
+		}	
 	} while (true);
 
 	return 0;

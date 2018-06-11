@@ -97,20 +97,7 @@ void SpaceShooter::updateEnemyPositions() {
 
 void SpaceShooter::spawnNewEnemy() {
 	Enemy newEnemy(rand() % SCREEN_HEIGHT);
-	bool isInAnyCollision = false;
-
-	for (int i = 0; i < enemies_container.size(); i++) {
-		if (newEnemy.isInCollisionWith(enemies_container.at(i))) {
-			isInAnyCollision = true;
-		}
-	}
-
-	if (isInAnyCollision) {
-		spawnNewEnemy();
-	}
-	else {
-		enemies_container.push_back(newEnemy);
-	}
+	enemies_container.push_back(newEnemy);
 }
 
 void SpaceShooter::checkForCollisionsBetweenProjectilesAndEnemies() {
