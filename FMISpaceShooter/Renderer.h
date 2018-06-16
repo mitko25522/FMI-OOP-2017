@@ -20,5 +20,6 @@ public:
 	static void renderStartScreen();
 	static void renderDifficultySelectionScreen();
 	static void renderGameScreen(SpaceShooter*);
+	static void printSavingGame();
 };
 

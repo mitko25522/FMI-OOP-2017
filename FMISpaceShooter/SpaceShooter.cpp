@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include <windows.h>
+#include <time.h>
 #include "SpaceShooter.h"
 #include "Renderer.h"
 
@@ -169,11 +171,7 @@ SpaceShooter::SpaceShooter() {
 }
 
 SpaceShooter::SpaceShooter(int difficulty) {
-	for (int i = 0; i < SCREEN_HEIGHT; i++) {
-		for (int j = 0; j < SCREEN_WIDTH; j++) {
-			pixelGrid[i][j] = ' ';
-		}
-	}
+	clearScreenPixelGrid();
 
 	this->gameProgressDelay = 20;
 	this->difficulty = difficulty;
@@ -189,16 +187,31 @@ SpaceShooter::SpaceShooter(int difficulty) {
 
 SpaceShooter::SpaceShooter(const SpaceShooter& other) {
 	this->difficulty = other.difficulty;
+	this->gameProgressDelay = other.gameProgressDelay;
+
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
 			this->pixelGrid[i][j] = other.pixelGrid[i][j];
 		}
 	}
-	std::cout << "\n COPY\n";
 }
 
 SpaceShooter::SpaceShooter(const char* saveFilePath) {
-	std::cout << "Error loading \"" << saveFilePath << "\"\n";
+	Save saveGame;
+	std::ifstream InFile(saveFilePath, std::ios::in, std::ios::binary);
+	InFile.read((char*)&saveGame, sizeof(Save));
+
+	if (saveGame.validityCheck != VALID_SAVE) {
+		std::cout << "Invalid save file.\n";
+		exit(EXIT_FAILURE);
+		delete[] saveFilePath;
+	}
+
+	this->difficulty = saveGame.gameDifficulty;
+	this->gameProgressDelay = saveGame.gameProgressDelay;
+	this->player.increaseScore(saveGame.playerScore);
+	this->player.reduceLives(saveGame.playerRemainingLives);
+
 	delete[] saveFilePath;
 }
 
@@ -237,4 +250,42 @@ char* SpaceShooter::getPixelGrid() {
 
 Player* SpaceShooter::getPlayer() {
 	return &player;
+}
+
+void SpaceShooter::generateSaveFileName(char name[15]) {
+	size_t currentTime = time(0);
+
+	int nameIndex = 9;
+	int divisor = 1;
+	for (int i = 0; i < 10; ++i) {
+		name[nameIndex] = ((currentTime / divisor) % 10) + '0';
+		nameIndex--;
+		divisor *= 10;
+	}
+
+	nameIndex = 10;
+	name[nameIndex++] = '.';
+	name[nameIndex++] = 'd';
+	name[nameIndex++] = 'a';
+	name[nameIndex++] = 't';
+	name[nameIndex] = '\0';
+}
+
+void SpaceShooter::saveGameProgress() {
+	char fileName[15];
+	generateSaveFileName(fileName);
+
+	Save save;
+	save.validityCheck = VALID_SAVE;
+	save.gameDifficulty = this->difficulty;
+	save.gameProgressDelay = this->gameProgressDelay;
+	save.playerScore = this->player.getScore();
+	save.playerRemainingLives = this->player.getRemainingLives();
+
+
+	std::ofstream OutFile(fileName, std::ios::binary | std::ios::trunc | std::ios::out);
+	OutFile.write((char*)&save, sizeof(save));
+
+	Renderer::printSavingGame();
+	OutFile.close();
 }

@@ -2,7 +2,7 @@
 #include "SpaceShooter.h"
 
 Player::Player() : Entity(0, SCREEN_HEIGHT / 2, 5, 3) {
-	this->remainingLives = 3;
+	this->remainingLives = PLAYER_MAX_LIVES;
 	this->score = 0;
 	this->gunPosX = 5;
 	this->gunPosY = 1;

@@ -80,4 +80,7 @@ void InputHandler::completeUserCommands(SpaceShooter& spaceShooter) {
 		spaceShooter.projectiles_container.push_back(newProjectile);
 	}
 
+	if (GetAsyncKeyState(0x53)) {
+		spaceShooter.saveGameProgress();
+	}
 }

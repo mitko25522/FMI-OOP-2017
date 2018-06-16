@@ -13,6 +13,8 @@
 #define DIFFICULTY_MEDIUM 32
 #define DIFFICULTY_INTERMEDIATE 16
 
+#define PLAYER_MAX_LIVES 3
+
 //delta_ticks = 17 hard
 //delta_ticks = 32 medium
 //delta_ticks = 65 easy
@@ -46,4 +48,16 @@ public:
 	Player* getPlayer();
 	static void printHelp();
 	int getDifficulty();
+	void generateSaveFileName(char name[15]);
+	void saveGameProgress();
+};
+
+#define VALID_SAVE 1337
+//validity check value 1337
+struct Save {
+	int validityCheck;
+	int gameDifficulty;
+	int gameProgressDelay;
+	int playerScore;
+	int playerRemainingLives;
 };
