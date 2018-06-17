@@ -21,7 +21,7 @@ void test() {
 		delta_ticks = clock() - initial_ticks;
 
 		if (delta_ticks > 17) {
-			system("cls");
+			Renderer::clearScreen();
 			//render();
 			std::cout << "FPS: " << CLOCKS_PER_SEC / delta_ticks;
 			reset = true;
@@ -52,6 +52,9 @@ SpaceShooter* getStartScreenInput() {
 	}
 }
 
+//make boss working
+//totall mess somewhere in leveloneboss
+
 int main() {
 	srand(time(NULL));
 
@@ -59,7 +62,6 @@ int main() {
 	SpaceShooter* spaceShooter = getStartScreenInput();
 
 	Renderer::renderGameScreen(spaceShooter);
-
 	clock_t initial_ticks = 0, delta_ticks = 0;
 	do {
 		static bool itsTimeForNextFrame = false;
@@ -84,6 +86,10 @@ int main() {
 		}
 		catch (const std::out_of_range&) {
 			continue;
+		}
+
+		if (spaceShooter->getPlayer()->getScore() >= BOSS_SPAWN_SCORE && spaceShooter->noBossHasBeenSpawnedYet) {
+			spaceShooter->startBossFight();
 		}
 
 		if (spaceShooter->getPlayer()->getRemainingLives() <= 0) {

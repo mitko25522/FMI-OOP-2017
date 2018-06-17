@@ -6,6 +6,7 @@
 //		[/
 
 class Player : public Entity {
+private:
 	int remainingLives;
 	int score;
 	int gunPosX;

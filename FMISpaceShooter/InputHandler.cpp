@@ -50,7 +50,6 @@ int InputHandler::setDifficulty()
 			return DIFFICULTY_INTERMEDIATE;
 		}
 
-
 		Sleep(50);
 	} while (true);
 }

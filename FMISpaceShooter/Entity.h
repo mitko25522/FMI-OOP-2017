@@ -19,6 +19,8 @@ public:
 	void moveDown(int);
 	void moveLeft(int);
 	void moveRight(int);
+	void changeXPosTo(int);
+	void changeYPosTo(int);
 	char** getSprite();
 	char getChar(int y, int x);
 	Entity(int xPos, int yPos, int width, int height);

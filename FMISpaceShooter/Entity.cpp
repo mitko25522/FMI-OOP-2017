@@ -94,6 +94,13 @@ void Entity::moveRight(int offset) {
 	}
 }
 
+void Entity::changeXPosTo(int newValue) {
+	this->xPos = newValue;
+}
+void Entity::changeYPosTo(int newValue) {
+	this->yPos = newValue;
+}
+
 char** Entity::getSprite() {
 	return this->sprite;
 }

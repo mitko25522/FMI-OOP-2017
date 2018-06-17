@@ -124,19 +124,19 @@ void Renderer::printAnimation() {
 	printTextFmi();
 	Sleep(1000);
 
-	system("cls");
+	Renderer::clearScreen();
 	printEmptyRows(6);
 	printTextSpace();
 	Sleep(1000);
 
-	system("cls");
+	Renderer::clearScreen();
 	printEmptyRows(13);
 	printTextShooter();
 	Sleep(1000);
 }
 
 void Renderer::printStaticStartScreen() {
-	system("cls");
+	Renderer::clearScreen();
 	printTextFmiWithRocket();
 	printTextSpaceWithRocket();
 	printTextShooterWithRocket();
@@ -160,7 +160,7 @@ void Renderer::renderStartScreen() {
 }
 
 void Renderer::renderDifficultySelectionScreen() {
-	system("cls");
+	Renderer::clearScreen();
 	printTextFmiWithRocket();
 	printTextSpaceWithRocket();
 	printTextShooterWithRocket();
@@ -168,9 +168,13 @@ void Renderer::renderDifficultySelectionScreen() {
 }
 
 void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
-	system("cls");
+	clearScreen();
+	std::cout << "Score: " << spaceShooter->getPlayer()->getScore() << "   Lives: " << spaceShooter->getPlayer()->getRemainingLives();
+	if (spaceShooter->bossFightIsInAction) {
+		std::cout << "   Boss lives: " << spaceShooter->boss_container.at(0).getRemainingLives();
+	}
 
-	std::cout << "Score: " << spaceShooter->getPlayer()->getScore() << "   Lives: " << spaceShooter->getPlayer()->getRemainingLives() << " \n";
+	std::cout << std::endl;
 
 	for (int i = 0; i < SCREEN_WIDTH; i++) {
 		std::cout << "-";
@@ -192,20 +196,20 @@ void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
 
 }
 
- //			 ____              _                 
- //			/ ___|  __ ___   _(_)_ __   __ _     
- //			\___ \ / _` \ \ / / | '_ \ / _` |    
- //			 ___) | (_| |\ V /| | | | | (_| |    
- //			|____/ \__,_| \_/ |_|_| |_|\__, |    
- //			   ____                    |___/     
- //			  / ___| __ _ _ __ ___   ___         
- //			 | |  _ / _` | '_ ` _ \ / _ \        
- //			 | |_| | (_| | | | | | |  __/  _   _ 
- //			  \____|\__,_|_| |_| |_|\___| (_) (_)
-                                      
+//			 ____              _                 
+//			/ ___|  __ ___   _(_)_ __   __ _     
+//			\___ \ / _` \ \ / / | '_ \ / _` |    
+//			 ___) | (_| |\ V /| | | | | (_| |    
+//			|____/ \__,_| \_/ |_|_| |_|\__, |    
+//			   ____                    |___/     
+//			  / ___| __ _ _ __ ___   ___         
+//			 | |  _ / _` | '_ ` _ \ / _ \        
+//			 | |_| | (_| | | | | | |  __/  _   _ 
+//			  \____|\__,_|_| |_| |_|\___| (_) (_)
+
 
 void Renderer::printSavingGame() {
-	system("cls");
+	Renderer::clearScreen();
 	std::cout << std::endl << std::endl << std::endl;
 	std::cout << "           ____              _                 " << std::endl;
 	std::cout << "          / ___|  __ ___   _(_)_ __   __ _      " << std::endl;
@@ -233,7 +237,7 @@ void Renderer::printSavingGame() {
 
 
 void Renderer::printGameOverScreen(SpaceShooter* spaceShooter) {
-	system("cls");
+	Renderer::clearScreen();
 	std::cout << "           ______ _______ _______ _______  " << std::endl;
 	std::cout << "          |  ____ |_____| |  |  | |______  " << std::endl;
 	std::cout << "          |_____| |     | |  |  | |______  " << std::endl;
@@ -250,13 +254,50 @@ void Renderer::printGameOverScreen(SpaceShooter* spaceShooter) {
 	std::cout << "Difficulty: ";
 
 	switch (spaceShooter->getDifficulty()) {
-		case DIFFICULTY_EASY:			std::cout << "Easy" << std::endl;			break;
-		case DIFFICULTY_MEDIUM:			std::cout << "Medium" << std::endl;			break;
-		case DIFFICULTY_INTERMEDIATE:	std::cout << "Intermediate" << std::endl;	break;
+	case DIFFICULTY_EASY:			std::cout << "Easy" << std::endl;			break;
+	case DIFFICULTY_MEDIUM:			std::cout << "Medium" << std::endl;			break;
+	case DIFFICULTY_INTERMEDIATE:	std::cout << "Intermediate" << std::endl;	break;
 	}
 
 	std::cout << "Score:      " << spaceShooter->getPlayer()->getScore() << std::endl;
 	std::cout << std::endl;
 	std::cout << std::endl;
 	Sleep(2000);
+}
+
+void Renderer::clearScreen()
+{
+	HANDLE                     hStdOut;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	DWORD                      count;
+	DWORD                      cellCount;
+	COORD                      homeCoords = { 0, 0 };
+
+	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+	/* Get the number of cells in the current buffer */
+	if (!GetConsoleScreenBufferInfo(hStdOut, &csbi)) return;
+	cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+
+	/* Fill the entire buffer with spaces */
+	if (!FillConsoleOutputCharacter(
+		hStdOut,
+		(TCHAR) ' ',
+		cellCount,
+		homeCoords,
+		&count
+	)) return;
+
+	/* Fill the entire buffer with the current colors and attributes */
+	if (!FillConsoleOutputAttribute(
+		hStdOut,
+		csbi.wAttributes,
+		cellCount,
+		homeCoords,
+		&count
+	)) return;
+
+	/* Move the cursor home */
+	SetConsoleCursorPosition(hStdOut, homeCoords);
 }

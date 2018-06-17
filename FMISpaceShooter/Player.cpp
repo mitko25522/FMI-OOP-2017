@@ -23,7 +23,7 @@ Player::Player() : Entity(0, SCREEN_HEIGHT / 2, 5, 3) {
 	sprite[0][14] = ' ';
 }
 
-Player::Player(const Player & other) {
+Player::Player(const Player& other) {
 	this->remainingLives = other.remainingLives;
 	this->score = other.score;
 
@@ -46,8 +46,7 @@ int Player::getScore() {
 	return this->score;
 }
 
-int Player::getRemainingLives()
-{
+int Player::getRemainingLives() {
 	return this->remainingLives;
 }
 

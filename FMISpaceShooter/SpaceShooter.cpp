@@ -6,7 +6,7 @@
 #include "Renderer.h"
 
 void SpaceShooter::printHelp() {
-	system("cls");
+	Renderer::clearScreen();
 	std::cout << "Welcome to FMISpaceShooter\n";
 	std::cout << "Here you will encounter enemies bla bla bla..\n";
 	std::cout << "Bla bla bla bla bla..\n";
@@ -19,7 +19,7 @@ void SpaceShooter::printHelp() {
 	std::cout << "\n\nPress \"Escape\" to go back to the start screen.\n";
 	do {
 		if (GetAsyncKeyState(VK_ESCAPE)) {
-			system("cls");
+			Renderer::clearScreen();
 			Renderer::printStaticStartScreen();
 			return;
 		}
@@ -32,14 +32,14 @@ int SpaceShooter::getDifficulty() {
 }
 
 void SpaceShooter::updatePlayerPositioningOnScreen() {
-	int playerPrevPosX = player.getPosX();
-	int playerPrevPosY = player.getPosY();
+	int playerPosX_inPixelGrid = player.getPosX();
+	int playerPosY_inPixelGrid = player.getPosY();
 
 	int currentPlayerIndexX = 0;
 	int currentPlayerIndexY = 0;
 
-	for (int i = playerPrevPosY; i < playerPrevPosY + player.getHeight(); i++) {
-		for (int j = playerPrevPosX; j < playerPrevPosX + player.getWidth(); j++) {
+	for (int i = playerPosY_inPixelGrid; i < playerPosY_inPixelGrid + player.getHeight(); i++) {
+		for (int j = playerPosX_inPixelGrid; j < playerPosX_inPixelGrid + player.getWidth(); j++) {
 			this->pixelGrid[i][j] = player.getChar(currentPlayerIndexY, currentPlayerIndexX);
 			currentPlayerIndexX++;
 		}
@@ -112,6 +112,14 @@ void SpaceShooter::checkForCollisionsBetweenProjectilesAndEnemies() {
 					this->player.increaseScore(10);
 					return;
 				}
+				if (bossFightIsInAction) {
+					if (projectiles_container.at(projectileIndex).isInCollisionWith(boss_container.at(0))) {
+						projectiles_container.erase(projectiles_container.begin() + projectileIndex);
+						boss_container.at(0).reduceLives(1);
+						this->player.increaseScore(10);
+						return;
+					}
+				}
 			}
 			if (!projectiles_container.at(projectileIndex).isItFromPlayer()) {
 				if (projectiles_container.at(projectileIndex).isInCollisionWith(player)) {
@@ -130,6 +138,12 @@ void SpaceShooter::checkForCollisionsBetweenPlayerAndEnemies() {
 			player.reduceLives(1);
 			enemies_container.erase(enemies_container.begin() + i);
 		}
+	}
+}
+
+void SpaceShooter::checkForCollisionBetweenPlayerAndBoss() {
+	if (this->player.isInCollisionWith(boss_container.at(0))) {
+		this->player.reduceLives(PLAYER_MAX_LIVES);
 	}
 }
 
@@ -161,9 +175,103 @@ void SpaceShooter::generateProjectileFromRandomEnemy() {
 	projectiles_container.push_back(newProjectile);
 }
 
+void SpaceShooter::generateBossProjectiles() {
+	static bool trigger = false;
+	static int shotsCount = 0;
+	static bool shotsDelayInProgress;
+
+	if (shotsDelayInProgress == false) {
+		shotsCount++;
+
+		if (shotsCount > 3) {
+			shotsDelayInProgress = true;
+		}
+	}
+	else if (shotsDelayInProgress == true) {
+		shotsCount--;
+
+		if (shotsCount < 0) {
+			shotsDelayInProgress = false;
+		}
+
+		return;
+	}
+
+	if (trigger == false)
+		for (int i = 0; i < 7; i++) {
+			int currentGunPosX = this->boss_container.at(0).getGunPosX(i) + this->boss_container.at(0).getPosX();
+			int currentGunPosY = this->boss_container.at(0).getGunPosY(i) + this->boss_container.at(0).getPosY();
+			Projectile newProjectile(currentGunPosX, currentGunPosY, false);
+			projectiles_container.push_back(newProjectile);
+			trigger = true;
+			if (i + 1 == 7) {
+				return;
+			}
+		}
+
+	if (trigger == true) {
+		int currentGunPosX = this->boss_container.at(0).getGunPosX(2) + this->boss_container.at(0).getPosX();
+		int currentGunPosY = this->boss_container.at(0).getGunPosY(2) + this->boss_container.at(0).getPosY();
+		Projectile newProjectile(currentGunPosX, currentGunPosY, false);
+		projectiles_container.push_back(newProjectile);
+
+		int currentGunPosX2 = this->boss_container.at(0).getGunPosX(3) + this->boss_container.at(0).getPosX();
+		int currentGunPosY2 = this->boss_container.at(0).getGunPosY(3) + this->boss_container.at(0).getPosY();
+		Projectile newProjectile2(currentGunPosX2, currentGunPosY2, false);
+		projectiles_container.push_back(newProjectile2);
+		trigger = false;
+
+		int currentGunPosX3 = this->boss_container.at(0).getGunPosX(4) + this->boss_container.at(0).getPosX();
+		int currentGunPosY3 = this->boss_container.at(0).getGunPosY(4) + this->boss_container.at(0).getPosY();
+		Projectile newProjectile3(currentGunPosX3, currentGunPosY3, false);
+		projectiles_container.push_back(newProjectile3);
+		trigger = false;
+		return;
+	}
+
+}
+
+//mess
+void SpaceShooter::updateBossPosition() {
+	static int updateCount;
+	int bossPosX_inPixelGrid = boss_container.at(0).getPosX();
+	int bossPosY_inPixelGrid = boss_container.at(0).getPosY();
+
+	int currentBossIndexX = 0;
+	int currentBossIndexY = 0;
+
+	if (updateCount >= 10) {
+		boss_container.at(0).changeXPosTo(SCREEN_WIDTH / 2 + (rand() % (SCREEN_WIDTH / 2) - boss_container.at(0).getWidth())  + 1);
+		boss_container.at(0).changeYPosTo(std::rand() % (SCREEN_HEIGHT - boss_container.at(0).getHeight()) + 1);
+
+		updateCount = 0;
+	}
+
+	for (int i = bossPosY_inPixelGrid; i < bossPosY_inPixelGrid + boss_container.at(0).getHeight(); i++) {
+		for (int j = bossPosX_inPixelGrid; j < bossPosX_inPixelGrid + boss_container.at(0).getWidth(); j++) {
+			this->pixelGrid[i][j] = boss_container.at(0).getChar(currentBossIndexY, currentBossIndexX);
+			currentBossIndexX++;
+		}
+		currentBossIndexX = 0;
+		currentBossIndexY++;
+	}
+
+	updateCount++;
+}
+
+void SpaceShooter::checkIfBossDed() {
+	if (boss_container.at(0).getRemainingLives() <= 0) {
+		boss_container.erase(boss_container.begin());
+		bossFightIsInAction = false;
+	}
+}
+
 SpaceShooter::SpaceShooter() {
 	clearScreenPixelGrid();
 
+	noBossHasBeenSpawnedYet = true;
+	bossFightIsInAction = false;
+	this->gameProgressDelay = 20;
 	this->difficulty = DIFFICULTY_MEDIUM;
 	std::cout << "Selected medium difficulty\n";
 	std::cout << "Starting new game\n";
@@ -173,6 +281,8 @@ SpaceShooter::SpaceShooter() {
 SpaceShooter::SpaceShooter(int difficulty) {
 	clearScreenPixelGrid();
 
+	noBossHasBeenSpawnedYet = true;
+	bossFightIsInAction = false;
 	this->gameProgressDelay = 20;
 	this->difficulty = difficulty;
 	std::cout << "Selected ";
@@ -188,6 +298,8 @@ SpaceShooter::SpaceShooter(int difficulty) {
 SpaceShooter::SpaceShooter(const SpaceShooter& other) {
 	this->difficulty = other.difficulty;
 	this->gameProgressDelay = other.gameProgressDelay;
+	this->bossFightIsInAction = other.bossFightIsInAction;
+	this->noBossHasBeenSpawnedYet = other.noBossHasBeenSpawnedYet;
 
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
@@ -212,36 +324,72 @@ SpaceShooter::SpaceShooter(const char* saveFilePath) {
 	this->player.increaseScore(saveGame.playerScore);
 	this->player.reduceLives(saveGame.playerRemainingLives);
 
+	if (saveGame.playerScore > 200) {
+		noBossHasBeenSpawnedYet = false;
+	}
+	else {
+		noBossHasBeenSpawnedYet = true;
+	}
+
 	delete[] saveFilePath;
 }
 
+//mess
 void SpaceShooter::generateEnemyProjectiles() {
-	static int updateSinceLastProjectile;
+	static int updatesSinceLastProjectile;
 
-	if (updateSinceLastProjectile >= gameProgressDelay / 2) {
-		generateProjectileFromRandomEnemy();
-		updateSinceLastProjectile = 0;
+	if (bossFightIsInAction) {
+		if (updatesSinceLastProjectile >= gameProgressDelay / 2) {
+			generateBossProjectiles();
+			updatesSinceLastProjectile = 0;
+		}
+	}
+	else {
+		if (updatesSinceLastProjectile >= gameProgressDelay / 2) {
+			generateProjectileFromRandomEnemy();
+			updatesSinceLastProjectile = 0;
+		}
 	}
 
-	updateSinceLastProjectile++;
+	updatesSinceLastProjectile++;
 }
 
 void SpaceShooter::updateScreen() {
 	static int updatesSinceLastSpawnedEnemy;
 	clearScreenPixelGrid();
 
-	if (updatesSinceLastSpawnedEnemy >= gameProgressDelay) {
-		spawnNewEnemy();
-		updatesSinceLastSpawnedEnemy = 0;
-	}
+	if (bossFightIsInAction) {
+		if (updatesSinceLastSpawnedEnemy >= 25) {
+			spawnNewEnemy();
+			updatesSinceLastSpawnedEnemy = 0;
+		}
 
-	checkIfEnemySpawnRateNeedsUpdating();
-	checkForCollisionsBetweenProjectilesAndEnemies();
-	checkForCollisionsBetweenPlayerAndEnemies();
-	updateProjectilePositions();
-	updateEnemyPositions();
-	updatePlayerPositioningOnScreen();
-	updatesSinceLastSpawnedEnemy++;
+		checkForCollisionsBetweenProjectilesAndEnemies();
+		checkForCollisionsBetweenPlayerAndEnemies();
+		checkForCollisionBetweenPlayerAndBoss();
+		updateProjectilePositions();
+		updateEnemyPositions();
+		updateBossPosition();
+		updatePlayerPositioningOnScreen();
+		checkIfBossDed();
+		updatesSinceLastSpawnedEnemy++;
+		return;
+	}
+	else {
+		if (updatesSinceLastSpawnedEnemy >= gameProgressDelay) {
+			spawnNewEnemy();
+			updatesSinceLastSpawnedEnemy = 0;
+		}
+
+		checkIfEnemySpawnRateNeedsUpdating();
+		checkForCollisionsBetweenProjectilesAndEnemies();
+		checkForCollisionsBetweenPlayerAndEnemies();
+		updateProjectilePositions();
+		updateEnemyPositions();
+		updatePlayerPositioningOnScreen();
+		updatesSinceLastSpawnedEnemy++;
+		return;
+	}
 }
 
 char* SpaceShooter::getPixelGrid() {
@@ -282,10 +430,25 @@ void SpaceShooter::saveGameProgress() {
 	save.playerScore = this->player.getScore();
 	save.playerRemainingLives = this->player.getRemainingLives();
 
-
 	std::ofstream OutFile(fileName, std::ios::binary | std::ios::trunc | std::ios::out);
 	OutFile.write((char*)&save, sizeof(save));
 
 	Renderer::printSavingGame();
 	OutFile.close();
+}
+
+void SpaceShooter::startBossFight() {
+	LevelOneBoss boss(1);
+	boss_container.push_back(boss);
+
+	for (int i = 0; i < enemies_container.size(); i++) {
+		enemies_container.erase(enemies_container.begin() + i);
+	}
+
+	for (int i = 0; i < projectiles_container.size(); i++) {
+		projectiles_container.erase(projectiles_container.begin() + i);
+	}
+
+	bossFightIsInAction = true;
+	noBossHasBeenSpawnedYet = false;
 }

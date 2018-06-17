@@ -123,6 +123,7 @@
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="LevelOneBoss.cpp" />
     <ClCompile Include="SpaceShooter.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -133,6 +134,7 @@
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="LevelOneBoss.h" />
     <ClInclude Include="SpaceShooter.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Player.h" />
