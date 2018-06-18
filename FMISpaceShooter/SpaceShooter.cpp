@@ -149,7 +149,7 @@ void SpaceShooter::checkForCollisionBetweenPlayerAndBoss() {
 
 void SpaceShooter::checkIfEnemySpawnRateNeedsUpdating() {
 	static int previousPlayerScore;
-	if (this->player.getScore() - previousPlayerScore >= 50) {
+	if (this->player.getScore() - previousPlayerScore >= 30) {
 		reduceGameProgressDelay();
 		previousPlayerScore = this->player.getScore();
 	}
@@ -310,8 +310,9 @@ SpaceShooter::SpaceShooter(const SpaceShooter& other) {
 
 SpaceShooter::SpaceShooter(const char* saveFilePath) {
 	Save saveGame;
-	std::ifstream InFile(saveFilePath, std::ios::in, std::ios::binary);
-	InFile.read((char*)&saveGame, sizeof(Save));
+	std::ifstream InFile(saveFilePath, std::ios::binary);
+	InFile.seekg(0);
+	InFile.read((char*)&saveGame, sizeof(saveGame));
 
 	if (saveGame.validityCheck != VALID_SAVE) {
 		std::cout << "Invalid save file.\n";
@@ -323,18 +324,17 @@ SpaceShooter::SpaceShooter(const char* saveFilePath) {
 	this->gameProgressDelay = saveGame.gameProgressDelay;
 	this->player.increaseScore(saveGame.playerScore);
 	this->player.reduceLives(saveGame.playerRemainingLives);
+	this->bossFightIsInAction = saveGame.bossFightIsInAction;
+	this->noBossHasBeenSpawnedYet = saveGame.noBossHasBeenSpawnedYet;
 
-	if (saveGame.playerScore > 200) {
-		noBossHasBeenSpawnedYet = false;
-	}
-	else {
-		noBossHasBeenSpawnedYet = true;
+	if (this->bossFightIsInAction) {
+		LevelOneBoss boss(saveGame.bossRemainingLives);
+		boss_container.push_back(boss);
 	}
 
 	delete[] saveFilePath;
 }
 
-//mess
 void SpaceShooter::generateEnemyProjectiles() {
 	static int updatesSinceLastProjectile;
 
@@ -425,12 +425,18 @@ void SpaceShooter::saveGameProgress() {
 
 	Save save;
 	save.validityCheck = VALID_SAVE;
+	save.bossFightIsInAction = this->bossFightIsInAction;
+	save.noBossHasBeenSpawnedYet = this->noBossHasBeenSpawnedYet;
 	save.gameDifficulty = this->difficulty;
 	save.gameProgressDelay = this->gameProgressDelay;
 	save.playerScore = this->player.getScore();
 	save.playerRemainingLives = this->player.getRemainingLives();
 
-	std::ofstream OutFile(fileName, std::ios::binary | std::ios::trunc | std::ios::out);
+	if (bossFightIsInAction) {
+		save.bossRemainingLives = boss_container.at(0).getRemainingLives();
+	}
+
+	std::ofstream OutFile(fileName, std::ios::binary);
 	OutFile.write((char*)&save, sizeof(save));
 
 	Renderer::printSavingGame();
@@ -438,17 +444,23 @@ void SpaceShooter::saveGameProgress() {
 }
 
 void SpaceShooter::startBossFight() {
-	LevelOneBoss boss(1);
-	boss_container.push_back(boss);
+	try {
+		LevelOneBoss boss(100);
+		boss_container.push_back(boss);
 
-	for (int i = 0; i < enemies_container.size(); i++) {
-		enemies_container.erase(enemies_container.begin() + i);
+		for (int i = 0; i < enemies_container.size(); i++) {
+			enemies_container.erase(enemies_container.begin() + i);
+		}
+
+		for (int i = 0; i < projectiles_container.size(); i++) {
+			projectiles_container.erase(projectiles_container.begin() + i);
+		}
+
+		bossFightIsInAction = true;
+		noBossHasBeenSpawnedYet = false;
 	}
-
-	for (int i = 0; i < projectiles_container.size(); i++) {
-		projectiles_container.erase(projectiles_container.begin() + i);
+	catch (std::exception& e) {
+		std::cout << e.what();
+		system("pause");
 	}
-
-	bossFightIsInAction = true;
-	noBossHasBeenSpawnedYet = false;
 }

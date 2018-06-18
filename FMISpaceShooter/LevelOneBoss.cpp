@@ -3,8 +3,8 @@
 
 //13x7
 
-LevelOneBoss::LevelOneBoss(int) {
-	this->remainingLives = 100;
+LevelOneBoss::LevelOneBoss(int remainingLives) {
+	this->remainingLives = remainingLives;
 	this->width = 14;
 	this->height = 7;
 	this->xPos = SCREEN_WIDTH - 1 - this->width;

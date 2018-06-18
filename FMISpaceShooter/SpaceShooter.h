@@ -72,4 +72,7 @@ struct Save {
 	int gameProgressDelay;
 	int playerScore;
 	int playerRemainingLives;
+	int bossRemainingLives;
+	bool bossFightIsInAction;
+	bool noBossHasBeenSpawnedYet;
 };
