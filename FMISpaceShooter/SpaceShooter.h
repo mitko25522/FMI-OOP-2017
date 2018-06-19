@@ -14,7 +14,7 @@
 #define DIFFICULTY_INTERMEDIATE 26
 
 #define PLAYER_MAX_LIVES 3
-#define BOSS_SPAWN_SCORE 100
+#define BOSS_SPAWN_SCORE 300
 
 //delta_ticks = 17 hard
 //delta_ticks = 32 medium
