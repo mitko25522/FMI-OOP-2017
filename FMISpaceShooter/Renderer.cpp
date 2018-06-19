@@ -167,7 +167,7 @@ void Renderer::renderDifficultySelectionScreen() {
 	printDifficultyOptions();
 }
 
-void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
+void Renderer::renderInitialGameScreen(SpaceShooter* spaceShooter) {
 	clearScreen();
 	std::cout << "Score: " << spaceShooter->getPlayer()->getScore() << "   Lives: " << spaceShooter->getPlayer()->getRemainingLives();
 	if (spaceShooter->bossFightIsInAction) {
@@ -184,7 +184,8 @@ void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
 
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
-			std::cout << spaceShooter->getPixelGrid()[i*SCREEN_WIDTH + j];
+			std::cout << spaceShooter->updatedScreen[i][j];
+			spaceShooter->renderedScreen[i][j] = spaceShooter->updatedScreen[i][j];
 		}
 		std::cout << "|" << std::endl;
 	}
@@ -195,6 +196,28 @@ void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
 	std::cout << " \n";
 
 }
+
+void Renderer::modifyRenderedScreen(SpaceShooter* spaceShooter) {
+	GoToXY(0, 0);
+	std::cout << "Score: " << spaceShooter->getPlayer()->getScore() << "   Lives: " << spaceShooter->getPlayer()->getRemainingLives();
+	if (spaceShooter->bossFightIsInAction) {
+		std::cout << "   Boss lives: " << spaceShooter->boss_container.at(0).getRemainingLives() << "   ";
+	}
+	else {
+		std::cout << "                      ";
+	}
+
+	for (int i = 0; i < SCREEN_HEIGHT; i++) {
+		for (int j = 0; j < SCREEN_WIDTH; j++) {
+			if (spaceShooter->renderedScreen[i][j] != spaceShooter->updatedScreen[i][j]) {
+				GoToXY(j, i + 2);
+				std::cout << spaceShooter->updatedScreen[i][j];
+				spaceShooter->renderedScreen[i][j] = spaceShooter->updatedScreen[i][j];
+			}
+		}
+	}
+}
+
 
 //			 ____              _                 
 //			/ ___|  __ ___   _(_)_ __   __ _     
@@ -209,19 +232,21 @@ void Renderer::renderGameScreen(SpaceShooter* spaceShooter) {
 
 
 void Renderer::printSavingGame() {
-	Renderer::clearScreen();
-	std::cout << std::endl << std::endl << std::endl;
-	std::cout << "           ____              _                 " << std::endl;
-	std::cout << "          / ___|  __ ___   _(_)_ __   __ _      " << std::endl;
-	std::cout << "          \\___ \\ / _` \\ \\ / / | '_ \\ / _` |     " << std::endl;
-	std::cout << "           ___) | (_| |\\ V /| | | | | (_| |     " << std::endl;
-	std::cout << "          |____/ \\__,_| \\_/ |_|_| |_|\\__, |     " << std::endl;
-	std::cout << "             ____                    |___/      " << std::endl;
-	std::cout << "            / ___| __ _ _ __ ___   ___          " << std::endl;
-	std::cout << "           | |  _ / _` | '_ ` _ \\ / _ \\         " << std::endl;
-	std::cout << "           | |_| | (_| | | | | | |  __/  _   _  " << std::endl;
-	std::cout << "            \\____|\\__,_|_| |_| |_|\\___| (_) (_) " << std::endl;
-	Sleep(1000);
+	//Renderer::clearScreen();
+	//std::cout << std::endl << std::endl << std::endl;
+	//std::cout << "           ____              _                 " << std::endl;
+	//std::cout << "          / ___|  __ ___   _(_)_ __   __ _      " << std::endl;
+	//std::cout << "          \\___ \\ / _` \\ \\ / / | '_ \\ / _` |     " << std::endl;
+	//std::cout << "           ___) | (_| |\\ V /| | | | | (_| |     " << std::endl;
+	//std::cout << "          |____/ \\__,_| \\_/ |_|_| |_|\\__, |     " << std::endl;
+	//std::cout << "             ____                    |___/      " << std::endl;
+	//std::cout << "            / ___| __ _ _ __ ___   ___          " << std::endl;
+	//std::cout << "           | |  _ / _` | '_ ` _ \\ / _ \\         " << std::endl;
+	//std::cout << "           | |_| | (_| | | | | | |  __/  _   _  " << std::endl;
+	//std::cout << "            \\____|\\__,_|_| |_| |_|\\___| (_) (_) " << std::endl;
+	//Sleep(1000);
+	GoToXY(0, 0);
+	std::cout << "Saving game..";
 }
 
 
@@ -301,4 +326,26 @@ void Renderer::clearScreen()
 
 	/* Move the cursor home */
 	SetConsoleCursorPosition(hStdOut, homeCoords);
+}
+
+void Renderer::GoToXY(int column, int line) {
+	// Create a COORD structure and fill in its members.
+	// This specifies the new position of the cursor that we will set.
+	COORD coord;
+	coord.X = column;
+	coord.Y = line;
+
+	// Obtain a handle to the console screen buffer.
+	// (You're just using the standard console, so you can use STD_OUTPUT_HANDLE
+	// in conjunction with the GetStdHandle() to retrieve the handle.)
+	// Note that because it is a standard handle, we don't need to close it.
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	// Finally, call the SetConsoleCursorPosition function.
+	if (!SetConsoleCursorPosition(hConsole, coord))
+	{
+		// Uh-oh! The function call failed, so you need to handle the error.
+		// You can call GetLastError() to get a more specific error code.
+		// ...
+	}
 }

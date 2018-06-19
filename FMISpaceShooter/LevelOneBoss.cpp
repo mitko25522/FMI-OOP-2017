@@ -144,7 +144,7 @@ LevelOneBoss::LevelOneBoss(const LevelOneBoss& other) {
 
 	this->sprite = new char*[height];
 	for (int i = 0; i < this->height; i++) {
-		this->sprite[i] = new char[50];
+		this->sprite[i] = new char[20];
 	}
 
 	for (int i = 0; i < 98; i++) {

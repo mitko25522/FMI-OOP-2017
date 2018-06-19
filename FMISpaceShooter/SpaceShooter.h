@@ -14,7 +14,7 @@
 #define DIFFICULTY_INTERMEDIATE 26
 
 #define PLAYER_MAX_LIVES 3
-#define BOSS_SPAWN_SCORE 500
+#define BOSS_SPAWN_SCORE 100
 
 //delta_ticks = 17 hard
 //delta_ticks = 32 medium
@@ -27,7 +27,6 @@ private:
 	Player player;
 	int difficulty;
 	int gameProgressDelay;
-	char pixelGrid[SCREEN_HEIGHT][SCREEN_WIDTH];
 	void updatePlayerPositioningOnScreen();
 	void updateProjectilePositions();
 	void updateEnemyPositions();
@@ -54,7 +53,8 @@ public:
 	SpaceShooter(const char*);
 	void generateEnemyProjectiles();
 	void updateScreen();
-	char* getPixelGrid();
+	char updatedScreen[SCREEN_HEIGHT][SCREEN_WIDTH];
+	char renderedScreen[SCREEN_HEIGHT][SCREEN_WIDTH];
 	Player* getPlayer();
 	static void printHelp();
 	int getDifficulty();
