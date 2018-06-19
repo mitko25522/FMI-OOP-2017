@@ -263,6 +263,7 @@ void Renderer::printGameOverScreen(SpaceShooter* spaceShooter) {
 	std::cout << std::endl;
 	std::cout << std::endl;
 	Sleep(2000);
+	system("pause");
 }
 
 void Renderer::clearScreen()
