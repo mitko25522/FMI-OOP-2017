@@ -61,7 +61,7 @@ int main() {
 	Renderer::renderStartScreen();
 	SpaceShooter* spaceShooter = getStartScreenInput();
 
-	Renderer::renderGameScreen(spaceShooter);
+	Renderer::renderInitialGameScreen(spaceShooter);
 	clock_t initial_ticks = 0, delta_ticks = 0;
 	do {
 		static bool itsTimeForNextFrame = false;
@@ -78,8 +78,8 @@ int main() {
 				InputHandler::completeUserCommands(*spaceShooter);
 				spaceShooter->generateEnemyProjectiles();
 				spaceShooter->updateScreen();
-				Renderer::renderGameScreen(spaceShooter);
-				std::cout << "FPS: " << CLOCKS_PER_SEC / delta_ticks;
+				Renderer::modifyRenderedScreen(spaceShooter);
+				//std::cout << "FPS: " << CLOCKS_PER_SEC / delta_ticks;
 				itsTimeForNextFrame = true;
 				delta_ticks = 0;
 			}

@@ -14,12 +14,14 @@ private:
 	static void printEmptyRows(int);
 	static void printAnimation();
 	static void printDifficultyOptions();
+	static void GoToXY(int, int);
 public:
 	static void printGameOverScreen(SpaceShooter*);
 	static void printStaticStartScreen();
 	static void renderStartScreen();
 	static void renderDifficultySelectionScreen();
-	static void renderGameScreen(SpaceShooter*);
+	static void renderInitialGameScreen(SpaceShooter*);
+	static void modifyRenderedScreen(SpaceShooter*);
 	static void printSavingGame();
 	static void clearScreen();
 };

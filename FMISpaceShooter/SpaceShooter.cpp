@@ -40,7 +40,7 @@ void SpaceShooter::updatePlayerPositioningOnScreen() {
 
 	for (int i = playerPosY_inPixelGrid; i < playerPosY_inPixelGrid + player.getHeight(); i++) {
 		for (int j = playerPosX_inPixelGrid; j < playerPosX_inPixelGrid + player.getWidth(); j++) {
-			this->pixelGrid[i][j] = player.getChar(currentPlayerIndexY, currentPlayerIndexX);
+			this->updatedScreen[i][j] = player.getChar(currentPlayerIndexY, currentPlayerIndexX);
 			currentPlayerIndexX++;
 		}
 		currentPlayerIndexX = 0;
@@ -58,7 +58,7 @@ void SpaceShooter::updateProjectilePositions() {
 				continue;
 			}
 
-			this->pixelGrid[projectiles_container.at(i).getPosY()][projectiles_container.at(i).getPosX()] = this->projectiles_container.at(i).getChar(0, 0);
+			this->updatedScreen[projectiles_container.at(i).getPosY()][projectiles_container.at(i).getPosX()] = this->projectiles_container.at(i).getChar(0, 0);
 		}
 
 		if (!projectiles_container.at(i).isItFromPlayer()) {
@@ -68,7 +68,7 @@ void SpaceShooter::updateProjectilePositions() {
 				projectiles_container.erase(projectiles_container.begin() + i);
 			}
 
-			this->pixelGrid[projectiles_container.at(i).getPosY()][projectiles_container.at(i).getPosX()] = this->projectiles_container.at(i).getChar(0, 0);
+			this->updatedScreen[projectiles_container.at(i).getPosY()][projectiles_container.at(i).getPosX()] = this->projectiles_container.at(i).getChar(0, 0);
 		}
 	}
 
@@ -78,7 +78,7 @@ void SpaceShooter::updateProjectilePositions() {
 void SpaceShooter::clearScreenPixelGrid() {
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
-			pixelGrid[i][j] = ' ';
+			updatedScreen[i][j] = ' ';
 		}
 	}
 }
@@ -92,7 +92,7 @@ void SpaceShooter::updateEnemyPositions() {
 		}
 
 		for (int currentEnemyPosX = 0; currentEnemyPosX < enemies_container.at(i).getWidth(); currentEnemyPosX++) {
-			this->pixelGrid[enemies_container.at(i).getPosY()][currentEnemyPosX + enemies_container.at(i).getPosX()] = enemies_container.at(i).getChar(0, currentEnemyPosX);
+			this->updatedScreen[enemies_container.at(i).getPosY()][currentEnemyPosX + enemies_container.at(i).getPosX()] = enemies_container.at(i).getChar(0, currentEnemyPosX);
 		}
 	}
 }
@@ -249,7 +249,7 @@ void SpaceShooter::updateBossPosition() {
 
 	for (int i = bossPosY_inPixelGrid; i < bossPosY_inPixelGrid + boss_container.at(0).getHeight(); i++) {
 		for (int j = bossPosX_inPixelGrid; j < bossPosX_inPixelGrid + boss_container.at(0).getWidth(); j++) {
-			this->pixelGrid[i][j] = boss_container.at(0).getChar(currentBossIndexY, currentBossIndexX);
+			this->updatedScreen[i][j] = boss_container.at(0).getChar(currentBossIndexY, currentBossIndexX);
 			currentBossIndexX++;
 		}
 		currentBossIndexX = 0;
@@ -303,7 +303,7 @@ SpaceShooter::SpaceShooter(const SpaceShooter& other) {
 
 	for (int i = 0; i < SCREEN_HEIGHT; i++) {
 		for (int j = 0; j < SCREEN_WIDTH; j++) {
-			this->pixelGrid[i][j] = other.pixelGrid[i][j];
+			this->updatedScreen[i][j] = other.updatedScreen[i][j];
 		}
 	}
 }
@@ -390,10 +390,6 @@ void SpaceShooter::updateScreen() {
 		updatesSinceLastSpawnedEnemy++;
 		return;
 	}
-}
-
-char* SpaceShooter::getPixelGrid() {
-	return &(pixelGrid[0][0]);
 }
 
 Player* SpaceShooter::getPlayer() {
