@@ -194,7 +194,6 @@ void Renderer::renderInitialGameScreen(SpaceShooter* spaceShooter) {
 		std::cout << "-";
 	}
 	std::cout << " \n";
-
 }
 
 void Renderer::modifyRenderedScreen(SpaceShooter* spaceShooter) {
@@ -292,6 +291,7 @@ void Renderer::printGameOverScreen(SpaceShooter* spaceShooter) {
 	system("pause");
 }
 
+//Copy pasted from stack overflow
 void Renderer::clearScreen()
 {
 	HANDLE                     hStdOut;
@@ -329,6 +329,7 @@ void Renderer::clearScreen()
 	SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
+//Copy pasted from stack overflow
 void Renderer::GoToXY(int column, int line) {
 	// Create a COORD structure and fill in its members.
 	// This specifies the new position of the cursor that we will set.

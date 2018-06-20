@@ -243,7 +243,7 @@ void SpaceShooter::updateBossPosition() {
 	if (updateCount >= 10) {
 		//min: ((SCREEN_WIDTH / 2) + (SCREEN_WIDTH/4))
 		//max: SCREEN_WIDTH - boss_container.at(0).getWidth()
-		//((SCREEN_WIDTH / 2) + (SCREEN_WIDTH/4)) + rand() % ((SCREEN_WIDTH - boss_container.at(0).getWidth() + 1) - ((SCREEN_WIDTH / 2) + (SCREEN_WIDTH/4)));
+		//min + rand() % (( max + 1 ) - min)
 		boss_container.at(0).changeXPosTo(((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 8)) + rand() % ((SCREEN_WIDTH - boss_container.at(0).getWidth() + 1) - ((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 8))));
 		boss_container.at(0).changeYPosTo(std::rand() % (SCREEN_HEIGHT - boss_container.at(0).getHeight() + 1));
 
