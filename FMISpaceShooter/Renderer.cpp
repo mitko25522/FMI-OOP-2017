@@ -246,7 +246,8 @@ void Renderer::printSavingGame() {
 	//std::cout << "            \\____|\\__,_|_| |_| |_|\\___| (_) (_) " << std::endl;
 	//Sleep(1000);
 	GoToXY(0, 0);
-	std::cout << "Saving game..";
+	std::cout << "Saving game..                                ";
+	Sleep(1000);
 }
 
 
