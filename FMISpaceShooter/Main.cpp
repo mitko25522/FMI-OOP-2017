@@ -6,43 +6,6 @@
 #include "InputHandler.h"
 #include "Enemy.h"
 
-void test() {
-	clock_t initial_ticks = 0;
-	clock_t delta_ticks = 0;
-	while (true) {
-		static bool reset = false;
-
-		if (reset) {
-			initial_ticks = clock();
-			reset = false;
-		}
-
-
-		delta_ticks = clock() - initial_ticks;
-
-		if (delta_ticks > 17) {
-			Renderer::clearScreen();
-			//render();
-			std::cout << "FPS: " << CLOCKS_PER_SEC / delta_ticks;
-			reset = true;
-			delta_ticks = 0;
-		}
-
-
-	}
-}
-
-
-//TODO:
-//
-//handle collisions using collision masks and probably a delegate for that
-//add moving patterns (buildings?mountains) in the background
-//fix updateEnemyPositions()
-//fix spawnNewEnemy in okay periods of time
-//fix entity.isInCollisionWith
-//test collisions
-//add gun posx and posy for enemy
-
 SpaceShooter* getStartScreenInput() {
 	switch (InputHandler::handleGameMenu()) {
 	case Choice::NEW_GAME:		return new SpaceShooter(InputHandler::setDifficulty()); break;
@@ -51,9 +14,6 @@ SpaceShooter* getStartScreenInput() {
 	case Choice::EXIT:			exit(EXIT_SUCCESS); break;
 	}
 }
-
-//make boss working
-//totall mess somewhere in leveloneboss
 
 int main() {
 	srand(time(NULL));

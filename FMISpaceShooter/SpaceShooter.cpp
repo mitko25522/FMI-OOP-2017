@@ -8,13 +8,13 @@
 void SpaceShooter::printHelp() {
 	Renderer::clearScreen();
 	std::cout << "Welcome to FMISpaceShooter\n";
-	std::cout << "Here you will encounter enemies bla bla bla..\n";
-	std::cout << "Bla bla bla bla bla..\n";
-	std::cout << "Bla bla bla bla bla..\n";
-	std::cout << "Bla bla bla bla bla..\n";
-	std::cout << "Bla bla bla bla bla..\n";
-	std::cout << "Bla bla bla bla bla..\n";
-	std::cout << "Bla bla bla bla bla..\n";
+	std::cout << "The goal is to survive the enemy encounters.\n";
+	std::cout << "Move around using the arrow keys and shoot with the \"Space\" key.\n";
+	std::cout << "Touching an enemy or a projectile results in a loss of a life.\n";
+	std::cout << "The difficulty of the game determines the general speed.\n";
+	std::cout << "As the game progresses enemies will spawn more frequently.\n";
+	std::cout << "Upon reaching a certain score you will encounter a boss fight.\n";
+	std::cout << "You can save your progress by using the \"S\" key.\n";
 
 	std::cout << "\n\nPress \"Escape\" to go back to the start screen.\n";
 	do {
