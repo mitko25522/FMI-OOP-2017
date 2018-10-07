@@ -1,0 +1,15 @@
+Image Template:
+time   -> row 5
+poster -> row 9
+path   -> row 15	
+
+Text Template:
+time   -> row 5
+poster -> row 9
+text   -> row 14
+
+Url Template:
+time   -> row 6
+poster -> row 10
+path   -> row 16
+text   -> row 18
